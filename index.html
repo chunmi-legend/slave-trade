@@ -2,219 +2,269 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>노예 무역의 명과 암 - 두 얼굴의 역사</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
-    
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://unpkg.com/topojson-client@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 
     <style>
+        html, body { height: 100%; }
         body {
-            font-family: 'Noto Serif KR', serif;
+            font-family: 'Noto Serif KR', 'Nanum Myeongjo', 'Batang', serif;
             margin: 0;
-            overflow: hidden; 
-            background-color: #050505; 
+            overflow: hidden;
+            background-color: #050505;
             color: #f8fafc;
-            user-select: none;
             -webkit-user-select: none;
-            touch-action: none;
+            user-select: none;
+            touch-action: manipulation;
         }
+        :focus-visible { outline: 3px solid #facc15; outline-offset: 3px; }
+
         .screen {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            inset: 0;
             opacity: 0;
+            visibility: hidden;
             pointer-events: none;
-            transition: opacity 0.8s ease-in-out;
+            transition: opacity 0.8s ease-in-out, visibility 0s linear 0.8s;
             z-index: 1;
         }
         .screen.active {
             opacity: 1;
+            visibility: visible;
             pointer-events: auto;
+            transition: opacity 0.8s ease-in-out, visibility 0s;
             z-index: 10;
         }
+        .scroll-screen { overflow-y: auto; -webkit-overflow-scrolling: touch; user-select: text; -webkit-user-select: text; }
+
+        /* ---------- 홈 ---------- */
         #home-screen {
             background: radial-gradient(circle at center, #1a1a2e 0%, #050505 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
             overflow-y: auto;
-            padding: 2rem;
+            padding: 3rem 1.25rem 2rem;
         }
+        .home-inner { max-width: 72rem; min-height: 100%; margin: 0 auto; display: flex; flex-direction: column; justify-content: center; }
+        .intro { max-width: 40rem; margin: 0 auto; line-height: 1.9; color: #cbd5e1; }
         .flag-card {
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            filter: grayscale(100%) opacity(0.7);
+            filter: grayscale(100%) opacity(0.75);
+            color: inherit;
+            font: inherit;
         }
-        .flag-card:hover {
+        .flag-card:hover, .flag-card:focus-visible {
             transform: translateY(-10px) scale(1.02);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
             border-color: rgba(255, 255, 255, 0.4);
             filter: grayscale(0%) opacity(1);
         }
-        #detail-screen { background-color: #000; }
-        .panel {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+        .home-btn {
+            padding: 0.8rem 1.4rem; border-radius: 999px; font-weight: 700; color: #fff;
+            border: 1px solid rgba(255,255,255,.25); background: rgba(15,23,42,.8);
+            display: inline-flex; align-items: center; gap: .5rem; transition: background .2s;
         }
+        .home-btn:hover { background: #334155; }
+        .home-btn.primary { background: rgba(127,29,29,.85); border-color: rgba(239,68,68,.5); box-shadow: 0 0 20px rgba(220,38,38,.3); }
+        .home-btn.primary:hover { background: #b91c1c; }
+
+        /* ---------- 상세 ---------- */
+        #detail-screen { background-color: #000; }
+        .panel { position: absolute; inset: 0; }
         #panel-dark { background: linear-gradient(135deg, #380404 0%, #000000 100%); z-index: 1; }
         #panel-light { background: linear-gradient(135deg, #ffffff 0%, #fef08a 100%); z-index: 2; clip-path: inset(0 50% 0 0); }
         #flag-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-size: cover;
-            background-position: center;
-            z-index: 3;
-            pointer-events: none;
+            position: absolute; inset: 0;
+            background-size: cover; background-position: center;
+            z-index: 3; pointer-events: none;
             box-shadow: inset 0 0 100px rgba(0,0,0,0.8);
         }
-        #flag-tint {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            mix-blend-mode: multiply; 
-        }
-        .content-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            z-index: 4;
-            pointer-events: none; 
-        }
+        #flag-tint { position: absolute; inset: 0; opacity: 0; mix-blend-mode: multiply; }
+        .content-layer { position: absolute; inset: 0; display: flex; z-index: 4; pointer-events: none; }
         .content-wrapper {
-            width: 50vw;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            width: 50%; height: 100%;
+            display: flex; flex-direction: column; justify-content: center;
             padding: 5rem;
-            opacity: 0; 
+            opacity: 0; visibility: hidden;
         }
         .content-left { align-items: flex-start; text-align: left; }
         .content-right { align-items: flex-end; text-align: right; }
         .info-box {
-            max-width: 500px;
-            padding: 2.5rem;
-            border-radius: 16px;
-            backdrop-filter: blur(15px);
-            pointer-events: auto; 
+            max-width: 500px; max-height: calc(100% - 2rem); overflow-y: auto;
+            padding: 2.5rem; border-radius: 16px;
+            backdrop-filter: blur(15px); pointer-events: auto;
+            user-select: text; -webkit-user-select: text;
         }
-        .info-box.light { background: rgba(255, 255, 255, 0.9); border: 1px solid #fbbf24; box-shadow: 0 20px 50px rgba(251, 191, 36, 0.3); color: #1e293b; }
-        .info-box.dark { background: rgba(15, 0, 0, 0.85); border: 1px solid #dc2626; box-shadow: 0 20px 50px rgba(220, 38, 38, 0.5); color: #f8fafc; }
+        .info-box.light { background: rgba(255, 255, 255, 0.92); border: 1px solid #fbbf24; box-shadow: 0 20px 50px rgba(251, 191, 36, 0.3); color: #1e293b; }
+        .info-box.dark { background: rgba(15, 0, 0, 0.88); border: 1px solid #dc2626; box-shadow: 0 20px 50px rgba(220, 38, 38, 0.5); color: #f8fafc; }
+        .info-box p { line-height: 1.85; }
         .media-element {
-            width: 100%;
-            border-radius: 8px;
-            margin-top: 1.5rem;
+            width: 100%; border-radius: 8px; margin-top: 1.5rem;
             box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            object-fit: cover;
-            max-height: 250px;
+            object-fit: cover; max-height: 250px;
         }
         .light .media-element { border: 2px solid rgba(251, 191, 36, 0.5); }
         .dark .media-element { border: 2px solid rgba(220, 38, 38, 0.5); }
+        .whose { margin-top: 1rem; padding-top: .8rem; font-size: .85rem; line-height: 1.7; }
+        .light .whose { border-top: 1px dashed #d4a017; color: #78350f; }
+        .dark .whose { border-top: 1px dashed #7f1d1d; color: #fca5a5; }
+
         #slider-wrapper {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 50%;
+            position: absolute; top: 0; bottom: 0; left: 50%;
             transform: translateX(-50%);
-            width: 80px; 
-            cursor: ew-resize;
-            z-index: 10;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            width: 80px; cursor: ew-resize; z-index: 10;
+            display: flex; justify-content: center; align-items: center;
+            touch-action: none;
         }
         .slider-line {
-            width: 6px;
-            height: 100%;
-            background: #ffffff;
+            width: 6px; height: 100%; background: #ffffff;
             box-shadow: 0 0 20px rgba(0,0,0,1), 0 0 5px rgba(255,255,255,0.8);
             position: relative;
         }
         .slider-button {
-            position: absolute;
-            top: 50%;
-            left: 50%;
+            position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 64px;
-            height: 64px;
-            background: #0f172a;
-            border: 4px solid #ffffff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            box-shadow: 0 0 30px rgba(0,0,0,1);
+            width: 64px; height: 64px;
+            background: #0f172a; border: 4px solid #ffffff; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white; box-shadow: 0 0 30px rgba(0,0,0,1);
             transition: transform 0.2s, background 0.2s;
         }
-        #slider-wrapper:hover .slider-button, #slider-wrapper:active .slider-button {
+        #slider-wrapper:hover .slider-button, #slider-wrapper:active .slider-button, #slider-wrapper:focus-visible .slider-button {
             transform: translate(-50%, -50%) scale(1.1);
             background: #3b82f6;
         }
+        .slider-button.hint::after {
+            content: ''; position: absolute; inset: -10px; border-radius: 50%;
+            border: 3px solid rgba(255,255,255,.7);
+            animation: ring 1.6s ease-out infinite;
+        }
+        @keyframes ring { from { transform: scale(.85); opacity: 1; } to { transform: scale(1.5); opacity: 0; } }
+
+        .center-card {
+            position: absolute; left: 50%; bottom: 1.5rem; transform: translateX(-50%);
+            width: min(92vw, 640px); z-index: 11; pointer-events: none;
+            background: rgba(2, 6, 23, 0.9); border: 1px solid rgba(255,255,255,.25);
+            border-radius: 14px; padding: 1.25rem 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+        .cc-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7rem 1.5rem; margin: .9rem 0; }
+        .cc-grid dt { font-size: .75rem; color: #94a3b8; }
+        .cc-grid dd { margin: 0; font-weight: 700; font-size: .95rem; }
+        .cc-think { font-size: .9rem; line-height: 1.75; color: #e2e8f0; border-top: 1px solid rgba(255,255,255,.15); padding-top: .8rem; }
+        .cc-hint { font-size: .8rem; color: #94a3b8; margin-top: .6rem; }
+
         .detail-header {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 1.5rem 2rem;
-            z-index: 20;
-            pointer-events: none;
+            position: absolute; top: 0; left: 0; width: 100%;
+            padding: 1.5rem 2rem; z-index: 20; pointer-events: none;
         }
         .detail-header button { pointer-events: auto; }
+        .jump-btn { padding: .45rem .9rem; border-radius: 999px; font-size: .85rem; font-weight: 700; background: rgba(15,23,42,.9); border: 1px solid #475569; color: #fff; }
+        .jump-btn:hover { background: #334155; }
+
+        /* ---------- 지도 ---------- */
+        .event-toast {
+            position: absolute; top: 5.5rem; left: 50%;
+            transform: translate(-50%, -12px); opacity: 0;
+            width: min(90vw, 460px); z-index: 25; pointer-events: none;
+            background: rgba(15, 23, 42, 0.95); border: 1px solid #f87171; border-left: 6px solid #f87171;
+            border-radius: 12px; padding: 1rem 1.2rem;
+            transition: opacity .35s, transform .35s;
+        }
+        .event-toast.show { opacity: 1; transform: translate(-50%, 0); }
+        .timeline { position: relative; height: 10px; background: #1e293b; border-radius: 999px; cursor: pointer; width: min(90vw, 720px); margin: 1.2rem auto 0; }
+        .timeline-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: linear-gradient(90deg, #64748b, #e2e8f0); border-radius: 999px; }
+        .tick { position: absolute; top: -5px; width: 3px; height: 20px; background: #f87171; transform: translateX(-1px); border-radius: 2px; }
+        .timeline-labels { display: flex; justify-content: space-between; width: min(90vw, 720px); margin: .35rem auto 0; font-size: .75rem; color: #94a3b8; }
+
+        /* ---------- 읽기 화면 ---------- */
+        .reading { background: radial-gradient(circle at top, #1c1917 0%, #050505 70%); }
+        .reading article { max-width: 46rem; margin: 0 auto; padding: 6rem 1.25rem 4rem; }
+        .reading h2 { font-size: 1.6rem; font-weight: 900; margin: 3.5rem 0 1rem; color: #fff; }
+        .reading p { line-height: 1.95; color: #cbd5e1; margin-bottom: 1rem; }
+        .stat-row { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1rem; margin: 1.5rem 0; }
+        .stat-row div { border-top: 3px solid #475569; padding-top: .6rem; }
+        .stat-row strong { display: block; font-size: 1.6rem; font-weight: 900; color: #fff; }
+        .stat-row span { font-size: .85rem; color: #94a3b8; }
+        .stat-row .loss { border-color: #dc2626; }
+        .stat-row .loss strong { color: #f87171; }
+        .abolition { list-style: none; padding: 0; margin: 1rem 0; border-left: 2px solid #475569; }
+        .abolition li { position: relative; padding: 0 0 1.1rem 1.4rem; line-height: 1.7; color: #cbd5e1; }
+        .abolition li::before { content: ''; position: absolute; left: -7px; top: .45rem; width: 12px; height: 12px; border-radius: 50%; background: #0f172a; border: 2px solid #eab308; }
+        .abolition b { color: #facc15; margin-right: .5rem; }
+
+        .quiz-opt { display: block; width: 100%; text-align: left; padding: .9rem 1.1rem; margin-bottom: .6rem; border-radius: 10px; border: 1px solid #475569; background: rgba(15,23,42,.8); color: #f1f5f9; font: inherit; transition: background .2s, border-color .2s; }
+        .quiz-opt:hover:not(:disabled) { background: #1e293b; border-color: #94a3b8; }
+        .quiz-opt.correct { border-color: #22c55e; background: rgba(20,83,45,.6); }
+        .quiz-opt.wrong { border-color: #ef4444; background: rgba(127,29,29,.6); }
+
         @media (max-width: 768px) {
-            .content-wrapper { padding: 1.5rem; width: 100%; }
-            .info-box { padding: 1.5rem; }
-            #slider-wrapper { width: 100px; } 
+            .content-wrapper { position: absolute; inset: 0; width: 100%; padding: 5rem 1rem 1rem; }
+            .content-left, .content-right { align-items: center; }
+            .info-box { padding: 1.4rem; max-height: calc(100% - 1rem); }
+            #slider-wrapper { width: 100px; }
+            .detail-header { padding: 1rem; }
+            .center-card { padding: 1rem 1.1rem; bottom: 1rem; }
+            .cc-grid { gap: .5rem 1rem; }
+            .stat-row strong { font-size: 1.25rem; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .screen, .flag-card, .event-toast { transition: none !important; }
+            .slider-button.hint::after { animation: none; }
         }
     </style>
 </head>
 <body>
 
     <!-- 메인 홈 화면 -->
-    <div id="home-screen" class="screen active">
-        <div class="max-w-4xl text-center mb-12">
-            <h1 class="text-4xl md:text-6xl font-black mb-6 tracking-tight drop-shadow-lg">
-                <span class="text-slate-200">대서양 노예 무역의</span><br class="md:hidden"> 
-                <span class="text-yellow-500">명</span>과 
-                <span class="text-red-600">암</span>
-            </h1>
-            <button onclick="openMap()" class="mt-4 px-6 py-3 bg-red-900/80 hover:bg-red-700 text-white rounded-full transition-all border border-red-500/50 shadow-[0_0_20px_rgba(220,38,38,0.3)] font-bold text-lg tracking-wide flex items-center justify-center gap-2 mx-auto">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2v20"/><path d="M2 12h20"/></svg>
-                대서양 노예무역 타임랩스
-            </button>
+    <main id="home-screen" class="screen active">
+        <div class="home-inner">
+            <div class="text-center mb-10">
+                <h1 class="text-4xl md:text-6xl font-black mb-6 tracking-tight drop-shadow-lg">
+                    <span class="text-slate-200">대서양 노예 무역의</span><br class="md:hidden">
+                    <span class="text-yellow-500">명</span>과
+                    <span class="text-red-600">암</span>
+                </h1>
+                <p class="intro text-sm md:text-base">
+                    16세기부터 19세기까지 약 1,250만 명의 아프리카인이 강제로 배에 실려 대서양을 건넜습니다.
+                    유럽의 항구 도시가 누린 번영은 이들의 고통 위에 세워졌습니다.
+                    나라를 골라 가운데 막대를 좌우로 움직이며 두 얼굴을 비교해 보세요.
+                </p>
+                <div class="mt-7 flex flex-wrap gap-3 justify-center">
+                    <button onclick="openMap()" class="home-btn primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2v20"/><path d="M2 12h20"/></svg>
+                        항해 타임랩스
+                    </button>
+                    <button onclick="showScreen('voices-screen')" class="home-btn">중간 항로와 저항의 역사</button>
+                    <button onclick="openQuiz()" class="home-btn">확인 퀴즈</button>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 w-full" id="flags-container"></div>
+            <p class="text-center text-xs text-slate-500 mt-10 leading-relaxed">
+                인원 수는 SlaveVoyages(대서양 노예무역 데이터베이스)의 선박 국적별 추정치를 반올림한 값이며, 연구에 따라 차이가 있을 수 있습니다.
+            </p>
         </div>
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 max-w-6xl w-full px-4" id="flags-container"></div>
-    </div>
+    </main>
 
     <!-- 국가별 명과 암 상세 화면 -->
-    <div id="detail-screen" class="screen">
-        <div class="detail-header flex items-center justify-between">
-            <button onclick="goBack()" class="px-5 py-2.5 bg-slate-900/90 hover:bg-slate-700 text-white rounded-full transition-all flex items-center gap-2 text-sm border border-slate-600 shadow-xl backdrop-blur-md">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                다른 국가 선택
+    <section id="detail-screen" class="screen" aria-label="국가별 명과 암">
+        <div class="detail-header flex items-center justify-between gap-2">
+            <button onclick="goBack()" class="px-4 py-2.5 bg-slate-900/90 hover:bg-slate-700 text-white rounded-full transition-all flex items-center gap-2 text-sm border border-slate-600 shadow-xl backdrop-blur-md">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                다른 국가
             </button>
+            <div class="flex gap-1.5">
+                <button class="jump-btn" onclick="animateSliderTo(10)">◀ 암</button>
+                <button class="jump-btn" onclick="animateSliderTo(50)">가운데</button>
+                <button class="jump-btn" onclick="animateSliderTo(90)">명 ▶</button>
+            </div>
         </div>
         <div id="panel-dark" class="panel"></div>
         <div id="panel-light" class="panel"></div>
@@ -224,183 +274,369 @@
                 <div class="info-box light">
                     <div class="flex items-center gap-3 mb-2">
                         <h3 class="text-4xl font-black text-yellow-600">명(明)</h3>
-                        <span class="text-yellow-600/60 font-bold uppercase tracking-widest">Prosperity</span>
+                        <span class="text-yellow-700/70 font-bold">유럽이 얻은 번영</span>
                     </div>
                     <div class="h-1 w-20 bg-yellow-400 mb-4"></div>
                     <h4 id="light-title" class="text-2xl font-bold mb-3 text-slate-800"></h4>
-                    <p id="light-desc" class="text-slate-700 text-sm md:text-base leading-relaxed font-medium"></p>
+                    <p id="light-desc" class="text-slate-700 text-sm md:text-base font-medium"></p>
                     <div id="light-media-container"></div>
+                    <p class="whose">이 번영은 누구의 것이었을까요? 부를 누린 쪽은 상인·농장주·투자자였고, 그 대가는 끌려간 사람들이 치렀습니다.</p>
                 </div>
             </div>
             <div class="content-wrapper content-right" id="content-dark">
                 <div class="info-box dark">
                     <div class="flex items-center justify-end gap-3 mb-2">
-                        <span class="text-red-600/60 font-bold uppercase tracking-widest">Atrocity</span>
+                        <span class="text-red-400/70 font-bold">아프리카인이 치른 대가</span>
                         <h3 class="text-4xl font-black text-red-600">암(暗)</h3>
                     </div>
                     <div class="h-1 w-20 bg-red-700 ml-auto mb-4"></div>
                     <h4 id="dark-title" class="text-2xl font-bold mb-3 text-white"></h4>
-                    <p id="dark-desc" class="text-slate-300 text-sm md:text-base leading-relaxed font-light"></p>
+                    <p id="dark-desc" class="text-slate-300 text-sm md:text-base font-light"></p>
                     <div id="dark-media-container"></div>
+                    <p class="whose">숫자 하나하나가 이름과 가족, 고향을 가진 한 사람이었다는 사실을 기억해 주세요.</p>
                 </div>
             </div>
         </div>
-        <div id="slider-wrapper">
+
+        <div id="center-card" class="center-card" aria-live="polite">
+            <h2 id="cc-name" class="text-2xl font-black"></h2>
+            <dl class="cc-grid">
+                <div><dt>배에 실려 간 아프리카인</dt><dd id="cc-people"></dd></div>
+                <div><dt>노예무역 활동 시기</dt><dd id="cc-period"></dd></div>
+                <div><dt>주요 출발 항구</dt><dd id="cc-ports"></dd></div>
+                <div><dt>주요 도착지</dt><dd id="cc-dest"></dd></div>
+            </dl>
+            <p class="cc-think"><strong class="text-yellow-400">생각해 보기</strong> <span id="cc-think"></span></p>
+            <p class="cc-hint">막대를 오른쪽으로 끌면 명(明), 왼쪽으로 끌면 암(暗)이 보입니다. 키보드 ← → 키도 쓸 수 있어요.</p>
+        </div>
+
+        <div id="slider-wrapper" tabindex="0" role="slider" aria-label="명과 암 비교 슬라이더" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
             <div class="slider-line">
-                <div class="slider-button">
-                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="15 18 9 12 15 6"></polyline>
-                    </svg>
+                <div class="slider-button hint" id="slider-button">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
                     <div class="w-1"></div>
-                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="9 18 15 12 9 6"></polyline>
-                    </svg>
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
     <!-- 타임랩스 지도 화면 -->
-    <div id="map-screen" class="screen">
+    <section id="map-screen" class="screen" aria-label="항해 타임랩스">
         <canvas id="map-bg-canvas" class="absolute inset-0 w-full h-full z-0"></canvas>
         <canvas id="timelapse-canvas" class="absolute inset-0 w-full h-full z-10"></canvas>
-        
+        <p id="map-error" class="hidden absolute inset-x-0 top-1/3 text-center text-slate-400 z-10 px-6">세계 지도를 불러오지 못했습니다. 인터넷 연결을 확인하고 새로고침해 주세요. 항해 애니메이션은 계속 볼 수 있습니다.</p>
+
         <div class="detail-header flex items-center justify-between z-20">
             <button onclick="closeMap()" class="px-5 py-2.5 bg-slate-900/90 hover:bg-slate-700 text-white rounded-full transition-all flex items-center gap-2 text-sm border border-slate-600 shadow-xl backdrop-blur-md">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
                 홈으로
             </button>
             <div class="text-right hidden md:block">
                 <h2 class="text-xl md:text-2xl font-bold text-white mb-1">대서양 노예 무역 항해 타임랩스</h2>
+                <p class="text-xs text-slate-400">점 하나는 기록된 항해 약 5척을 나타냅니다</p>
             </div>
         </div>
 
-        <div class="absolute top-24 left-4 md:left-10 z-20 bg-slate-900/80 p-4 rounded-xl border border-slate-700 backdrop-blur-md shadow-2xl">
-            <h3 class="text-white text-sm md:text-base font-bold mb-3 border-b border-slate-600 pb-2">국가별 선박 (출발지)</h3>
+        <div id="event-toast" class="event-toast" role="status" aria-live="polite">
+            <div class="text-red-300 text-sm font-bold" id="toast-year"></div>
+            <div class="text-white text-lg font-bold mt-0.5" id="toast-title"></div>
+            <p class="text-slate-300 text-sm leading-relaxed mt-1" id="toast-text"></p>
+        </div>
+
+        <div class="absolute top-24 left-4 md:left-10 z-20 bg-slate-900/80 p-4 rounded-xl border border-slate-700 backdrop-blur-md shadow-2xl hidden md:block">
+            <h3 class="text-white text-sm md:text-base font-bold mb-3 border-b border-slate-600 pb-2">선박의 국적</h3>
             <div class="flex flex-col gap-2">
-                <div class="flex items-center gap-3"><div class="w-4 h-4 rounded-full shadow-[0_0_8px_#10b981] bg-[#10b981]"></div><span class="text-slate-200 text-xs md:text-sm font-medium">포르투갈 / 브라질</span></div>
-                <div class="flex items-center gap-3"><div class="w-4 h-4 rounded-full shadow-[0_0_8px_#3b82f6] bg-[#3b82f6]"></div><span class="text-slate-200 text-xs md:text-sm font-medium">영국</span></div>
-                <div class="flex items-center gap-3"><div class="w-4 h-4 rounded-full shadow-[0_0_8px_#06b6d4] bg-[#06b6d4]"></div><span class="text-slate-200 text-xs md:text-sm font-medium">프랑스</span></div>
-                <div class="flex items-center gap-3"><div class="w-4 h-4 rounded-full shadow-[0_0_8px_#eab308] bg-[#eab308]"></div><span class="text-slate-200 text-xs md:text-sm font-medium">스페인 / 우루과이</span></div>
-                <div class="flex items-center gap-3"><div class="w-4 h-4 rounded-full shadow-[0_0_8px_#f97316] bg-[#f97316]"></div><span class="text-slate-200 text-xs md:text-sm font-medium">네덜란드</span></div>
+                <div class="flex items-center gap-3"><div class="w-4 h-4 rounded-full shadow-[0_0_8px_#10b981] bg-[#10b981]"></div><span class="text-slate-200 text-sm font-medium">포르투갈 / 브라질</span></div>
+                <div class="flex items-center gap-3"><div class="w-4 h-4 rounded-full shadow-[0_0_8px_#3b82f6] bg-[#3b82f6]"></div><span class="text-slate-200 text-sm font-medium">영국</span></div>
+                <div class="flex items-center gap-3"><div class="w-4 h-4 rounded-full shadow-[0_0_8px_#06b6d4] bg-[#06b6d4]"></div><span class="text-slate-200 text-sm font-medium">프랑스</span></div>
+                <div class="flex items-center gap-3"><div class="w-4 h-4 rounded-full shadow-[0_0_8px_#eab308] bg-[#eab308]"></div><span class="text-slate-200 text-sm font-medium">스페인 / 우루과이</span></div>
+                <div class="flex items-center gap-3"><div class="w-4 h-4 rounded-full shadow-[0_0_8px_#f97316] bg-[#f97316]"></div><span class="text-slate-200 text-sm font-medium">네덜란드</span></div>
             </div>
+            <label class="flex items-center gap-2 mt-4 pt-3 border-t border-slate-600 text-sm text-slate-200 cursor-pointer">
+                <input type="checkbox" id="pause-on-event" class="w-4 h-4 accent-red-500">
+                사건마다 멈추기
+            </label>
         </div>
 
-        <div class="absolute top-24 right-4 md:right-10 z-20 bg-slate-900/80 p-4 rounded-xl border border-slate-700 backdrop-blur-md shadow-2xl w-48 md:w-64">
-            <h3 class="text-white text-sm md:text-base font-bold mb-3 border-b border-slate-600 pb-2">실시간 누적 총 항해수</h3>
+        <div class="absolute top-24 right-4 md:right-10 z-20 bg-slate-900/80 p-4 rounded-xl border border-slate-700 backdrop-blur-md shadow-2xl w-44 md:w-64">
+            <h3 class="text-white text-sm md:text-base font-bold mb-1">누적 항해 수</h3>
+            <p class="text-[11px] text-slate-400 mb-3 border-b border-slate-600 pb-2">기록이 남은 항해 기준</p>
             <div id="bar-chart-container" class="flex flex-col gap-3"></div>
         </div>
 
-        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 text-center pointer-events-none w-full px-4">
-            <div class="text-slate-400 text-sm mb-2 tracking-widest font-bold">YEAR</div>
-            <div id="year-display" class="text-6xl md:text-8xl font-black text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.5)] tracking-tighter tabular-nums">1500</div>
-            
-            <div class="mt-6 flex flex-wrap gap-2 md:gap-3 justify-center pointer-events-auto">
-                <button onclick="toggleMapPlay()" id="map-play-btn" class="px-5 py-2 bg-slate-800 border border-slate-600 rounded-full text-white hover:bg-slate-700 font-bold transition-colors shadow-lg">
-                    일시정지
-                </button>
+        <div class="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 z-20 text-center pointer-events-none w-full px-4">
+            <div id="year-display" class="text-5xl md:text-7xl font-black text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.5)] tracking-tighter tabular-nums">1500</div>
+            <div class="pointer-events-auto">
+                <div id="timeline" class="timeline" title="클릭하면 그 해로 이동합니다" role="slider" aria-label="연도 이동" aria-valuemin="1500" aria-valuemax="1870" tabindex="0">
+                    <div id="timeline-fill" class="timeline-fill"></div>
+                </div>
+                <div class="timeline-labels"><span>1500</span><span>빨간 눈금: 주요 사건 (클릭해서 이동)</span><span>1870</span></div>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-2 md:gap-3 justify-center pointer-events-auto">
+                <button onclick="toggleMapPlay()" id="map-play-btn" class="px-5 py-2 bg-slate-800 border border-slate-600 rounded-full text-white hover:bg-slate-700 font-bold transition-colors shadow-lg">일시정지</button>
                 <div class="flex gap-1 bg-slate-900 p-1 rounded-full border border-slate-700 shadow-lg">
                     <button onclick="setSpeed(1)" id="speed-1x" class="speed-btn px-4 py-1.5 bg-slate-700 border border-slate-500 rounded-full text-white font-bold transition-colors">1x</button>
                     <button onclick="setSpeed(2)" id="speed-2x" class="speed-btn px-4 py-1.5 bg-slate-800 border border-transparent rounded-full text-white hover:bg-slate-700 font-bold transition-colors">2x</button>
                     <button onclick="setSpeed(4)" id="speed-4x" class="speed-btn px-4 py-1.5 bg-slate-800 border border-transparent rounded-full text-white hover:bg-slate-700 font-bold transition-colors">4x</button>
                 </div>
-                <button onclick="resetMap()" class="px-5 py-2 bg-slate-800 border border-slate-600 rounded-full text-white hover:bg-slate-700 font-bold transition-colors shadow-lg">
-                    초기화
-                </button>
+                <button onclick="resetMap()" class="px-5 py-2 bg-slate-800 border border-slate-600 rounded-full text-white hover:bg-slate-700 font-bold transition-colors shadow-lg">처음부터</button>
             </div>
         </div>
-    </div>
+    </section>
+
+    <!-- 중간 항로와 저항 -->
+    <section id="voices-screen" class="screen scroll-screen reading" aria-label="중간 항로와 저항의 역사">
+        <div class="detail-header" style="position:fixed">
+            <button onclick="showScreen('home-screen')" class="px-5 py-2.5 bg-slate-900/90 hover:bg-slate-700 text-white rounded-full flex items-center gap-2 text-sm border border-slate-600 shadow-xl backdrop-blur-md">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                홈으로
+            </button>
+        </div>
+        <article>
+            <h1 class="text-3xl md:text-5xl font-black leading-tight text-white">배 밑바닥의 역사,<br>그리고 끝나지 않은 저항</h1>
+            <p class="mt-6">국가별 화면이 유럽의 시선에서 명과 암을 나눴다면, 이 페이지는 끌려간 사람들의 시선에서 노예무역을 봅니다.</p>
+
+            <h2>삼각무역: 배가 한 바퀴 돌 때마다 이익이 남는 구조</h2>
+            <svg viewBox="0 0 600 360" class="w-full h-auto my-4" role="img" aria-label="유럽에서 아프리카로 공산품, 아프리카에서 아메리카로 노예가 된 사람들, 아메리카에서 유럽으로 설탕·담배·면화가 이동한 삼각무역 지도">
+                <defs>
+                    <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#cbd5e1"/></marker>
+                    <marker id="ahr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#ef4444"/></marker>
+                </defs>
+                <path d="M440,85 C500,140 500,200 470,245" fill="none" stroke="#cbd5e1" stroke-width="3" marker-end="url(#ah)"/>
+                <path d="M440,275 C340,320 200,290 135,215" fill="none" stroke="#ef4444" stroke-width="5" marker-end="url(#ahr)"/>
+                <path d="M130,160 C200,70 320,50 400,65" fill="none" stroke="#cbd5e1" stroke-width="3" marker-end="url(#ah)"/>
+                <circle cx="425" cy="70" r="10" fill="#3b82f6"/><text x="425" y="42" fill="#fff" font-size="20" font-weight="700" text-anchor="middle">유럽</text>
+                <circle cx="455" cy="265" r="10" fill="#eab308"/><text x="505" y="300" fill="#fff" font-size="20" font-weight="700" text-anchor="middle">서아프리카</text>
+                <circle cx="120" cy="190" r="10" fill="#10b981"/><text x="85" y="240" fill="#fff" font-size="20" font-weight="700" text-anchor="middle">아메리카</text>
+                <text x="520" y="170" fill="#cbd5e1" font-size="15" text-anchor="middle">총·직물·술</text>
+                <text x="290" y="330" fill="#fca5a5" font-size="16" font-weight="700" text-anchor="middle">중간 항로: 사로잡힌 아프리카인</text>
+                <text x="245" y="70" fill="#cbd5e1" font-size="15" text-anchor="middle">설탕·담배·면화</text>
+            </svg>
+            <p>유럽 상인들은 총, 직물, 술 같은 공산품을 싣고 아프리카 해안으로 가서 사람과 맞바꿨습니다. 사로잡힌 사람들은 대부분 아프리카 내부의 전쟁이나 납치로 붙잡혀 해안의 요새로 끌려온 이들이었습니다. 배는 이들을 아메리카에 팔고, 그 돈으로 설탕·담배·면화를 사서 유럽으로 돌아갔습니다.</p>
+
+            <h2>중간 항로</h2>
+            <p>아프리카에서 아메리카로 건너는 구간을 '중간 항로'라고 부릅니다. 보통 한두 달 넘게 걸리는 항해 동안 사람들은 사슬에 묶인 채 몸을 제대로 펼 수도 없는 선창에 갇혔습니다. 더위와 오염된 물, 전염병, 폭력 속에서 많은 이들이 바다 위에서 목숨을 잃었습니다.</p>
+            <div class="stat-row">
+                <div><strong>약 1,250만 명</strong><span>아프리카에서 배에 실림</span></div>
+                <div><strong>약 1,070만 명</strong><span>아메리카에 도착</span></div>
+                <div class="loss"><strong>약 180만 명</strong><span>항해 중 사망</span></div>
+            </div>
+            <p class="text-sm text-slate-400">해안까지 끌려오는 길과 요새에서 숨진 사람은 이 숫자에 포함되지 않습니다.</p>
+
+            <h2>끌려간 사람의 목소리</h2>
+            <p>올라우다 에퀴아노는 어린 시절 납치되어 노예로 팔렸습니다. 그는 오랜 노력 끝에 스스로 몸값을 치러 자유를 얻었고, 1789년 노예선의 참상과 자신의 삶을 담은 자서전을 영국에서 펴냈습니다. 이 책은 많은 영국인에게 노예무역의 실상을 알리며 폐지 운동의 중요한 근거가 되었습니다.</p>
+
+            <h2>멈추지 않은 저항</h2>
+            <p>끌려간 사람들은 결코 순순히 따르지 않았습니다. 배 위에서 반란을 일으키기도 했고, 아메리카에서는 농장을 탈출해 스스로 공동체를 만들었습니다. 브라질의 팔마리스는 탈출한 노예들이 거의 100년 가까이 지켜 낸 공동체였고, 자메이카의 '마룬'들은 영국군과 싸워 자치를 인정받았습니다.</p>
+            <p>가장 큰 저항은 1791년 프랑스 식민지 생도맹그에서 일어났습니다. 투생 루베르튀르 등이 이끈 봉기는 13년 동안 이어졌고, 1804년 노예였던 사람들이 세운 첫 번째 독립국 아이티가 탄생했습니다.</p>
+
+            <h2>폐지까지의 긴 길</h2>
+            <ol class="abolition">
+                <li><b>1787</b>영국에서 노예무역 폐지 위원회가 만들어졌습니다.</li>
+                <li><b>1791</b>생도맹그에서 노예들의 봉기가 시작되었습니다.</li>
+                <li><b>1804</b>아이티가 독립했습니다.</li>
+                <li><b>1807</b>영국이 노예무역을 금지했습니다. 이듬해 미국도 노예 수입을 금지했습니다.</li>
+                <li><b>1833</b>영국이 식민지의 노예제 자체를 폐지하는 법을 만들었습니다.</li>
+                <li><b>1848</b>프랑스가 식민지의 노예제를 폐지했습니다.</li>
+                <li><b>1865</b>미국이 남북전쟁 뒤 헌법 수정으로 노예제를 폐지했습니다.</li>
+                <li><b>1888</b>브라질이 아메리카 대륙에서 가장 늦게 노예제를 폐지했습니다.</li>
+            </ol>
+            <p>노예무역을 금지하는 것과 노예제 자체를 없애는 것은 다른 일이었습니다. 무역이 금지된 뒤에도 이미 노예가 된 사람들과 그 자녀들은 수십 년 동안 노예로 살아야 했습니다.</p>
+
+            <h2>아프리카에 남은 상처</h2>
+            <p>수백 년 동안 가장 일할 나이의 젊은이들이 끌려가면서 서아프리카와 중앙아프리카의 여러 지역은 큰 인구 손실을 겪었습니다. 노예를 얻기 위한 전쟁과 납치가 늘면서 이웃 공동체 사이의 신뢰도 무너졌습니다. 많은 역사학자들은 이 상처가 오늘날까지 아프리카 사회에 영향을 주고 있다고 봅니다.</p>
+
+            <p class="text-xs text-slate-500 mt-12">참고: SlaveVoyages(slavevoyages.org) 대서양 노예무역 데이터베이스 추정치. 수치는 반올림했으며 연구에 따라 다를 수 있습니다.</p>
+            <div class="mt-8 flex flex-wrap gap-3">
+                <button onclick="openQuiz()" class="home-btn primary">배운 내용 퀴즈로 확인하기</button>
+            </div>
+        </article>
+    </section>
+
+    <!-- 퀴즈 -->
+    <section id="quiz-screen" class="screen scroll-screen reading" aria-label="확인 퀴즈">
+        <div class="detail-header" style="position:fixed">
+            <button onclick="showScreen('home-screen')" class="px-5 py-2.5 bg-slate-900/90 hover:bg-slate-700 text-white rounded-full flex items-center gap-2 text-sm border border-slate-600 shadow-xl backdrop-blur-md">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                홈으로
+            </button>
+        </div>
+        <article id="quiz-body"></article>
+    </section>
 
     <script>
+        /* ================= 국가 데이터 ================= */
         const countryData = {
-            uk: { name: '영국', flag: 'https://flagcdn.com/w1280/gb.png', light: { title: '영국 제국의 산업 혁명과 번영', description: '노예 무역과 플랜테이션 농업으로 막대한 자본을 축적한 영국은 산업혁명의 든든한 기틀을 마련했습니다.', mediaType: 'image', mediaSrc: './images/uk-light.jpg' }, dark: { title: '역사상 가장 큰 규모의 인간 사냥', description: '18세기 대서양 노예 무역을 주도한 영국은 수백만 명의 아프리카인들을 노예선 선창에 짐짝처럼 구겨 넣어 아메리카로 강제 이주 시켰습니다.', mediaType: 'video', mediaSrc: './images/uk-dark.mp4' }},
-            fr: { name: '프랑스', flag: 'https://flagcdn.com/w1280/fr.png', light: { title: '화려한 부르주아 문화의 토대', description: '프랑스의 항구는 식민지 수확물을 통해 엄청난 부를 거머쥐었고, 이는 부르주아 사회의 밑거름이 되었습니다.', mediaType: 'image', mediaSrc: './images/france-light.jpg' }, dark: { title: '생도맹그(아이티)의 참극', description: '가혹한 매질과 열악한 환경으로 수많은 노예들이 수년 내에 목숨을 잃었습니다.', mediaType: 'image', mediaSrc: './images/france-dark.jpg' }},
-            nl: { name: '네덜란드', flag: 'https://flagcdn.com/w1280/nl.png', light: { title: '황금시대의 상업 제국', description: '네덜란드 서인도 회사(WIC)를 앞세운 국제 무역은 17세기 전례 없는 경제적 황금기를 가져다주었습니다.', mediaType: 'image', mediaSrc: './images/nl-light.png' }, dark: { title: '가혹한 중간 기착지, 엘미나성', description: '아프리카 해안의 요새들에서 아프리카인들은 인간의 취급을 받지 못한 채 끔찍한 환경에 갇혀 있었습니다.', mediaType: 'video', mediaSrc: './images/nl-dark.mp4' }},
-            pt: { name: '포르투갈', flag: 'https://flagcdn.com/w1280/pt.png', light: { title: '최초의 글로벌 무역망 구축', description: '식민지 브라질을 통해 유럽 전역에 귀중품과 자원을 공급하며 초창기 엄청난 부를 획득했습니다.', mediaType: 'video', mediaSrc: './images/siu.mp4' }, dark: { title: '가장 길고 거대한 착취의 역사', description: '모든 유럽 국가 중 가장 많은 수(약 500만 명 이상)의 아프리카인들을 강제 이주시킨 국가입니다.', mediaType: 'image', mediaSrc: './images/pt-dark.jpg' }},
-            es: { name: '스페인', flag: 'https://flagcdn.com/w1280/es.png', light: { title: '신대륙의 막대한 부와 은(Silver)', description: '신대륙의 광산과 대농장을 운영하며 유럽 경제를 뒤흔들 막대한 금과 은을 가져왔습니다.', mediaType: 'image', mediaSrc: './images/es-light.jpg' }, dark: { title: '아시엔토(Asiento)와 끔찍한 광산 노동', description: '독점 노예 공급권인 아시엔토를 통해 수많은 노예가 수입되었으며 광산에서 소모품처럼 죽어갔습니다.', mediaType: 'video', mediaSrc: './images/es-dark.mp4' }}
+            pt: { name: '포르투갈', flag: 'https://flagcdn.com/w1280/pt.png',
+                stats: { people: '약 585만 명', period: '1510년대 ~ 1850년대', ports: '리스본, 리우데자네이루, 살바도르', dest: '브라질' },
+                think: '오늘날 브라질은 아프리카 밖에서 아프리카계 사람이 가장 많이 사는 나라 가운데 하나입니다. 노예무역은 지금의 사회에 어떤 흔적을 남겼을까요?',
+                light: { title: '최초의 대서양 무역망', description: '포르투갈은 15세기부터 아프리카 해안을 탐험하며 유럽·아프리카·아메리카를 잇는 무역망을 처음 만들었습니다. 식민지 브라질의 설탕과 18세기에 발견된 금은 포르투갈에 막대한 부를 안겨 주었습니다.', mediaType: 'video', mediaSrc: './images/siu.mp4' },
+                dark: { title: '가장 길고 거대한 착취', description: '포르투갈과 브라질 배는 약 585만 명, 대서양을 건넌 전체 인원의 절반 가까이를 실어 날랐습니다. 노예무역은 300년 넘게 이어졌고, 브라질은 1888년에야 아메리카 대륙에서 가장 늦게 노예제를 폐지했습니다.', mediaType: 'image', mediaSrc: './images/pt-dark.jpg' }},
+            uk: { name: '영국', flag: 'https://flagcdn.com/w1280/gb.png',
+                stats: { people: '약 326만 명', period: '1560년대 ~ 1807년', ports: '리버풀, 브리스톨, 런던', dest: '자메이카, 바베이도스, 북아메리카' },
+                think: '18세기에 노예무역을 가장 활발히 했던 영국은 1807년 노예무역을 금지한 뒤 다른 나라의 노예선을 단속했습니다. 이런 변화는 왜 일어났을까요?',
+                light: { title: '산업혁명의 밑거름이 된 자본', description: '리버풀과 브리스톨 같은 항구 도시는 노예무역과 카리브해 설탕 농장에서 번 돈으로 급성장했습니다. 이렇게 모인 자본이 산업혁명을 뒷받침했다는 주장이 있으며, 그 영향이 얼마나 컸는지는 지금도 역사학자들 사이에서 논쟁 중입니다.', mediaType: 'image', mediaSrc: './images/uk-light.jpg' },
+                dark: { title: '18세기 최대의 노예 운송국', description: '영국 배는 약 326만 명의 아프리카인을 대서양 너머로 실어 날랐습니다. 1781년 종(Zong)호의 선원들은 식수가 부족해지자 보험금을 받으려고 130명이 넘는 아프리카인을 산 채로 바다에 던졌습니다. 이 사건은 노예무역 폐지 운동에 불을 붙였습니다.', mediaType: 'video', mediaSrc: './images/uk-dark.mp4' }},
+            fr: { name: '프랑스', flag: 'https://flagcdn.com/w1280/fr.png',
+                stats: { people: '약 138만 명', period: '1640년대 ~ 1830년대', ports: '낭트, 보르도, 라로셸, 르아브르', dest: '생도맹그, 마르티니크, 과들루프' },
+                think: '1791년 생도맹그의 노예들은 스스로 봉기해 1804년 아이티를 세웠습니다. 이 소식은 다른 식민지의 노예와 농장주들에게 각각 어떻게 들렸을까요?',
+                light: { title: '항구 도시의 황금기', description: '낭트와 보르도는 노예무역과 식민지의 설탕·커피 무역으로 크게 번성했습니다. 18세기 생도맹그(지금의 아이티)는 세계에서 가장 많은 설탕과 커피를 생산한 식민지였고, 그 부는 프랑스 상인 계층이 성장하는 바탕이 되었습니다.', mediaType: 'image', mediaSrc: './images/france-light.jpg' },
+                dark: { title: '생도맹그의 참극', description: '생도맹그의 사탕수수 농장에서는 가혹한 노동과 체벌로 노예들이 빠르게 목숨을 잃었고, 농장주들은 그 빈자리를 새로 끌려온 아프리카인으로 채웠습니다. 1685년 만들어진 흑인법(Code Noir)은 노예를 법적으로 "재산"으로 규정했습니다.', mediaType: 'image', mediaSrc: './images/france-dark.jpg' }},
+            es: { name: '스페인', flag: 'https://flagcdn.com/w1280/es.png',
+                stats: { people: '약 106만 명', period: '1510년대 ~ 1860년대', ports: '세비야, 카디스, 아바나', dest: '쿠바, 푸에르토리코, 스페인령 아메리카' },
+                think: '스페인은 1820년 노예무역을 끝내겠다고 약속했지만 쿠바로 가는 불법 노예선은 1860년대까지 이어졌습니다. 법으로 금지된 뒤에도 노예무역이 계속된 까닭은 무엇일까요?',
+                light: { title: '신대륙의 은과 설탕', description: '스페인은 아메리카의 포토시 은광 등에서 막대한 은을 들여와 유럽 경제를 뒤흔들었습니다. 19세기에는 식민지 쿠바가 세계 최대의 설탕 생산지 가운데 하나로 떠올랐습니다.', mediaType: 'image', mediaSrc: './images/es-light.jpg' },
+                dark: { title: '아시엔토와 쿠바의 설탕 농장', description: '스페인 왕실은 "아시엔토"라는 노예 공급 독점권을 다른 나라 상인에게 팔아 식민지에 아프리카인을 들여왔습니다. 19세기 쿠바의 설탕 농장은 노예 노동에 의존했고, 불법 노예무역은 1860년대까지 계속되었습니다.', mediaType: 'video', mediaSrc: './images/es-dark.mp4' }},
+            nl: { name: '네덜란드', flag: 'https://flagcdn.com/w1280/nl.png',
+                stats: { people: '약 55만 명', period: '1590년대 ~ 1800년대 초', ports: '플리싱언, 미델뷔르흐, 암스테르담', dest: '수리남, 퀴라소, 브라질 북동부' },
+                think: '엘미나성은 지금 유네스코 세계유산입니다. 이런 아픈 역사의 장소를 지우지 않고 보존하는 이유는 무엇일까요?',
+                light: { title: '황금시대의 상업 제국', description: '17세기 네덜란드는 세계 무역의 중심이었습니다. 네덜란드 서인도 회사(WIC)는 아프리카 해안의 요새와 카리브해 식민지를 연결하며 설탕과 노예무역으로 이익을 거두었습니다.', mediaType: 'image', mediaSrc: './images/nl-light.png' },
+                dark: { title: '엘미나성, 돌아올 수 없는 문', description: '1637년 네덜란드는 포르투갈이 세운 가나의 엘미나성을 빼앗아 노예무역 거점으로 썼습니다. 붙잡힌 사람들은 어둡고 비좁은 지하 감옥에서 몇 주씩 배를 기다리다 좁은 문을 지나 노예선에 올랐습니다. 수리남 농장의 혹독한 노동도 악명이 높았습니다.', mediaType: 'video', mediaSrc: './images/nl-dark.mp4' }}
         };
 
-        const container = document.getElementById('flags-container');
-        const sliderWrapper = document.getElementById('slider-wrapper');
-        const panelLight = document.getElementById('panel-light');
-        const flagOverlay = document.getElementById('flag-overlay');
-        const flagTint = document.getElementById('flag-tint');
-        let isDragging = false, windowWidth = window.innerWidth;
+        /* ================= 화면 전환 ================= */
+        let currentScreen = 'home-screen';
+        function showScreen(id) {
+            if (currentScreen === 'map-screen' && id !== 'map-screen') stopMap();
+            document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
+            currentScreen = id;
+            const el = document.getElementById(id);
+            if (el.classList.contains('scroll-screen')) el.scrollTop = 0;
+        }
 
+        /* ================= 홈 ================= */
+        const container = document.getElementById('flags-container');
         function initApp() {
             Object.keys(countryData).forEach(key => {
-                const country = countryData[key];
-                const card = document.createElement('div');
+                const c = countryData[key];
+                const card = document.createElement('button');
+                card.type = 'button';
                 card.className = 'flag-card rounded-xl overflow-hidden flex flex-col items-center pb-5';
-                card.onclick = (e) => { e.stopPropagation(); openDetail(key); }
-                card.innerHTML = `<div class="w-full h-32 md:h-40 bg-slate-900 flex items-center justify-center overflow-hidden mb-4 border-b border-white/10"><img src="${country.flag}" alt="${country.name}" class="w-full h-full object-cover"></div><h3 class="text-xl font-bold text-white tracking-widest">${country.name}</h3>`;
+                card.onclick = () => openDetail(key);
+                card.innerHTML = `<div class="w-full h-28 md:h-36 bg-slate-900 flex items-center justify-center overflow-hidden mb-4 border-b border-white/10"><img src="${c.flag}" alt="" class="w-full h-full object-cover"></div>
+                    <span class="text-xl font-bold text-white tracking-widest">${c.name}</span>
+                    <span class="text-xs text-slate-400 mt-1.5">${c.stats.people} 강제 수송</span>`;
                 container.appendChild(card);
             });
         }
 
+        /* ================= 상세 (명/암 슬라이더) ================= */
+        const sliderWrapper = document.getElementById('slider-wrapper');
+        const sliderButton = document.getElementById('slider-button');
+        const panelLight = document.getElementById('panel-light');
+        const flagOverlay = document.getElementById('flag-overlay');
+        const flagTint = document.getElementById('flag-tint');
+        const contentLight = document.getElementById('content-light');
+        const contentDark = document.getElementById('content-dark');
+        const centerCard = document.getElementById('center-card');
+        let isDragging = false, sliderPct = 50, sliderAnim = null;
+
         function generateMediaHTML(type, src) {
-            if (!src) return ''; 
-            return type === 'video' ? `<video class="media-element" src="${src}" autoplay loop muted playsinline></video>` : `<img class="media-element" src="${src}" alt="역사적 자료 이미지">`;
+            if (!src) return '';
+            return type === 'video'
+                ? `<video class="media-element" src="${src}" autoplay loop muted playsinline onerror="this.remove()"></video>`
+                : `<img class="media-element" src="${src}" alt="역사 자료 이미지" onerror="this.remove()">`;
         }
 
-        function openDetail(countryKey) {
-            const data = countryData[countryKey];
-            flagOverlay.style.backgroundImage = `url('${data.flag}')`;
-            document.getElementById('light-title').innerText = data.light.title;
-            document.getElementById('light-desc').innerText = data.light.description;
-            document.getElementById('dark-title').innerText = data.dark.title;
-            document.getElementById('dark-desc').innerText = data.dark.description;
-            document.getElementById('light-media-container').innerHTML = generateMediaHTML(data.light.mediaType, data.light.mediaSrc);
-            document.getElementById('dark-media-container').innerHTML = generateMediaHTML(data.dark.mediaType, data.dark.mediaSrc);
-            
-            updateSlider(window.innerWidth / 2, window.innerWidth);
-            document.getElementById('home-screen').classList.remove('active');
-            document.getElementById('detail-screen').classList.add('active');
+        function openDetail(key) {
+            const d = countryData[key];
+            flagOverlay.style.backgroundImage = `url('${d.flag}')`;
+            document.getElementById('light-title').innerText = d.light.title;
+            document.getElementById('light-desc').innerText = d.light.description;
+            document.getElementById('dark-title').innerText = d.dark.title;
+            document.getElementById('dark-desc').innerText = d.dark.description;
+            document.getElementById('light-media-container').innerHTML = generateMediaHTML(d.light.mediaType, d.light.mediaSrc);
+            document.getElementById('dark-media-container').innerHTML = generateMediaHTML(d.dark.mediaType, d.dark.mediaSrc);
+            document.getElementById('cc-name').innerText = d.name;
+            document.getElementById('cc-people').innerText = d.stats.people;
+            document.getElementById('cc-period').innerText = d.stats.period;
+            document.getElementById('cc-ports').innerText = d.stats.ports;
+            document.getElementById('cc-dest').innerText = d.stats.dest;
+            document.getElementById('cc-think').innerText = d.think;
+            sliderButton.classList.add('hint');
+            setSliderPct(50);
+            showScreen('detail-screen');
+            sliderWrapper.focus({ preventScroll: true });
         }
 
         function goBack() {
-            document.getElementById('detail-screen').classList.remove('active');
-            document.getElementById('home-screen').classList.add('active');
+            showScreen('home-screen');
             setTimeout(() => {
                 document.getElementById('light-media-container').innerHTML = '';
                 document.getElementById('dark-media-container').innerHTML = '';
-                updateSlider(window.innerWidth / 2, window.innerWidth);
+                setSliderPct(50);
             }, 800);
         }
 
-        function updateSlider(clientX, currentWindowWidth) {
-            let x = Math.max(0, Math.min(clientX, currentWindowWidth));
-            let percentage = (x / currentWindowWidth) * 100;
+        function setVisible(el, op) {
+            el.style.opacity = op;
+            el.style.visibility = op > 0.02 ? 'visible' : 'hidden';
+        }
+
+        function setSliderPct(p) {
+            const percentage = Math.max(0, Math.min(100, p));
+            sliderPct = percentage;
             sliderWrapper.style.left = `${percentage}%`;
+            sliderWrapper.setAttribute('aria-valuenow', Math.round(percentage));
             panelLight.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
-            let diff = Math.abs(percentage - 50);
-            flagOverlay.style.opacity = Math.max(0, 1 - (diff / 25));
-            
-            if (percentage < 49.5) { 
+            const diff = Math.abs(percentage - 50);
+            flagOverlay.style.opacity = Math.max(0, 1 - diff / 25);
+            setVisible(centerCard, Math.max(0, 1 - diff / 8));
+
+            if (percentage < 49.5) {
                 flagTint.style.mixBlendMode = 'multiply';
-                flagTint.style.backgroundColor = 'rgba(153, 0, 0, 1)'; 
-                flagTint.style.opacity = Math.min(1, diff / 25); 
-                document.getElementById('content-dark').style.opacity = percentage < 45 ? Math.min(1, (45 - percentage) / 20) : 0;
-                document.getElementById('content-light').style.opacity = 0;
-            } else if (percentage > 50.5) {
-                flagTint.style.mixBlendMode = 'overlay'; 
-                flagTint.style.backgroundColor = 'rgba(255, 215, 0, 1)'; 
+                flagTint.style.backgroundColor = 'rgba(153, 0, 0, 1)';
                 flagTint.style.opacity = Math.min(1, diff / 25);
-                document.getElementById('content-light').style.opacity = percentage > 55 ? Math.min(1, (percentage - 55) / 20) : 0;
-                document.getElementById('content-dark').style.opacity = 0;
+                setVisible(contentDark, percentage < 45 ? Math.min(1, (45 - percentage) / 20) : 0);
+                setVisible(contentLight, 0);
+            } else if (percentage > 50.5) {
+                flagTint.style.mixBlendMode = 'overlay';
+                flagTint.style.backgroundColor = 'rgba(255, 215, 0, 1)';
+                flagTint.style.opacity = Math.min(1, diff / 25);
+                setVisible(contentLight, percentage > 55 ? Math.min(1, (percentage - 55) / 20) : 0);
+                setVisible(contentDark, 0);
             } else {
                 flagTint.style.opacity = 0;
-                document.getElementById('content-light').style.opacity = 0;
-                document.getElementById('content-dark').style.opacity = 0;
+                setVisible(contentLight, 0);
+                setVisible(contentDark, 0);
             }
         }
 
-        sliderWrapper.addEventListener('pointerdown', (e) => { isDragging = true; windowWidth = window.innerWidth; sliderWrapper.setPointerCapture(e.pointerId); });
-        sliderWrapper.addEventListener('pointermove', (e) => { if (!isDragging) return; e.preventDefault(); updateSlider(e.clientX, windowWidth); });
-        sliderWrapper.addEventListener('pointerup', (e) => { isDragging = false; sliderWrapper.releasePointerCapture(e.pointerId); });
-        
-        let mapActive = false, mapYear = 1500, mapAnimFrame, mapShips = [], isMapPlaying = true, currentSpeed = 1;
+        function animateSliderTo(target) {
+            sliderButton.classList.remove('hint');
+            cancelAnimationFrame(sliderAnim);
+            const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (reduce) { setSliderPct(target); return; }
+            const start = sliderPct, t0 = performance.now(), dur = 600;
+            const step = now => {
+                const t = Math.min(1, (now - t0) / dur);
+                const e = 1 - Math.pow(1 - t, 3);
+                setSliderPct(start + (target - start) * e);
+                if (t < 1) sliderAnim = requestAnimationFrame(step);
+            };
+            sliderAnim = requestAnimationFrame(step);
+        }
+
+        sliderWrapper.addEventListener('pointerdown', e => {
+            isDragging = true;
+            cancelAnimationFrame(sliderAnim);
+            sliderButton.classList.remove('hint');
+            sliderWrapper.setPointerCapture(e.pointerId);
+        });
+        sliderWrapper.addEventListener('pointermove', e => {
+            if (!isDragging) return;
+            e.preventDefault();
+            setSliderPct(e.clientX / window.innerWidth * 100);
+        });
+        const endDrag = e => { isDragging = false; try { sliderWrapper.releasePointerCapture(e.pointerId); } catch (_) {} };
+        sliderWrapper.addEventListener('pointerup', endDrag);
+        sliderWrapper.addEventListener('pointercancel', endDrag);
+
+        /* ================= 타임랩스 지도 ================= */
+        let mapActive = false, mapYear = 1500, mapAnimFrame, mapShips = [], isMapPlaying = true, currentSpeed = 1, lastTs = null;
         let totalShipCounts = { pt: 0, uk: 0, fr: 0, es: 0, nl: 0 };
+        const MAP_START = 1500, MAP_END = 1870;
         const mapBgCanvas = document.getElementById('map-bg-canvas');
         const mapBgCtx = mapBgCanvas.getContext('2d');
         const shipCanvas = document.getElementById('timelapse-canvas');
@@ -411,53 +647,71 @@
 
         const realYearlyData = [[1514,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0],[1516,0,1,1,0,0,0,0,0,0,0,0,1,0,0,0],[1519,0,0,0,0,0,0,0,0,0,1,0,7,0,0,0],[1526,0,0,0,0,0,0,0,0,0,2,0,2,0,0,0],[1527,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0],[1532,1,0,1,0,0,0,0,0,0,1,0,1,0,0,0],[1534,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0],[1535,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],[1541,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0],[1557,2,0,2,0,0,0,0,0,0,0,0,0,0,0,0],[1562,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0],[1563,0,0,0,3,0,3,0,0,0,0,0,0,0,0,0],[1564,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0],[1565,0,0,0,0,0,4,0,0,0,1,0,1,0,0,0],[1567,0,0,0,0,0,4,0,0,0,1,0,1,0,0,0],[1568,0,0,0,6,0,6,0,0,0,0,0,0,0,0,0],[1571,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],[1574,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0],[1575,1,0,1,0,0,0,0,0,1,0,0,0,0,0,0],[1576,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0],[1577,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0],[1581,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],[1582,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0],[1583,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0],[1585,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0],[1587,1,0,1,0,0,0,0,0,0,3,0,3,0,0,0],[1588,2,0,2,0,0,0,0,0,0,1,0,1,0,0,0],[1590,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0],[1593,0,0,0,0,0,0,0,0,0,10,0,10,0,0,0],[1594,0,0,0,0,0,0,0,0,0,4,0,4,0,0,0],[1595,8,0,9,0,0,0,0,0,0,3,0,3,0,0,0],[1596,12,0,16,0,0,0,0,0,0,0,0,0,0,1,1],[1597,20,0,22,0,0,0,0,0,0,0,0,0,1,0,2],[1598,21,0,25,0,0,0,0,0,0,0,0,0,0,0,1],[1599,28,0,32,0,0,0,0,0,0,0,0,0,0,0,0],[1600,24,0,25,0,0,0,0,0,0,0,0,0,0,0,0],[1601,27,0,28,0,0,0,0,0,0,0,0,0,0,0,0],[1602,4,0,6,0,0,0,0,0,0,0,0,0,0,0,0],[1603,3,0,4,0,0,0,0,0,0,0,0,0,0,0,0],[1604,4,0,4,0,0,0,0,0,0,0,0,0,1,0,1],[1605,7,0,8,0,0,0,0,0,0,1,0,1,0,0,0],[1606,1,0,1,0,0,0,0,0,0,0,0,0,0,0,1],[1607,1,0,2,0,0,0,0,0,0,0,0,1,0,0,0],[1608,10,0,10,0,0,0,0,0,0,0,0,0,0,0,0],[1609,8,0,9,0,0,0,0,0,0,1,0,1,0,0,0],[1610,11,0,11,0,0,0,0,0,0,0,0,0,0,0,0],[1611,11,0,12,0,0,0,0,0,0,1,0,1,0,0,0],[1612,7,0,7,0,0,0,0,0,0,2,0,2,0,0,0],[1613,6,0,6,0,0,0,0,0,0,0,0,0,0,0,0],[1614,2,0,2,0,0,0,0,0,0,0,0,0,0,0,0],[1615,6,0,6,0,0,0,0,0,0,2,0,2,1,0,2],[1616,4,0,4,0,0,0,0,0,0,4,0,4,0,0,0],[1617,7,0,7,0,0,0,0,0,0,12,0,12,0,0,0],[1618,15,0,16,0,0,0,0,0,0,0,0,0,0,0,0],[1619,24,0,24,0,0,0,0,0,0,5,0,5,0,0,0],[1620,14,0,14,0,0,0,0,0,0,12,0,12,0,0,0],[1621,16,0,16,0,0,0,0,0,0,13,0,13,0,0,0],[1622,10,0,10,0,0,0,0,0,0,8,0,8,0,0,0],[1623,15,0,15,0,0,0,0,0,0,2,0,2,0,0,0],[1624,20,0,21,0,0,0,0,0,0,0,0,0,0,0,0],[1625,24,0,24,0,0,0,0,0,0,0,0,0,0,0,0],[1626,15,0,15,0,0,0,0,0,0,0,0,0,0,0,0],[1627,17,0,17,0,0,0,0,0,0,0,0,0,0,0,0],[1628,13,0,13,0,0,0,0,0,0,0,0,0,0,0,0],[1629,6,0,6,0,0,0,0,0,0,0,0,0,0,0,0],[1630,13,0,13,0,0,0,0,0,0,0,0,0,1,0,1],[1631,17,0,17,0,0,0,0,0,0,5,0,5,0,0,0],[1632,12,0,12,0,0,0,0,0,0,1,0,2,0,0,0],[1633,7,0,7,0,0,0,0,0,0,2,0,2,0,0,0],[1634,14,0,14,0,0,0,0,0,0,0,0,0,0,0,0],[1635,8,0,8,0,0,0,0,0,0,0,0,0,0,0,0],[1636,15,0,15,0,0,0,0,0,0,1,0,1,0,0,0],[1637,7,0,7,0,0,0,0,0,0,0,0,0,6,0,6],[1638,11,0,11,0,0,0,0,0,0,1,0,1,4,0,8],[1639,8,0,9,0,0,0,0,0,0,1,0,1,7,0,10],[1640,2,0,2,0,0,0,0,0,0,2,0,2,5,0,6],[1641,2,0,2,1,0,1,0,0,0,1,0,1,7,0,7],[1642,0,0,0,0,0,2,0,0,0,0,0,0,17,0,20],[1643,2,0,2,0,0,0,0,0,2,0,0,0,15,0,18],[1644,2,0,2,8,0,11,2,0,2,0,0,1,14,0,18],[1645,3,0,4,11,0,12,0,0,0,0,0,1,13,0,13],[1646,3,0,3,11,0,13,0,0,0,2,0,2,4,0,7],[1647,3,0,3,8,0,8,1,0,1,0,0,0,1,0,1],[1648,0,0,0,3,0,3,0,0,1,0,0,0,0,0,1],[1649,4,0,5,1,0,1,0,0,0,0,0,0,2,0,2],[1650,8,0,10,1,0,1,0,0,0,0,0,0,1,0,2],[1651,4,0,5,1,0,1,0,0,0,2,0,2,1,0,1],[1652,5,0,6,3,0,8,0,0,0,1,0,2,5,0,7],[1653,4,0,5,0,0,0,0,0,0,0,0,0,4,0,5],[1654,2,0,2,7,0,13,0,0,0,1,0,4,3,0,4],[1655,2,0,2,6,0,13,0,0,0,0,0,0,3,0,6],[1656,6,0,6,8,0,9,0,0,0,2,0,5,3,0,4],[1657,1,0,1,2,0,5,0,0,0,0,0,0,8,0,9],[1658,2,0,4,7,0,9,0,0,0,0,0,0,6,0,9],[1659,0,0,1,2,0,4,1,0,1,2,0,2,14,0,18],[1660,0,0,0,4,0,6,0,0,0,1,0,1,8,0,10],[1661,1,0,2,4,0,9,0,0,0,1,0,1,9,0,12],[1662,0,0,1,3,0,11,0,0,0,1,0,1,6,0,10],[1663,1,0,3,11,1,14,0,0,0,0,0,0,9,0,10],[1664,2,0,2,33,0,40,0,0,1,0,0,0,9,0,12],[1665,1,0,1,25,0,27,0,0,0,0,0,0,5,0,8],[1666,0,0,2,10,0,15,1,0,2,0,0,0,2,0,6],[1667,1,0,1,3,0,9,1,0,1,0,0,0,6,0,8],[1668,0,0,0,5,0,9,0,0,0,0,0,0,16,1,22],[1669,1,0,1,1,0,2,0,0,0,0,0,0,24,0,33],[1670,0,0,0,1,0,4,2,0,3,0,0,0,13,1,18],[1671,5,1,6,1,0,1,2,0,5,0,0,0,21,1,25],[1672,1,0,2,2,0,5,2,0,4,0,0,0,10,0,11],[1673,2,0,2,0,0,2,0,0,1,0,0,0,9,0,9],[1674,0,0,1,10,0,16,0,0,0,1,0,1,8,0,8],[1675,0,0,0,15,0,22,0,0,2,1,0,1,4,0,6],[1676,3,0,3,20,0,22,0,0,0,0,0,0,10,0,10],[1677,3,0,3,14,0,17,3,0,4,3,0,3,4,1,9],[1678,3,0,3,17,0,26,0,0,2,6,0,6,4,0,4],[1679,3,0,6,25,0,32,5,1,10,2,0,2,6,0,9],[1680,6,0,6,23,0,34,0,1,2,1,0,1,11,0,12],[1681,4,0,8,35,0,51,3,0,4,2,0,4,12,0,12],[1682,1,0,1,29,0,46,6,0,7,0,0,0,6,0,7],[1683,1,0,1,40,0,61,2,0,4,1,0,1,7,0,8],[1684,6,0,6,31,0,37,3,0,4,0,0,0,8,0,8],[1685,8,0,9,24,0,39,4,0,4,0,0,1,8,0,10],[1686,6,0,6,40,0,45,4,0,5,0,0,0,8,0,8],[1687,6,0,6,39,0,41,4,0,4,0,0,0,13,0,15],[1688,6,0,6,17,0,25,3,0,6,0,0,0,12,0,15],[1689,9,0,9,21,0,22,1,0,3,0,0,0,6,0,7],[1690,12,0,12,9,0,11,0,0,1,0,0,1,1,0,1],[1691,16,0,16,13,0,18,1,0,2,0,0,0,7,0,8],[1692,15,0,15,11,0,17,0,0,0,0,0,0,5,0,5],[1693,10,0,10,12,0,14,1,0,3,0,0,0,6,0,7],[1694,11,0,11,11,0,15,1,0,1,0,0,0,7,0,8],[1695,18,0,18,15,0,18,1,0,2,0,0,0,3,0,5],[1696,22,0,23,10,0,22,1,0,1,0,0,0,3,0,3],[1697,35,0,35,15,0,27,1,0,1,0,0,0,3,1,8],[1698,53,0,59,20,0,38,5,0,7,0,0,0,8,0,9],[1699,44,0,44,16,0,55,3,0,5,0,0,0,12,0,19],[1700,42,0,42,31,0,101,1,0,3,0,0,0,12,0,17],[1701,36,0,36,23,0,131,1,0,5,0,0,0,17,0,19],[1702,24,0,25,29,0,100,2,0,3,0,0,0,10,0,12],[1703,24,0,25,26,0,46,5,0,12,0,0,0,4,0,5],[1704,21,0,21,36,0,62,3,0,6,0,0,0,5,0,7],[1705,17,0,17,24,0,56,9,0,11,0,0,0,7,0,11],[1706,22,0,22,32,0,52,2,0,3,0,0,0,4,0,4],[1707,37,0,38,22,0,42,1,0,4,0,0,0,8,0,8],[1708,23,0,23,33,0,68,5,0,7,0,0,0,6,0,9],[1709,28,0,29,17,0,39,5,0,8,0,0,0,7,0,9],[1710,24,0,24,30,0,56,9,0,13,0,0,0,9,0,10],[1711,28,0,29,22,0,50,6,0,10,0,0,0,3,0,10],[1712,45,0,45,8,0,39,3,0,9,0,0,0,4,0,7],[1713,42,0,42,36,0,59,8,0,12,0,0,0,3,0,6],[1714,37,0,38,39,1,71,22,0,28,0,0,0,7,0,11],[1715,38,0,46,34,0,70,24,0,28,0,0,0,16,0,22],[1716,36,0,36,31,0,64,26,0,27,0,0,0,10,0,16],[1717,31,0,32,29,0,86,10,0,19,0,0,0,10,0,15],[1718,29,0,31,50,0,109,10,0,17,0,0,0,7,0,8],[1719,39,0,40,41,0,100,21,0,26,0,0,0,9,0,15],[1720,39,0,41,41,0,67,23,0,28,0,0,0,5,0,12],[1721,40,0,44,33,0,61,30,0,34,0,0,0,7,0,8],[1722,39,0,39,34,0,71,31,0,37,0,0,0,7,0,9],[1723,50,0,51,31,0,72,12,0,12,0,0,0,7,0,7],[1724,82,0,84,33,0,85,15,0,15,0,0,0,6,0,8],[1725,72,1,76,30,0,98,16,0,17,0,0,0,8,0,9],[1726,67,0,69,44,0,115,19,0,20,0,0,0,9,0,11],[1727,64,1,68,30,0,87,20,0,24,0,0,0,6,0,10],[1728,60,0,60,29,0,84,17,0,22,0,0,0,3,0,4],[1729,47,1,48,44,1,105,19,0,27,0,0,0,5,0,7],[1730,33,0,33,59,0,103,18,0,29,0,0,0,4,0,4],[1731,57,0,57,66,1,120,19,0,23,0,0,0,5,0,5],[1732,29,0,29,46,2,110,22,0,24,0,0,0,7,0,9],[1733,38,0,38,26,4,82,12,0,19,0,0,0,7,0,8],[1734,54,0,54,31,2,77,10,0,13,0,0,0,7,0,11],[1735,33,1,35,28,0,67,15,0,24,0,0,0,8,0,10],[1736,41,0,42,38,1,82,14,0,18,0,0,0,7,0,8],[1737,40,0,40,54,1,113,21,0,28,0,0,0,2,0,3],[1738,51,0,52,34,0,77,32,0,35,0,0,0,3,0,5],[1739,30,0,30,53,0,101,36,1,49,0,0,0,2,0,4],[1740,49,0,50,42,0,86,39,0,59,0,0,0,2,0,2],[1741,36,0,38,23,0,72,54,0,76,0,0,0,6,0,11],[1742,62,0,63,32,0,55,39,0,51,0,0,0,2,0,8],[1743,32,1,33,40,0,60,42,0,54,0,0,0,9,0,12],[1744,67,0,67,62,0,75,36,0,55,0,0,0,8,0,14],[1745,35,1,36,15,0,32,9,0,10,0,0,0,3,0,12],[1746,39,0,39,15,0,30,0,0,2,0,0,0,5,0,12],[1747,65,0,66,23,0,69,1,0,4,0,0,0,4,0,14],[1748,61,0,61,48,0,78,4,0,9,0,0,0,6,0,11],[1749,56,0,56,63,0,88,29,0,46,0,0,0,8,0,12],[1750,59,0,60,58,0,84,48,0,55,0,0,0,4,0,10],[1751,42,1,45,57,0,80,49,0,51,0,0,0,4,0,11],[1752,50,2,52,89,0,106,33,0,47,1,0,1,7,0,9],[1753,60,0,60,77,0,108,39,0,48,0,0,0,4,0,8],[1754,37,0,38,102,0,126,51,0,63,0,0,0,16,0,19],[1755,42,0,43,101,1,135,51,0,69,0,0,0,9,0,13],[1756,53,0,53,81,0,112,19,0,24,0,0,0,14,0,15],[1757,46,1,47,65,0,90,1,0,1,0,0,0,7,0,13],[1758,60,1,61,68,0,86,0,0,0,0,0,0,11,0,16],[1759,41,0,41,74,0,95,0,0,0,1,0,1,9,0,13],[1760,57,0,57,98,0,123,0,0,0,0,0,0,5,0,7],[1761,37,0,37,121,0,142,0,0,0,0,0,0,13,0,16],[1762,53,0,53,80,0,115,0,0,0,0,0,0,12,0,18],[1763,47,0,47,86,0,110,7,0,9,0,0,0,10,0,18],[1764,36,0,36,130,0,164,47,0,54,0,0,0,13,0,17],[1765,57,0,57,132,0,165,44,0,56,0,0,0,18,0,23],[1766,69,0,69,138,0,178,48,0,62,0,0,3,17,0,22],[1767,69,0,69,120,0,146,54,0,61,1,0,3,15,0,25],[1768,50,0,51,123,0,140,53,0,57,0,0,3,13,0,21],[1769,50,0,50,129,0,155,51,0,56,0,0,2,10,0,19],[1770,45,0,45,133,0,166,50,0,64,0,0,0,15,0,24],[1771,56,0,56,132,0,171,29,0,37,0,0,0,23,0,29],[1772,36,0,36,129,0,160,50,0,55,0,0,0,14,0,24],[1773,30,0,30,136,0,173,38,0,47,0,0,0,14,0,24],[1774,52,0,52,153,0,183,50,0,56,0,0,0,11,0,19],[1775,64,0,64,147,0,175,48,0,54,0,0,0,13,0,17],[1776,44,0,45,125,0,145,62,0,72,0,0,0,4,0,10],[1777,33,0,33,65,0,80,58,0,67,0,0,0,5,0,12],[1778,50,0,50,21,0,35,45,0,58,0,0,0,5,0,9],[1779,37,0,40,15,0,29,5,0,6,1,0,1,7,0,10],[1780,55,0,56,14,0,25,0,0,0,0,0,0,8,0,14],[1781,68,0,69,25,0,43,1,0,3,0,0,0,4,0,7],[1782,86,0,87,35,0,48,9,0,9,0,0,0,0,0,2],[1783,63,0,76,51,0,68,19,0,27,1,0,1,2,0,3],[1784,61,0,61,106,0,122,69,0,81,0,0,0,12,0,12],[1785,48,0,48,84,0,101,76,0,90,0,0,0,11,0,11],[1786,51,0,51,76,0,97,85,0,95,0,0,0,2,0,3],[1787,44,0,44,85,0,107,110,0,123,0,0,0,3,0,5],[1788,48,0,48,89,0,114,91,0,102,1,0,2,5,0,6],[1789,54,0,54,99,0,110,89,0,105,0,0,0,5,0,5],[1790,45,0,45,84,0,111,134,0,161,0,0,1,7,0,7],[1791,48,0,49,142,0,159,81,0,111,0,0,0,7,0,8],[1792,59,0,59,148,0,169,65,0,87,2,0,2,6,0,8],[1793,74,0,75,153,0,171,26,0,34,2,0,2,12,0,13],[1794,92,0,94,66,0,130,1,0,2,0,0,1,1,0,1],[1795,90,0,90,74,0,93,0,0,0,1,0,4,2,0,2],[1796,73,0,73,76,0,100,0,0,0,3,0,3,0,0,0],[1797,87,0,88,85,0,115,2,0,3,6,0,6,0,0,0],[1798,58,0,59,115,0,136,0,0,0,1,0,1,0,0,0],[1799,77,0,78,144,0,185,0,0,0,2,0,2,0,0,0],[1800,70,0,70,130,0,151,0,0,0,1,0,2,0,0,0],[1801,68,0,72,121,0,147,0,0,0,2,0,2,0,0,0],[1802,76,0,76,131,0,177,12,0,14,2,0,4,0,0,2],[1803,76,0,79,90,0,157,40,0,47,12,0,16,3,0,5],[1804,92,0,98,84,0,133,4,0,5,1,0,2,0,0,0],[1805,91,0,92,105,0,136,1,0,1,4,0,5,0,0,0],[1806,108,0,109,98,0,125,0,0,0,1,0,1,0,0,0],[1807,93,0,93,111,0,121,2,0,3,0,0,0,0,0,0],[1808,66,0,71,33,0,33,1,0,2,0,0,0,0,0,1],[1809,82,0,83,1,0,1,0,0,0,2,0,17,0,0,1],[1810,133,0,142,0,0,1,0,0,0,14,0,50,0,0,0],[1811,123,0,137,0,0,1,0,0,0,8,0,55,0,0,0],[1812,143,0,154,0,0,0,0,0,0,6,0,44,0,0,0],[1813,111,0,119,0,0,0,0,0,0,6,0,37,0,0,0],[1814,115,0,119,0,0,0,1,0,2,19,0,53,0,0,0],[1815,118,0,131,0,0,0,7,0,14,11,0,58,0,0,0],[1816,124,0,131,0,0,0,4,0,7,18,0,131,0,0,0],[1817,130,0,135,0,0,0,11,0,19,17,0,166,0,0,0],[1818,158,0,162,0,0,0,10,0,18,11,0,110,0,0,0],[1819,150,0,152,0,0,0,19,0,35,23,0,81,0,0,0],[1820,131,0,137,0,0,0,35,0,67,26,0,77,0,0,2],[1821,134,0,136,0,0,0,34,0,61,6,0,14,0,0,0],[1822,167,0,173,0,0,0,47,0,77,8,0,12,1,0,1],[1823,97,0,98,0,0,0,19,0,38,3,0,9,0,0,0],[1824,104,0,107,0,0,0,35,0,56,4,0,21,0,0,0],[1825,118,0,119,0,0,0,58,0,80,17,0,49,1,0,1],[1826,157,0,160,0,0,0,38,0,56,10,0,24,1,0,2],[1827,168,0,182,0,0,0,13,0,30,11,0,28,0,0,0],[1828,161,0,166,0,0,0,10,0,26,23,0,38,0,0,0],[1829,203,0,206,0,0,0,17,0,31,23,0,54,1,0,2],[1830,140,0,147,0,0,0,16,0,25,17,0,56,0,0,0],[1831,14,0,17,0,0,0,5,0,7,32,0,44,0,0,0],[1832,8,0,13,0,0,0,1,0,1,20,0,40,0,0,0],[1833,9,0,15,0,0,0,0,0,1,27,0,41,0,0,0],[1834,21,0,29,0,0,0,1,0,1,23,0,48,0,0,0],[1835,26,0,36,0,0,0,0,0,0,51,0,84,0,0,0],[1836,78,0,92,0,0,0,0,0,0,25,0,79,0,0,0],[1837,122,0,164,0,0,0,0,0,0,8,0,15,0,0,0],[1838,137,0,192,0,0,0,0,0,0,9,0,13,0,0,0],[1839,170,0,232,0,0,0,0,0,1,6,0,13,0,0,0],[1840,87,0,147,0,0,0,1,0,1,4,0,17,0,0,0],[1841,55,0,112,0,0,0,2,0,2,0,0,6,0,0,0],[1842,32,0,66,0,0,0,0,0,2,2,0,5,0,0,0],[1843,13,0,39,0,0,0,1,0,1,7,0,17,0,0,0],[1844,56,0,67,0,0,0,0,0,0,3,0,10,0,0,0],[1845,60,0,108,0,0,0,0,0,1,2,0,11,0,0,0],[1846,29,0,49,0,0,0,0,0,0,2,0,3,0,0,0],[1847,31,0,89,0,0,0,1,0,2,1,0,1,0,0,0],[1848,17,0,70,0,0,0,2,0,4,1,0,2,0,0,0],[1849,24,0,52,0,0,0,0,0,6,1,0,3,0,0,0],[1850,24,0,56,0,0,0,1,0,1,1,0,3,0,0,0],[1851,5,0,12,0,0,0,0,0,0,5,0,10,0,0,0],[1852,0,0,1,0,0,0,0,0,0,3,0,9,0,0,0],[1853,2,0,5,0,0,0,0,0,0,3,0,10,0,0,0],[1854,1,0,2,0,0,0,0,0,0,1,0,5,0,0,0],[1855,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0],[1856,1,0,2,0,0,0,0,0,0,1,0,3,0,0,0],[1857,0,0,1,0,0,0,0,0,0,1,0,7,0,0,0],[1858,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0],[1859,0,0,1,0,0,0,0,0,0,1,0,9,0,0,0],[1860,0,0,0,0,0,0,1,0,1,0,0,1,0,0,0],[1861,0,0,0,0,0,0,1,0,1,0,0,7,0,0,0],[1862,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0],[1863,0,0,1,0,0,0,0,0,0,0,0,2,0,0,0],[1864,0,0,0,0,0,0,1,0,1,1,0,4,0,0,0],[1865,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0],[1866,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]];
 
+        const historyEvents = [
+            { year: 1518, title: '아프리카에서 아메리카로 직접', text: '스페인 국왕이 아프리카에서 아메리카 식민지로 노예를 곧바로 실어 가는 무역을 허가했습니다.' },
+            { year: 1619, title: '북아메리카 버지니아', text: '영국 식민지 버지니아에 아프리카인들이 끌려온 기록이 처음 남았습니다.' },
+            { year: 1637, title: '네덜란드, 엘미나성 점령', text: '네덜란드가 포르투갈의 엘미나성을 빼앗아 노예무역의 거점으로 삼았습니다.' },
+            { year: 1672, title: '영국 왕립아프리카회사', text: '영국 왕실의 지원을 받는 회사가 아프리카 무역 독점권을 얻어 노예무역에 본격적으로 뛰어들었습니다.' },
+            { year: 1694, title: '팔마리스 함락', text: '브라질에서 탈출한 노예들이 100년 가까이 지켜 온 공동체 팔마리스가 포르투갈군의 공격으로 무너졌습니다.' },
+            { year: 1713, title: '아시엔토가 영국으로', text: '위트레흐트 조약으로 영국이 스페인 식민지에 노예를 공급하는 독점권을 얻었습니다. 파란 점이 늘어나는 것을 지켜보세요.' },
+            { year: 1781, title: '종(Zong)호 학살', text: '영국 노예선 종호의 선원들이 보험금을 노리고 130명이 넘는 아프리카인을 바다에 던졌습니다.' },
+            { year: 1787, title: '영국 폐지 운동의 시작', text: '노예무역 폐지 위원회가 만들어지고 "나는 인간이자 형제가 아닌가?"라는 구호가 퍼졌습니다.' },
+            { year: 1791, title: '생도맹그 봉기', text: '프랑스 식민지 생도맹그의 노예들이 봉기했습니다. 이후 프랑스 배(하늘색)가 급격히 줄어듭니다.' },
+            { year: 1804, title: '아이티 독립', text: '노예였던 사람들이 세운 첫 번째 독립국 아이티가 탄생했습니다.' },
+            { year: 1807, title: '영국, 노예무역 금지', text: '영국 선박의 노예무역이 불법이 되었습니다. 파란 점이 사라지는 것을 확인해 보세요.' },
+            { year: 1831, title: '브라질의 첫 금지법', text: '브라질이 노예무역을 금지했지만 단속이 거의 없어 몇 년 뒤 다시 크게 늘어났습니다.' },
+            { year: 1833, title: '영국, 노예제 폐지법', text: '영국이 노예무역뿐 아니라 식민지의 노예제 자체를 없애는 법을 만들었습니다.' },
+            { year: 1848, title: '프랑스, 노예제 폐지', text: '프랑스가 모든 식민지의 노예제를 폐지했습니다.' },
+            { year: 1850, title: '브라질 노예무역 종식', text: '브라질이 강력한 단속법을 만들면서 브라질행 노예무역이 사실상 끝났습니다. 초록 점의 변화를 보세요.' },
+            { year: 1866, title: '마지막 항해들', text: '쿠바로 향한 불법 노예선을 끝으로 대서양 노예무역이 막을 내립니다. 쿠바는 1886년, 브라질은 1888년에 노예제를 폐지했습니다.' }
+        ];
+        let shownEvents = new Set();
+        let toastTimer = null;
+
         const colors = { pt: '#10b981', uk: '#3b82f6', fr: '#06b6d4', es: '#eab308', nl: '#f97316' };
         const countryNames = { pt: '포르투갈', uk: '영국', fr: '프랑스', es: '스페인', nl: '네덜란드' };
 
         const routeWeights = { pt:{am:[],eu:[]}, uk:{am:[],eu:[]}, fr:{am:[],eu:[]}, es:{am:[],eu:[]}, nl:{am:[],eu:[]} };
-        for(let flag in realRoutesData) {
-            for(let region in realRoutesData[flag]) {
+        for (let flag in realRoutesData) {
+            for (let region in realRoutesData[flag]) {
                 let sum = 0;
                 routeWeights[flag][region] = realRoutesData[flag][region].map(r => { sum += r[1]; return sum; });
             }
         }
 
         function getHistoricalRoute(flag, region) {
-            if (!realRoutesData[flag][region] || realRoutesData[flag][region].length === 0) {
-                return region === 'eu' ? [[-15,14], [-9,39]] : [[-15,14], [-40,-15]]; 
-            }
             const routes = realRoutesData[flag][region];
+            if (!routes || routes.length === 0) {
+                return region === 'eu' ? [[-15,14], [-9,39]] : [[-15,14], [-40,-15]];
+            }
             const weights = routeWeights[flag][region];
             const rand = Math.random() * weights[weights.length - 1];
-            for (let i = 0; i < weights.length; i++) {
-                if (rand <= weights[i]) return [[routes[i][0][0], routes[i][0][1]], [routes[i][0][2], routes[i][0][3]]];
-            }
-            return [[routes[routes.length-1][0][0], routes[routes.length-1][0][1]], [routes[routes.length-1][0][2], routes[routes.length-1][0][3]]];
+            let i = weights.findIndex(w => rand <= w);
+            if (i < 0) i = routes.length - 1;
+            const r = routes[i][0];
+            return [[r[0], r[1]], [r[2], r[3]]];
         }
 
         function initBarChart() {
-            const container = document.getElementById('bar-chart-container');
-            container.innerHTML = '';
-            ['uk', 'pt', 'fr', 'es', 'nl'].forEach(k => {
-                container.innerHTML += `
-                    <div class="flex flex-col gap-1">
-                        <div class="flex justify-between text-xs text-slate-300">
-                            <span>${countryNames[k]}</span>
-                            <span id="count-${k}" class="font-bold tabular-nums">0</span>
-                        </div>
-                        <div class="w-full bg-slate-800 rounded-full h-2">
-                            <div id="bar-${k}" class="h-2 rounded-full transition-all duration-200 ease-out" style="width: 0%; background-color: ${colors[k]}"></div>
-                        </div>
-                    </div>`;
-            });
+            const box = document.getElementById('bar-chart-container');
+            box.innerHTML = ['pt', 'uk', 'fr', 'es', 'nl'].map(k => `
+                <div class="flex flex-col gap-1">
+                    <div class="flex justify-between text-xs text-slate-300">
+                        <span class="flex items-center gap-1.5"><i class="inline-block w-2 h-2 rounded-full" style="background:${colors[k]}"></i>${countryNames[k]}</span>
+                        <span id="count-${k}" class="font-bold tabular-nums">0</span>
+                    </div>
+                    <div class="w-full bg-slate-800 rounded-full h-2">
+                        <div id="bar-${k}" class="h-2 rounded-full transition-all duration-200 ease-out" style="width:0%;background-color:${colors[k]}"></div>
+                    </div>
+                </div>`).join('');
         }
 
         function updateBarChart() {
-            let max = Math.max(...Object.values(totalShipCounts), 1); 
+            const max = Math.max(...Object.values(totalShipCounts), 1);
             for (let k in totalShipCounts) {
-                let el = document.getElementById(`count-${k}`);
-                let bar = document.getElementById(`bar-${k}`);
-                if(el && bar) {
+                const el = document.getElementById(`count-${k}`);
+                const bar = document.getElementById(`bar-${k}`);
+                if (el && bar) {
                     el.innerText = totalShipCounts[k].toLocaleString();
                     bar.style.width = `${(totalShipCounts[k] / max) * 100}%`;
                 }
@@ -470,99 +724,162 @@
                 btn.classList.remove('bg-slate-700', 'border-slate-500');
                 btn.classList.add('bg-slate-800', 'border-transparent');
             });
-            let activeBtn = document.getElementById(`speed-${multiplier}x`);
+            const activeBtn = document.getElementById(`speed-${multiplier}x`);
             activeBtn.classList.remove('bg-slate-800', 'border-transparent');
             activeBtn.classList.add('bg-slate-700', 'border-slate-500');
         }
 
-        d3.json('https://unpkg.com/world-atlas@2.0.2/countries-110m.json').then(data => {
-            worldGeoData = data;
-            if (mapActive) drawRealWorldMap();
-        });
+        if (window.d3 && window.topojson) {
+            d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json')
+                .then(data => { worldGeoData = data; if (mapActive) drawRealWorldMap(); })
+                .catch(() => document.getElementById('map-error').classList.remove('hidden'));
+        } else {
+            document.getElementById('map-error').classList.remove('hidden');
+        }
 
         function drawRealWorldMap() {
-            if (!worldGeoData) return;
             mapBgCtx.clearRect(0, 0, mapBgCanvas.width, mapBgCanvas.height);
-            
-            const gradient = mapBgCtx.createRadialGradient(mapBgCanvas.width/2, mapBgCanvas.height/2, mapBgCanvas.height*0.2, mapBgCanvas.width/2, mapBgCanvas.height/2, mapBgCanvas.height);
-            gradient.addColorStop(0, '#0f172a');
-            gradient.addColorStop(1, '#020617');
-            mapBgCtx.fillStyle = gradient;
+            const g = mapBgCtx.createRadialGradient(mapBgCanvas.width/2, mapBgCanvas.height/2, mapBgCanvas.height*0.2, mapBgCanvas.width/2, mapBgCanvas.height/2, mapBgCanvas.height);
+            g.addColorStop(0, '#0f172a');
+            g.addColorStop(1, '#020617');
+            mapBgCtx.fillStyle = g;
             mapBgCtx.fillRect(0, 0, mapBgCanvas.width, mapBgCanvas.height);
+            if (!worldGeoData) return;
 
             const path = d3.geoPath().projection(mapProjection).context(mapBgCtx);
             const countries = topojson.feature(worldGeoData, worldGeoData.objects.countries);
-            
             mapBgCtx.beginPath();
             path(countries);
-            mapBgCtx.fillStyle = '#1e293b'; 
+            mapBgCtx.fillStyle = '#1e293b';
             mapBgCtx.fill();
-            mapBgCtx.strokeStyle = '#334155'; 
+            mapBgCtx.strokeStyle = '#334155';
             mapBgCtx.stroke();
+
+            // 대륙 이름
+            mapBgCtx.font = '600 13px "Noto Serif KR", serif';
+            mapBgCtx.fillStyle = 'rgba(148,163,184,.55)';
+            mapBgCtx.textAlign = 'center';
+            [['유럽', [10, 50]], ['아프리카', [20, 5]], ['브라질', [-52, -8]], ['카리브해', [-72, 23]], ['북아메리카', [-95, 40]]]
+                .forEach(([name, ll]) => { const p = mapProjection(ll); if (p) mapBgCtx.fillText(name, p[0], p[1]); });
         }
 
         let shipQueue = [];
         let dataIndex = 0;
 
+        function buildTimeline() {
+            const tl = document.getElementById('timeline');
+            tl.querySelectorAll('.tick').forEach(t => t.remove());
+            historyEvents.forEach(ev => {
+                const t = document.createElement('div');
+                t.className = 'tick';
+                t.style.left = `${(ev.year - MAP_START) / (MAP_END - MAP_START) * 100}%`;
+                t.title = `${ev.year}년 ${ev.title}`;
+                t.addEventListener('click', e => { e.stopPropagation(); seekYear(ev.year - 0.5); });
+                tl.appendChild(t);
+            });
+            tl.onclick = e => {
+                const r = tl.getBoundingClientRect();
+                seekYear(MAP_START + (e.clientX - r.left) / r.width * (MAP_END - MAP_START));
+            };
+            tl.onkeydown = e => {
+                if (e.key === 'ArrowRight') { seekYear(mapYear + 10); e.preventDefault(); }
+                if (e.key === 'ArrowLeft') { seekYear(mapYear - 10); e.preventDefault(); }
+            };
+        }
+
+        function updateYearUI() {
+            const y = Math.min(MAP_END, Math.floor(mapYear));
+            document.getElementById('year-display').innerText = y;
+            document.getElementById('timeline-fill').style.width = `${(mapYear - MAP_START) / (MAP_END - MAP_START) * 100}%`;
+            document.getElementById('timeline').setAttribute('aria-valuenow', y);
+        }
+
         function openMap() {
-            document.getElementById('home-screen').classList.remove('active');
-            document.getElementById('map-screen').classList.add('active');
+            showScreen('map-screen');
             mapActive = true;
             resizeMap();
             initBarChart();
+            buildTimeline();
             resetMap();
-            animateMap();
+            lastTs = null;
+            cancelAnimationFrame(mapAnimFrame);
+            mapAnimFrame = requestAnimationFrame(animateMap);
         }
 
-        function closeMap() {
-            document.getElementById('map-screen').classList.remove('active');
-            document.getElementById('home-screen').classList.add('active');
+        function stopMap() {
             mapActive = false;
             cancelAnimationFrame(mapAnimFrame);
+            hideToast();
         }
+
+        function closeMap() { showScreen('home-screen'); }
 
         function resizeMap() {
             mapBgCanvas.width = shipCanvas.width = window.innerWidth;
             mapBgCanvas.height = shipCanvas.height = window.innerHeight;
-            
-            let scale = window.innerWidth < 768 ? window.innerWidth / 3.5 : window.innerWidth / 5;
-            mapProjection = d3.geoMercator()
-                .scale(scale)
-                .translate([window.innerWidth / 2, window.innerHeight / 2])
-                .center([-15, 10]); 
-                
+            const scale = window.innerWidth < 768 ? window.innerWidth / 3.5 : window.innerWidth / 5;
+            const w = window.innerWidth, hh = window.innerHeight;
+            mapProjection = window.d3
+                ? d3.geoMercator().scale(scale).translate([w / 2, hh / 2]).center([-15, 10])
+                : ([lon, lat]) => [w / 2 + (lon + 15) * scale / 57.3, hh / 2 - (lat - 10) * scale / 57.3]; // 라이브러리를 못 불러왔을 때 대비
+            mapShips = [];
             drawRealWorldMap();
         }
 
+        function setPlaying(p) {
+            isMapPlaying = p;
+            document.getElementById('map-play-btn').innerText = p ? '일시정지' : '재생';
+        }
+
         function toggleMapPlay() {
-            isMapPlaying = !isMapPlaying;
-            document.getElementById('map-play-btn').innerText = isMapPlaying ? '일시정지' : '재생';
+            if (!isMapPlaying && mapYear >= MAP_END) seekYear(MAP_START);
+            setPlaying(!isMapPlaying);
+            if (isMapPlaying) { clearTimeout(toastTimer); toastTimer = setTimeout(hideToast, 1500); }
+        }
+
+        function seekYear(y) {
+            y = Math.max(MAP_START, Math.min(MAP_END - 0.01, y));
+            mapYear = y;
+            dataIndex = 0;
+            totalShipCounts = { pt: 0, uk: 0, fr: 0, es: 0, nl: 0 };
+            const flags = ['pt', 'uk', 'fr', 'es', 'nl'];
+            while (dataIndex < realYearlyData.length && realYearlyData[dataIndex][0] <= Math.floor(y)) {
+                const row = realYearlyData[dataIndex];
+                for (let i = 0; i < 5; i++) totalShipCounts[flags[i]] += row[i * 3 + 3];
+                dataIndex++;
+            }
+            shownEvents = new Set(historyEvents.filter(ev => ev.year <= Math.floor(y)).map(ev => ev.year));
+            shipQueue = [];
+            mapShips = [];
+            shipCtx.clearRect(0, 0, shipCanvas.width, shipCanvas.height);
+            hideToast();
+            updateBarChart();
+            updateYearUI();
         }
 
         function resetMap() {
-            mapYear = 1500;
-            dataIndex = 0;
-            mapShips = [];
-            shipQueue = [];
-            isMapPlaying = true;
-            totalShipCounts = { pt: 0, uk: 0, fr: 0, es: 0, nl: 0 };
-            updateBarChart();
+            seekYear(MAP_START);
             setSpeed(1);
-            document.getElementById('map-play-btn').innerText = '일시정지';
-            shipCtx.clearRect(0, 0, shipCanvas.width, shipCanvas.height);
+            setPlaying(true);
         }
 
-        function spawnShip(country, speedFactor, region) {
-            let pts = getHistoricalRoute(country, region);
-            let o = pts[0];
-            let d = pts[1];
-            
-            let jO = [o[0] + (Math.random()*4-2), o[1] + (Math.random()*4-2)];
-            let jD = [d[0] + (Math.random()*4-2), d[1] + (Math.random()*4-2)];
-            
-            let startPos = mapProjection(jO);
-            let endPos = mapProjection(jD);
+        function showToast(ev) {
+            document.getElementById('toast-year').innerText = `${ev.year}년`;
+            document.getElementById('toast-title').innerText = ev.title;
+            document.getElementById('toast-text').innerText = ev.text;
+            document.getElementById('event-toast').classList.add('show');
+            clearTimeout(toastTimer);
+            if (document.getElementById('pause-on-event').checked) setPlaying(false);
+            else toastTimer = setTimeout(hideToast, 5500 / Math.sqrt(currentSpeed));
+        }
+        function hideToast() { document.getElementById('event-toast').classList.remove('show'); }
 
+        function spawnShip(country, speedFactor, region) {
+            const [o, d] = getHistoricalRoute(country, region);
+            const jO = [o[0] + (Math.random() * 4 - 2), o[1] + (Math.random() * 4 - 2)];
+            const jD = [d[0] + (Math.random() * 4 - 2), d[1] + (Math.random() * 4 - 2)];
+            const startPos = mapProjection(jO);
+            const endPos = mapProjection(jD);
             mapShips.push({
                 startX: startPos[0], startY: startPos[1],
                 targetX: endPos[0], targetY: endPos[1],
@@ -572,84 +889,78 @@
             });
         }
 
-        function animateMap() {
-            if(!mapActive) return;
+        function animateMap(ts) {
+            if (!mapActive) return;
+            if (ts === undefined) ts = performance.now();
+            // 모니터 주사율(60Hz/120Hz)과 관계없이 같은 속도로 재생
+            const dt = lastTs === null ? 1 : Math.min(ts - lastTs, 50) / 16.667;
+            lastTs = ts;
 
             shipCtx.globalCompositeOperation = 'destination-out';
-            shipCtx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+            shipCtx.fillStyle = `rgba(255, 255, 255, ${Math.min(0.5, 0.15 * dt)})`;
             shipCtx.fillRect(0, 0, shipCanvas.width, shipCanvas.height);
             shipCtx.globalCompositeOperation = 'source-over';
 
-            if(isMapPlaying) {
-                const yearPerFrame = 0.15 * currentSpeed; 
-                mapYear += yearPerFrame; 
-                
-                if(mapYear >= 1870) {
-                    isMapPlaying = false;
-                    document.getElementById('map-play-btn').innerText = '재생';
-                }
-                document.getElementById('year-display').innerText = Math.floor(mapYear);
+            if (isMapPlaying) {
+                const yearPerFrame = 0.15 * currentSpeed * dt;
+                mapYear += yearPerFrame;
+                if (mapYear >= MAP_END) { mapYear = MAP_END; setPlaying(false); }
+                updateYearUI();
 
+                const flags = ['pt', 'uk', 'fr', 'es', 'nl'];
                 while (dataIndex < realYearlyData.length && realYearlyData[dataIndex][0] <= Math.floor(mapYear)) {
-                    let row = realYearlyData[dataIndex];
-                    let flags = ['pt', 'uk', 'fr', 'es', 'nl'];
-                    
-                    for(let i=0; i<5; i++) {
-                        let amCount = row[i * 3 + 1];    
-                        let euCount = row[i * 3 + 2];    
-                        let totalCount = row[i * 3 + 3]; 
-                        
-                        // 차트 누적 (실제 전체 선박 합산)
-                        totalShipCounts[flags[i]] += totalCount;
-
-                        // 입자 생성
-                        let amParticles = Math.ceil(amCount / 5);
-                        let euParticles = euCount;
-
-                        for(let p=0; p<amParticles; p++) shipQueue.push({flag: flags[i], region: 'am'});
-                        for(let p=0; p<euParticles; p++) shipQueue.push({flag: flags[i], region: 'eu'});
+                    const row = realYearlyData[dataIndex];
+                    for (let i = 0; i < 5; i++) {
+                        const amCount = row[i * 3 + 1];
+                        const euCount = row[i * 3 + 2];
+                        totalShipCounts[flags[i]] += row[i * 3 + 3];
+                        const amParticles = Math.ceil(amCount / 5);
+                        for (let p = 0; p < amParticles; p++) shipQueue.push({ flag: flags[i], region: 'am' });
+                        for (let p = 0; p < euCount; p++) shipQueue.push({ flag: flags[i], region: 'eu' });
                     }
                     dataIndex++;
                 }
 
+                const due = historyEvents.filter(ev => ev.year <= Math.floor(mapYear) && !shownEvents.has(ev.year));
+                if (due.length) {
+                    due.forEach(ev => shownEvents.add(ev.year));
+                    showToast(due[due.length - 1]);
+                }
+
                 if (shipQueue.length > 0) {
-                    let spawnCount = Math.ceil(shipQueue.length / (1 / yearPerFrame));
-                    for (let i = 0; i < spawnCount; i++) {
-                        if (shipQueue.length === 0) break;
-                        let ship = shipQueue.shift();
+                    const spawnCount = Math.ceil(shipQueue.length * Math.min(1, yearPerFrame));
+                    for (let i = 0; i < spawnCount && shipQueue.length; i++) {
+                        const ship = shipQueue.shift();
                         spawnShip(ship.flag, currentSpeed, ship.region);
                     }
                     updateBarChart();
                 }
             }
 
+            const eastCut = mapProjection([20, 0])[0];
             for (let i = mapShips.length - 1; i >= 0; i--) {
-                let s = mapShips[i];
-                s.progress += s.speed;
-                
+                const s = mapShips[i];
+                s.progress = Math.min(1, s.progress + s.speed * dt);
                 const t = s.progress;
                 const cx = (s.startX + s.targetX) / 2;
-                let cy = Math.min(s.startY, s.targetY) - (shipCanvas.width * 0.03); 
-                
-                if (s.startX > mapProjection([20, 0])[0]) {
-                    cy = Math.max(s.startY, s.targetY) + (shipCanvas.width * 0.1); 
-                }
+                let cy = Math.min(s.startY, s.targetY) - (shipCanvas.width * 0.03);
+                if (s.startX > eastCut) cy = Math.max(s.startY, s.targetY) + (shipCanvas.width * 0.1);
 
-                const currentX = (1-t)*(1-t)*s.startX + 2*(1-t)*t*cx + t*t*s.targetX;
-                const currentY = (1-t)*(1-t)*s.startY + 2*(1-t)*t*cy + t*t*s.targetY;
+                const x = (1-t)*(1-t)*s.startX + 2*(1-t)*t*cx + t*t*s.targetX;
+                const y = (1-t)*(1-t)*s.startY + 2*(1-t)*t*cy + t*t*s.targetY;
 
                 shipCtx.beginPath();
-                shipCtx.arc(currentX, currentY, 2.5, 0, Math.PI*2);
+                shipCtx.arc(x, y, 2.5, 0, Math.PI * 2);
                 shipCtx.fillStyle = s.color;
                 shipCtx.shadowColor = s.color;
                 shipCtx.shadowBlur = 12;
                 shipCtx.fill();
-                shipCtx.shadowBlur = 0; 
+                shipCtx.shadowBlur = 0;
 
-                if(s.progress >= 1) {
-                    mapShips.splice(i, 1); 
+                if (s.progress >= 1) {
+                    mapShips.splice(i, 1);
                     shipCtx.beginPath();
-                    shipCtx.arc(s.targetX, s.targetY, 15, 0, Math.PI*2);
+                    shipCtx.arc(s.targetX, s.targetY, 15, 0, Math.PI * 2);
                     shipCtx.fillStyle = s.color + '40';
                     shipCtx.fill();
                 }
@@ -657,9 +968,92 @@
             mapAnimFrame = requestAnimationFrame(animateMap);
         }
 
+        /* ================= 퀴즈 ================= */
+        const quizData = [
+            { q: '대서양 노예무역에서 가장 많은 아프리카인을 실어 나른 배는 어느 나라 배였을까요?',
+              opts: ['영국', '포르투갈(브라질 포함)', '프랑스', '네덜란드'], a: 1,
+              ex: '포르투갈·브라질 배가 약 585만 명, 전체의 절반 가까이를 실어 날랐습니다. 영국은 18세기에 가장 활발했지만 전체 규모로는 두 번째입니다.' },
+            { q: '삼각무역에서 유럽 상인들이 아프리카로 싣고 간 물건은 무엇이었을까요?',
+              opts: ['설탕과 담배', '총·직물·술 같은 공산품', '은과 금', '커피와 면화'], a: 1,
+              ex: '유럽의 공산품을 아프리카에서 사람과 맞바꾸고, 아메리카에서 설탕·담배·면화를 사서 유럽으로 돌아갔습니다.' },
+            { q: '아프리카에서 아메리카로 건너가는 가장 참혹한 항해 구간을 무엇이라고 부를까요?',
+              opts: ['비단길', '중간 항로', '북서 항로', '희망봉 항로'], a: 1,
+              ex: '삼각무역의 가운데 구간이라 "중간 항로"라고 부릅니다. 이 항해에서 약 180만 명이 목숨을 잃었습니다.' },
+            { q: '노예였던 사람들이 봉기해 1804년 독립국을 세운 곳은 어디일까요?',
+              opts: ['쿠바', '자메이카', '아이티', '브라질'], a: 2,
+              ex: '프랑스 식민지 생도맹그의 노예들이 1791년 봉기해 1804년 아이티를 세웠습니다.' },
+            { q: '영국이 노예무역을 법으로 금지한 해는 언제일까요?',
+              opts: ['1688년', '1776년', '1807년', '1888년'], a: 2,
+              ex: '1807년입니다. 타임랩스에서 이 해 이후 파란 점이 사라지는 것을 볼 수 있습니다. 1888년은 브라질이 노예제를 폐지한 해입니다.' },
+            { q: '약 1,250만 명이 배에 실렸지만 아메리카에 도착한 사람은 약 1,070만 명이었습니다. 이 차이는 무엇을 뜻할까요?',
+              opts: ['유럽으로 옮겨진 사람', '항해 도중 목숨을 잃은 사람', '고향으로 돌아간 사람', '기록이 잘못된 것'], a: 1,
+              ex: '약 180만 명이 중간 항로에서 숨졌습니다. 해안까지 끌려오는 길에서 숨진 사람은 여기에 포함되지도 않습니다.' }
+        ];
+        let quizIdx = 0, quizScore = 0;
+
+        function openQuiz() { quizIdx = 0; quizScore = 0; renderQuiz(); showScreen('quiz-screen'); }
+
+        function renderQuiz() {
+            const body = document.getElementById('quiz-body');
+            if (quizIdx >= quizData.length) {
+                const msg = quizScore === quizData.length ? '모두 맞혔어요. 명과 암을 제대로 살펴봤네요.'
+                    : quizScore >= 4 ? '잘했어요. 틀린 문제는 국가별 화면이나 타임랩스에서 다시 확인해 보세요.'
+                    : '중간 항로와 저항의 역사 페이지를 읽고 다시 도전해 보세요.';
+                body.innerHTML = `
+                    <h1 class="text-3xl md:text-4xl font-black text-white">결과: ${quizData.length}문제 중 ${quizScore}문제</h1>
+                    <p class="mt-4">${msg}</p>
+                    <div class="mt-8 flex flex-wrap gap-3">
+                        <button class="home-btn primary" onclick="openQuiz()">다시 풀기</button>
+                        <button class="home-btn" onclick="showScreen('voices-screen')">중간 항로와 저항 읽기</button>
+                        <button class="home-btn" onclick="showScreen('home-screen')">홈으로</button>
+                    </div>`;
+                return;
+            }
+            const item = quizData[quizIdx];
+            body.innerHTML = `
+                <p class="text-sm text-slate-400">${quizIdx + 1} / ${quizData.length}</p>
+                <div class="h-1 bg-slate-800 rounded-full mt-2 mb-8"><div class="h-1 bg-yellow-500 rounded-full" style="width:${quizIdx / quizData.length * 100}%"></div></div>
+                <h1 class="text-2xl md:text-3xl font-black text-white leading-snug mb-8">${item.q}</h1>
+                <div id="quiz-opts">${item.opts.map((o, i) => `<button class="quiz-opt" data-i="${i}">${o}</button>`).join('')}</div>
+                <div id="quiz-feedback" class="mt-4"></div>`;
+            body.querySelectorAll('.quiz-opt').forEach(btn => btn.addEventListener('click', () => answerQuiz(+btn.dataset.i)));
+        }
+
+        function answerQuiz(i) {
+            const item = quizData[quizIdx];
+            const btns = document.querySelectorAll('#quiz-opts .quiz-opt');
+            btns.forEach((b, j) => {
+                b.disabled = true;
+                if (j === item.a) b.classList.add('correct');
+                else if (j === i) b.classList.add('wrong');
+            });
+            const ok = i === item.a;
+            if (ok) quizScore++;
+            document.getElementById('quiz-feedback').innerHTML = `
+                <p class="font-bold ${ok ? 'text-green-400' : 'text-red-400'}">${ok ? '정답입니다.' : '아쉬워요, 정답은 ' + item.opts[item.a] + '입니다.'}</p>
+                <p class="mt-1">${item.ex}</p>
+                <button class="home-btn primary mt-4" id="quiz-next">${quizIdx + 1 < quizData.length ? '다음 문제' : '결과 보기'}</button>`;
+            const next = document.getElementById('quiz-next');
+            next.addEventListener('click', () => { quizIdx++; renderQuiz(); document.getElementById('quiz-screen').scrollTop = 0; });
+            next.focus();
+        }
+
+        /* ================= 공통 이벤트 ================= */
+        document.addEventListener('keydown', e => {
+            if (currentScreen === 'detail-screen') {
+                if (e.key === 'ArrowLeft') { animateSliderTo(Math.max(0, Math.round(sliderPct - 10))); e.preventDefault(); }
+                if (e.key === 'ArrowRight') { animateSliderTo(Math.min(100, Math.round(sliderPct + 10))); e.preventDefault(); }
+                if (e.key === 'Escape') goBack();
+            } else if (currentScreen === 'map-screen') {
+                if (e.key === ' ' && e.target.tagName !== 'BUTTON' && e.target.tagName !== 'INPUT') { toggleMapPlay(); e.preventDefault(); }
+                if (e.key === 'Escape') closeMap();
+            } else if (e.key === 'Escape' && currentScreen !== 'home-screen') {
+                showScreen('home-screen');
+            }
+        });
+
         window.addEventListener('resize', () => {
-            windowWidth = window.innerWidth;
-            if (document.getElementById('detail-screen').classList.contains('active')) updateSlider(windowWidth / 2, windowWidth);
+            if (currentScreen === 'detail-screen') setSliderPct(sliderPct);
             if (mapActive) resizeMap();
         });
 
