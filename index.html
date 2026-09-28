@@ -12,6 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 
     <style>
+        *, *::before, *::after { box-sizing: border-box; }
         html, body { height: 100%; }
         body {
             font-family: 'Noto Serif KR', 'Nanum Myeongjo', 'Batang', serif;
@@ -205,6 +206,121 @@
         .quiz-opt.correct { border-color: #22c55e; background: rgba(20,83,45,.6); }
         .quiz-opt.wrong { border-color: #ef4444; background: rgba(127,29,29,.6); }
 
+        /* ---------- 교류 지도 (중학생용) ---------- */
+        #exchange-screen { background: radial-gradient(circle at 35% 45%, #0f1b33 0%, #020617 80%); }
+        #ex-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+        #ex-svg text { font-family: inherit; }
+        .ex-land { fill: #121a2b; stroke: #1f2b42; stroke-width: .6; }
+        .ex-land.c-europe { fill: #24406e; }
+        .ex-land.c-africa { fill: #57401f; }
+        .ex-land.c-america { fill: #1f5047; }
+        .ex-land.c-europe, .ex-land.c-africa, .ex-land.c-america { cursor: pointer; stroke: #0b1222; }
+        .ex-land.c-europe:hover, .ex-land.c-africa:hover, .ex-land.c-america:hover { filter: brightness(1.25); }
+        .ex-land.sel { filter: brightness(1.7) !important; }
+        .ex-arrow { fill: none; stroke-linecap: round; transition: opacity .35s; }
+        .ex-arrow-g { transition: opacity .35s; }
+        .ex-arrow-g.dim { opacity: .15; }
+        .ex-alabel rect { fill: #0b1222; stroke-width: 2; }
+        .ex-alabel text { fill: #fff; font-weight: 700; font-size: 13px; }
+        .ex-pill { cursor: pointer; outline: none; }
+        .ex-pill rect { fill: rgba(2, 6, 23, .82); stroke-width: 2; transition: stroke .2s; }
+        .ex-pill text { fill: #fff; font-size: 19px; font-weight: 900; }
+        .ex-pill:hover rect, .ex-pill:focus-visible rect { stroke: #facc15 !important; }
+        .ex-pill.sel rect { stroke: #facc15 !important; stroke-width: 3.5; fill: rgba(66, 52, 10, .9); }
+        .ex-country { cursor: pointer; outline: none; }
+        .ex-country .hit { fill: transparent; stroke: none; }
+        .ex-country .dot { fill: #0f172a; stroke: #e2e8f0; stroke-width: 2; }
+        .ex-country text { fill: #e2e8f0; font-size: 13px; font-weight: 700; paint-order: stroke; stroke: #020617; stroke-width: 3.5px; stroke-linejoin: round; }
+        .ex-country:hover .dot, .ex-country:focus-visible .dot { stroke: #facc15; }
+        .ex-country.sel .dot { fill: #facc15; stroke: #facc15; }
+        .ex-country.sel text { fill: #fde68a; }
+        #ex-cargo rect { fill: #f8fafc; }
+        #ex-cargo text { fill: #0f172a; font-size: 13px; font-weight: 700; }
+
+        .ex-panel {
+            position: absolute; top: 0; right: 0; bottom: 0; width: min(440px, 40vw); z-index: 15;
+            background: rgba(2, 6, 23, .95); border-left: 1px solid #1e293b;
+            overflow-y: auto; padding: 5.5rem 1.7rem 2.5rem; user-select: text; -webkit-user-select: text;
+            font-size: 1.02rem;
+        }
+        .ex-title { font-size: 1.9rem; font-weight: 900; color: #fff; line-height: 1.3; }
+        .ex-tag { font-size: .85rem; color: #94a3b8; margin-bottom: .15rem; }
+        .ex-lead { line-height: 1.9; color: #e2e8f0; margin: .9rem 0 1.2rem; }
+        .ex-lead b, .ex-text b { color: #fde68a; }
+        .ex-summary { display: inline-block; margin: .6rem 0 1rem; padding: .35rem .8rem; border-radius: 8px; background: rgba(250, 204, 21, .12); color: #fde68a; font-weight: 700; line-height: 1.6; }
+        .ex-text { line-height: 1.95; color: #e2e8f0; margin: .8rem 0; }
+        .ex-hint { font-size: .9rem; color: #94a3b8; margin-top: .7rem; }
+        .ex-h3 { font-size: 1.05rem; font-weight: 900; color: #fff; margin: 1.5rem 0 .6rem; }
+        .ex-big-btn { width: 100%; padding: 1rem; border-radius: 12px; font-size: 1.1rem; font-weight: 900; color: #fff; background: #b91c1c; border: 0; box-shadow: 0 6px 20px rgba(185, 28, 28, .35); }
+        .ex-big-btn:hover { background: #dc2626; }
+        .ex-btn { padding: .65rem 1.2rem; border-radius: 999px; font-weight: 700; color: #fff; background: #1e293b; border: 1px solid #475569; }
+        .ex-btn:hover { background: #334155; }
+        .ex-btn.primary { background: #b91c1c; border-color: #ef4444; }
+        .ex-btn.primary:hover { background: #dc2626; }
+        .ex-btn:disabled { opacity: .35; }
+        .ex-link { display: block; font-size: .9rem; color: #94a3b8; text-decoration: underline; text-underline-offset: 3px; margin-top: 1rem; }
+
+        .ex-fig { margin: 0 0 .5rem; }
+        .ex-fig img { width: 100%; max-height: 220px; object-fit: cover; border-radius: 10px; border: 1px solid #334155; background: #0f172a; }
+        .ex-fig figcaption { font-size: .8rem; color: #94a3b8; line-height: 1.6; margin-top: .4rem; }
+        .ex-ph { height: 140px; border: 1px dashed #475569; border-radius: 10px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 1rem; font-size: .8rem; line-height: 1.7; color: #94a3b8; margin-bottom: .5rem;
+                 background: repeating-linear-gradient(45deg, #0b1324 0 10px, #0f192e 10px 20px); }
+        .ex-ph b { color: #e2e8f0; }
+
+        .ex-trade { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin: 1.1rem 0 .4rem; }
+        .ex-trade > div { border-radius: 10px; padding: .75rem .85rem; background: #0f172a; border: 1px solid #1e293b; }
+        .ex-trade span { display: block; font-size: .8rem; color: #94a3b8; margin-bottom: .2rem; }
+        .ex-trade b { font-size: 1rem; line-height: 1.6; color: #fff; }
+        .ex-send { border-top: 4px solid #60a5fa !important; }
+        .ex-recv { border-top: 4px solid #34d399 !important; }
+
+        .ex-story { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .55rem; }
+        .ex-story li { position: relative; padding-left: 1.1rem; line-height: 1.85; color: #e2e8f0; }
+        .ex-story li::before { content: ''; position: absolute; left: 0; top: .72rem; width: 6px; height: 6px; border-radius: 50%; background: #94a3b8; }
+
+        .ex-feel { display: flex; flex-direction: column; gap: .5rem; margin-top: 1.3rem; }
+        .ex-feel > div { display: flex; gap: .7rem; align-items: flex-start; padding: .75rem .9rem; border-radius: 10px; background: #0f172a; line-height: 1.65; }
+        .ex-feel .emo { font-size: 1.5rem; line-height: 1; }
+        .ex-feel b { display: block; font-size: .85rem; }
+        .ex-feel .good { border-left: 4px solid #eab308; } .ex-feel .good b { color: #facc15; }
+        .ex-feel .bad { border-left: 4px solid #dc2626; } .ex-feel .bad b { color: #f87171; }
+
+        .ex-arrow-list { list-style: none; padding: 0; margin: 1.3rem 0 0; display: flex; flex-direction: column; gap: .55rem; }
+        .ex-arrow-list li { display: flex; gap: .7rem; align-items: center; line-height: 1.6; }
+        .ex-num { flex: none; width: 1.7rem; height: 1.7rem; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 900; font-size: .9rem; color: #0b1222; }
+        .ex-quick { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; margin-top: 1rem; }
+        .ex-quick button { padding: .8rem .4rem; border-radius: 10px; font-weight: 900; color: #fff; border: 2px solid transparent; }
+        .ex-quick button:hover { border-color: #facc15; }
+        .ex-flags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .4rem; }
+        .ex-flags button { display: inline-flex; align-items: center; gap: .4rem; padding: .35rem .75rem .35rem .4rem; border-radius: 999px; border: 1px solid #334155; background: #0f172a; color: #e2e8f0; font-size: .9rem; }
+        .ex-flags button.on { border-color: #facc15; color: #fde68a; }
+        .ex-flags img { width: 22px; height: 15px; object-fit: cover; border-radius: 2px; }
+        .ex-words { margin-top: 1.4rem; border: 1px solid #1e293b; border-radius: 10px; padding: .8rem 1rem; background: #0b1222; }
+        .ex-words summary { cursor: pointer; font-weight: 700; color: #e2e8f0; }
+        .ex-words dl { margin: .7rem 0 0; font-size: .92rem; line-height: 1.7; }
+        .ex-words dt { color: #fde68a; font-weight: 700; margin-top: .5rem; }
+        .ex-words dd { margin: 0; color: #cbd5e1; }
+
+        .ex-steps { display: flex; gap: .35rem; margin-bottom: 1rem; }
+        .ex-steps button { flex: 1; height: 2rem; border-radius: 8px; font-weight: 900; font-size: .85rem; color: #94a3b8; background: #0f172a; border: 1px solid #1e293b; }
+        .ex-steps button.done { background: #3f1d1d; color: #fecaca; border-color: #7f1d1d; }
+        .ex-steps button.now { background: #b91c1c; color: #fff; border-color: #ef4444; }
+        .ex-cargo-line { display: flex; gap: .5rem; align-items: center; margin-top: .8rem; padding: .6rem .8rem; border-radius: 10px; background: #0f172a; border: 1px dashed #475569; font-size: .92rem; color: #cbd5e1; }
+        .ex-cargo-line b { color: #fff; }
+        .ex-sum-row { display: flex; gap: .7rem; padding: .75rem .9rem; border-radius: 10px; background: #0f172a; margin-top: .5rem; line-height: 1.65; }
+        .ex-sum-row .emo { font-size: 1.5rem; line-height: 1; }
+        .ex-sum-row b { display: block; color: #fff; }
+        .ex-think { margin-top: 1.2rem; padding: .9rem 1rem; border-radius: 10px; background: rgba(250, 204, 21, .1); border: 1px solid rgba(250, 204, 21, .35); line-height: 1.8; color: #fef3c7; }
+
+        @media (max-width: 768px) {
+            .ex-panel { top: auto; left: 0; width: 100%; height: 50%; border-left: 0; border-top: 1px solid #334155; border-radius: 18px 18px 0 0; padding: 1.2rem 1.1rem 2rem; font-size: 1rem; }
+            .ex-title { font-size: 1.5rem; }
+            .ex-fig img { max-height: 150px; }
+            .ex-pill text { font-size: 15px; }
+            .ex-country text { font-size: 11px; }
+            .ex-alabel text { font-size: 11px; }
+        }
+
         @media (max-width: 768px) {
             .content-wrapper { position: absolute; inset: 0; width: 100%; padding: 5rem 1rem 1rem; }
             .content-left, .content-right { align-items: center; }
@@ -234,9 +350,14 @@
                 </h1>
                 <p class="intro text-sm md:text-base">
                     16세기부터 19세기까지 약 1,250만 명의 아프리카인이 강제로 배에 실려 대서양을 건넜습니다.
-                    나라를 골라 가운데 막대를 좌우로 움직이며 두 얼굴을 비교해 보세요.
+                    유럽의 항구 도시가 누린 번영은 이들의 고통 위에 세워졌습니다.
+                    교류 지도에서 대서양을 오간 사람·물건·문화를 따라가 보고, 나라를 골라 가운데 막대를 움직이며 두 얼굴을 비교해 보세요.
                 </p>
                 <div class="mt-7 flex flex-wrap gap-3 justify-center">
+                    <button onclick="openExchange()" class="home-btn primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h13l-3-3M21 17H8l3 3"/></svg>
+                        대서양 교류 지도
+                    </button>
                     <button onclick="openMap()" class="home-btn primary">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2v20"/><path d="M2 12h20"/></svg>
                         항해 타임랩스
@@ -254,11 +375,12 @@
 
     <!-- 국가별 명과 암 상세 화면 -->
     <section id="detail-screen" class="screen" aria-label="국가별 명과 암">
-        <div class="detail-header flex items-center justify-between gap-2">
+        <div class="detail-header flex flex-wrap items-center justify-between gap-2">
             <button onclick="goBack()" class="px-4 py-2.5 bg-slate-900/90 hover:bg-slate-700 text-white rounded-full transition-all flex items-center gap-2 text-sm border border-slate-600 shadow-xl backdrop-blur-md">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
                 다른 국가
             </button>
+            <button onclick="openExchange(currentCountry)" class="px-4 py-2.5 bg-slate-900/90 hover:bg-slate-700 text-white rounded-full text-sm border border-slate-600 shadow-xl backdrop-blur-md mr-auto">교류 지도에서 보기</button>
             <div class="flex gap-1.5">
                 <button class="jump-btn" onclick="animateSliderTo(10)">◀ 암</button>
                 <button class="jump-btn" onclick="animateSliderTo(50)">가운데</button>
@@ -352,10 +474,6 @@
                 <div class="flex items-center gap-3"><div class="w-4 h-4 rounded-full shadow-[0_0_8px_#eab308] bg-[#eab308]"></div><span class="text-slate-200 text-sm font-medium">스페인 / 우루과이</span></div>
                 <div class="flex items-center gap-3"><div class="w-4 h-4 rounded-full shadow-[0_0_8px_#f97316] bg-[#f97316]"></div><span class="text-slate-200 text-sm font-medium">네덜란드</span></div>
             </div>
-            <label class="flex items-center gap-2 mt-4 pt-3 border-t border-slate-600 text-sm text-slate-200 cursor-pointer">
-                <input type="checkbox" id="pause-on-event" class="w-4 h-4 accent-red-500">
-                사건마다 멈추기
-            </label>
         </div>
 
         <div class="absolute top-24 right-4 md:right-10 z-20 bg-slate-900/80 p-4 rounded-xl border border-slate-700 backdrop-blur-md shadow-2xl w-44 md:w-64">
@@ -380,8 +498,24 @@
                     <button onclick="setSpeed(4)" id="speed-4x" class="speed-btn px-4 py-1.5 bg-slate-800 border border-transparent rounded-full text-white hover:bg-slate-700 font-bold transition-colors">4x</button>
                 </div>
                 <button onclick="resetMap()" class="px-5 py-2 bg-slate-800 border border-slate-600 rounded-full text-white hover:bg-slate-700 font-bold transition-colors shadow-lg">처음부터</button>
+                <label class="px-4 py-2 bg-slate-800 border border-slate-600 rounded-full text-white text-sm font-bold flex items-center gap-2 cursor-pointer shadow-lg">
+                    <input type="checkbox" id="pause-on-event" class="w-4 h-4 accent-red-500">
+                    사건마다 멈추기
+                </label>
             </div>
         </div>
+    </section>
+
+    <!-- 대서양 교류 지도 -->
+    <section id="exchange-screen" class="screen" aria-label="대서양 교류 지도">
+        <svg id="ex-svg" role="group" aria-label="대서양 교류 지도. 대륙이나 나라를 누르면 설명이 나옵니다."></svg>
+        <div class="detail-header flex items-center gap-4 z-20">
+            <button onclick="showScreen('home-screen')" class="px-5 py-2.5 bg-slate-900/90 hover:bg-slate-700 text-white rounded-full transition-all flex items-center gap-2 text-sm border border-slate-600 shadow-xl backdrop-blur-md">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                홈으로
+            </button>
+        </div>
+        <aside id="ex-panel" class="ex-panel" aria-live="polite"></aside>
     </section>
 
     <!-- 중간 항로와 저항 -->
@@ -449,6 +583,7 @@
             <p class="text-xs text-slate-500 mt-12">참고: SlaveVoyages(slavevoyages.org) 대서양 노예무역 데이터베이스 추정치. 수치는 반올림했으며 연구에 따라 다를 수 있습니다.</p>
             <div class="mt-8 flex flex-wrap gap-3">
                 <button onclick="openQuiz()" class="home-btn primary">배운 내용 퀴즈로 확인하기</button>
+                <button onclick="openExchange()" class="home-btn">교류 지도에서 따라가기</button>
             </div>
         </article>
     </section>
@@ -495,14 +630,34 @@
         };
 
         /* ================= 화면 전환 ================= */
-        let currentScreen = 'home-screen';
-        function showScreen(id) {
+        let currentScreen = 'home-screen', currentCountry = null, routing = false;
+        const screenHash = { 'home-screen': '', 'map-screen': '#timelapse', 'voices-screen': '#history', 'quiz-screen': '#quiz', 'exchange-screen': '#exchange', 'detail-screen': '' };
+
+        function showScreen(id, hash) {
             if (currentScreen === 'map-screen' && id !== 'map-screen') stopMap();
+            if (currentScreen === 'exchange-screen' && id !== 'exchange-screen') exStopShip();
             document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
             currentScreen = id;
             const el = document.getElementById(id);
             if (el.classList.contains('scroll-screen')) el.scrollTop = 0;
+            const h = hash !== undefined ? hash : screenHash[id];
+            if (!routing && (location.hash || '') !== h) history.pushState(null, '', h || location.pathname + location.search);
         }
+
+        // 주소 뒤의 #으로 화면 열기 (휴대폰 뒤로 가기, 특정 화면 바로 링크)
+        function route() {
+            routing = true;
+            try {
+                const h = location.hash.slice(1);
+                if (h === 'timelapse') openMap();
+                else if (h === 'history') showScreen('voices-screen');
+                else if (h === 'quiz') openQuiz();
+                else if (h.startsWith('exchange')) openExchange(h.split('-')[1]);
+                else if (h.startsWith('country-') && countryData[h.slice(8)]) openDetail(h.slice(8));
+                else showScreen('home-screen');
+            } finally { routing = false; }
+        }
+        window.addEventListener('popstate', route);
 
         /* ================= 홈 ================= */
         const container = document.getElementById('flags-container');
@@ -555,7 +710,8 @@
             document.getElementById('cc-think').innerText = d.think;
             sliderButton.classList.add('hint');
             setSliderPct(50);
-            showScreen('detail-screen');
+            currentCountry = key;
+            showScreen('detail-screen', '#country-' + key);
             sliderWrapper.focus({ preventScroll: true });
         }
 
@@ -728,13 +884,15 @@
             activeBtn.classList.add('bg-slate-700', 'border-slate-500');
         }
 
-        if (window.d3 && window.topojson) {
-            d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json')
-                .then(data => { worldGeoData = data; if (mapActive) drawRealWorldMap(); })
-                .catch(() => document.getElementById('map-error').classList.remove('hidden'));
-        } else {
-            document.getElementById('map-error').classList.remove('hidden');
-        }
+        const worldReady = (window.d3 && window.topojson)
+            ? d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json').catch(() => null)
+            : Promise.resolve(null);
+        worldReady.then(data => {
+            worldGeoData = data;
+            if (!data) document.getElementById('map-error').classList.remove('hidden');
+            if (mapActive) drawRealWorldMap();
+            if (currentScreen === 'exchange-screen') renderExchange();
+        });
 
         function drawRealWorldMap() {
             mapBgCtx.clearRect(0, 0, mapBgCanvas.width, mapBgCanvas.height);
@@ -986,7 +1144,13 @@
               ex: '1807년입니다. 타임랩스에서 이 해 이후 파란 점이 사라지는 것을 볼 수 있습니다. 1888년은 브라질이 노예제를 폐지한 해입니다.' },
             { q: '약 1,250만 명이 배에 실렸지만 아메리카에 도착한 사람은 약 1,070만 명이었습니다. 이 차이는 무엇을 뜻할까요?',
               opts: ['유럽으로 옮겨진 사람', '항해 도중 목숨을 잃은 사람', '고향으로 돌아간 사람', '기록이 잘못된 것'], a: 1,
-              ex: '약 180만 명이 중간 항로에서 숨졌습니다. 해안까지 끌려오는 길에서 숨진 사람은 여기에 포함되지도 않습니다.' }
+              ex: '약 180만 명이 중간 항로에서 숨졌습니다. 해안까지 끌려오는 길에서 숨진 사람은 여기에 포함되지도 않습니다.' },
+            { q: '대서양 교류를 통해 아메리카에서 아프리카로 전해져 오늘날 아프리카의 중요한 주식이 된 작물은 무엇일까요?',
+              opts: ['쌀과 밀', '카사바와 옥수수', '감자와 보리', '커피와 차'], a: 1,
+              ex: '포르투갈 상인들이 아메리카의 카사바와 옥수수를 아프리카에 들여왔습니다. 교류는 사람과 상품뿐 아니라 작물과 문화도 옮겼습니다.' },
+            { q: '브라질의 카포에이라·삼바와 미국의 블루스·재즈에는 어떤 공통점이 있을까요?',
+              opts: ['유럽 귀족 문화에서 나왔다', '끌려간 아프리카인과 그 후손의 문화에 뿌리를 두었다', '원주민의 종교 의식에서 나왔다', '20세기에 새로 발명되었다'], a: 1,
+              ex: '강제로 끌려간 사람들은 음악과 춤, 종교를 지켜 냈고, 그 전통이 아메리카 곳곳의 새로운 문화로 이어졌습니다.' }
         ];
         let quizIdx = 0, quizScore = 0;
 
@@ -996,7 +1160,7 @@
             const body = document.getElementById('quiz-body');
             if (quizIdx >= quizData.length) {
                 const msg = quizScore === quizData.length ? '모두 맞혔어요. 명과 암을 제대로 살펴봤네요.'
-                    : quizScore >= 4 ? '잘했어요. 틀린 문제는 국가별 화면이나 타임랩스에서 다시 확인해 보세요.'
+                    : quizScore >= Math.ceil(quizData.length * 0.6) ? '잘했어요. 틀린 문제는 국가별 화면이나 타임랩스에서 다시 확인해 보세요.'
                     : '중간 항로와 저항의 역사 페이지를 읽고 다시 도전해 보세요.';
                 body.innerHTML = `
                     <h1 class="text-3xl md:text-4xl font-black text-white">결과: ${quizData.length}문제 중 ${quizScore}문제</h1>
@@ -1037,6 +1201,444 @@
             next.focus();
         }
 
+        /* ================= 교류 지도 (중학생용 쉬운 버전) ================= */
+        // 삼각무역의 세 뱃길
+        const EX_ARROWS = [
+            { id: 'a1', from: 'europe', to: 'africa', color: '#60a5fa', num: 1, label: '옷감·총·술', cargo: '📦 옷감·총·술', bend: 1 },
+            { id: 'a2', from: 'africa', to: 'america', color: '#ef4444', num: 2, label: '끌려간 사람들', cargo: '⛓️ 끌려가는 사람들', bend: -1 },
+            { id: 'a3', from: 'america', to: 'europe', color: '#eab308', num: 3, label: '설탕·담배·면화', cargo: '🌿 설탕·담배·면화', bend: -1 }
+        ];
+        const EX_HUB = { europe: [-12, 47], africa: [1, 3], america: [-63, 15] };
+        const EX_PILL = { europe: [28, 55], africa: [21, 6], america: [-60, -9] };
+        const EX_TINT = { europe: '#60a5fa', africa: '#f59e0b', america: '#34d399' };
+
+        const AFRICA_IDS = new Set(['012','024','204','072','854','108','120','140','148','178','180','384','262','818','226','232','231','266','270','288','324','624','404','426','430','434','450','454','466','478','504','508','516','562','566','646','686','694','706','710','728','729','748','834','768','788','800','732','894','716']);
+        const EUROPE_IDS = { '826': 'uk', '250': 'fr', '528': 'nl', '620': 'pt', '724': 'es' };
+
+        const EX = {
+            europe: { tag: '대륙', name: '유럽', summary: '물건을 보내고 설탕·담배·면화를 받아 부자가 된 곳',
+                sent: '📦 옷감, 총, 술', recv: '🌿 설탕, 담배, 면화',
+                story: ['영국, 프랑스, 포르투갈, 스페인, 네덜란드가 노예무역에 뛰어들었어요.', '유럽의 배는 공장에서 만든 물건을 싣고 아프리카로 떠났어요.', '돌아올 때 가져온 설탕·담배·면화를 팔아 큰돈을 벌었어요.'],
+                good: '상인, 배 주인, 공장 주인, 은행', bad: '유럽이 번 돈은 아프리카 사람들의 고통으로 만들어졌어요.',
+                img: [['./images/exchange/europe.jpg', '노예무역으로 번성한 유럽의 항구'], ['./images/exchange/uk.jpg', '18세기 영국 리버풀 항구'], ['./images/exchange/france.jpg', '프랑스 낭트의 부자 상인들이 지은 저택']] },
+            africa: { tag: '대륙', name: '아프리카', summary: '가장 소중한 사람들을 빼앗긴 곳',
+                sent: '⛓️ 강제로 끌려간 사람들 (약 1,250만 명)', recv: '📦 옷감, 총, 술<br>🌽 옥수수, 카사바',
+                story: ['유럽 상인들이 배에 물건을 싣고 아프리카 해안에 왔어요.', '그 물건과 바꾼 것은 전쟁이나 납치로 붙잡힌 사람들이었어요.', '수백 년 동안 젊은이들이 끌려가면서 마을과 나라가 약해지고 전쟁이 늘었어요.'],
+                good: '사람을 팔고 물건을 얻은 일부 지배자와 상인', bad: '끌려간 사람들, 그리고 가족과 젊은이를 잃은 마을',
+                img: [['./images/exchange/africa.jpg', '노예선에 사람을 빽빽하게 실은 모습을 그린 그림 (1788년경)']] },
+            america: { tag: '대륙', name: '아메리카', summary: '끌려온 사람들이 돈도 받지 못하고 일한 대농장',
+                sent: '🌿 설탕, 담배, 면화', recv: '⛓️ 끌려온 아프리카 사람들',
+                story: ['카리브해, 브라질, 북아메리카에는 사탕수수·담배·면화를 키우는 커다란 농장이 많았어요.', '농장 주인들은 끌려온 사람들을 사서 돈도 주지 않고 힘든 일을 시켰어요.', '끌려온 사람들은 고향의 음악과 춤, 음식을 지켜 냈어요. 이것이 삼바와 재즈 같은 문화의 뿌리가 되었어요.'],
+                good: '사탕수수·담배·면화 농장 주인', bad: '끌려와 평생 일한 사람들과 노예로 태어난 그 자녀들',
+                img: [['./images/exchange/caribbean.jpg', '사탕수수 농장에서 일하는 사람들을 그린 그림 (1823년)'], ['./images/exchange/brazil.jpg', '19세기 초 브라질의 노예들을 그린 그림'], ['./images/exchange/north-america.jpg', '미국 남부의 면화 농장']] },
+            uk: { parent: 'europe', tag: '유럽', name: '영국', summary: '18세기에 노예무역을 가장 활발하게 한 나라',
+                sent: '📦 옷감, 총, 쇠붙이', recv: '🌿 설탕, 담배, 면화',
+                story: ['리버풀 항구에서 수많은 노예선이 아프리카로 떠났어요.', '돌아올 때 싣고 온 설탕과 면화를 팔아 큰돈을 벌었어요.', '이 돈이 공장과 은행으로 흘러가 산업혁명에 힘을 보탰다는 주장도 있어요.'],
+                good: '리버풀의 상인, 은행, 공장 주인', bad: '영국 배에 실려 간 약 326만 명의 아프리카 사람들',
+                img: [['./images/exchange/uk.jpg', '18세기 리버풀 항구. 노예무역으로 크게 성장한 도시예요.'], ['./images/uk-light.jpg', '영국의 번영을 보여 주는 자료']] },
+            fr: { parent: 'europe', tag: '유럽', name: '프랑스', summary: '설탕과 커피로 부자가 된 항구 도시들',
+                sent: '📦 옷감, 술, 총', recv: '🌿 설탕, 커피',
+                story: ['낭트와 보르도 항구에서 노예선이 출발했어요.', '지금의 아이티인 생도맹그의 농장에서 설탕과 커피를 가져와 유럽 곳곳에 팔았어요.', '항구에는 부자가 된 상인들이 지은 멋진 저택들이 줄지어 생겼어요.'],
+                good: '낭트·보르도의 상인과 생도맹그의 농장 주인', bad: '생도맹그 농장에서 일하다 목숨을 잃은 사람들',
+                img: [['./images/exchange/france.jpg', '낭트의 부자 상인들이 지은 저택. 노예무역으로 번 돈으로 지었어요.'], ['./images/france-light.jpg', '프랑스 항구 도시의 번영을 보여 주는 자료']] },
+            nl: { parent: 'europe', tag: '유럽', name: '네덜란드', summary: '1600년대 바다 무역의 강자',
+                sent: '📦 옷감, 총, 조개껍데기 돈', recv: '🌿 설탕',
+                story: ['네덜란드 서인도 회사가 아프리카 해안의 요새들을 차지했어요.', '서아프리카에서 돈처럼 쓰이던 조개껍데기를 가져가 사람과 바꿨어요.', '남아메리카 수리남의 농장에서 설탕을 들여왔어요.'],
+                good: '서인도 회사의 주인과 상인', bad: '해안 요새에 갇혔다가 끌려간 사람들',
+                img: [['./images/exchange/netherlands.jpg', '황금시대 암스테르담 항구'], ['./images/nl-light.png', '네덜란드 황금시대를 보여 주는 자료']] },
+            pt: { parent: 'europe', tag: '유럽', name: '포르투갈', summary: '노예무역을 가장 먼저, 가장 많이 한 나라',
+                sent: '📦 옷감과 여러 물건', recv: '🌿 설탕<br>💰 금 (브라질에서)',
+                story: ['포르투갈은 1400년대부터 아프리카 해안을 오갔어요.', '식민지 브라질로 가장 많은 아프리카 사람들을 끌고 갔어요.', '브라질의 설탕과 금으로 큰 부를 얻었어요.'],
+                good: '포르투갈 왕실과 상인, 브라질의 농장 주인', bad: '브라질로 끌려간 수백만 명의 아프리카 사람들',
+                img: [['./images/exchange/portugal.jpg', '리스본 항구']] },
+            es: { parent: 'europe', tag: '유럽', name: '스페인', summary: '아메리카의 은으로 부자가 된 나라',
+                sent: '📦 유럽 물건', recv: '💰 은<br>🌿 설탕',
+                story: ['스페인은 아메리카의 광산에서 엄청난 양의 은을 캐 왔어요.', '노예는 주로 다른 나라 상인들에게 허가증을 주고 데려오게 했어요.', '1800년대에는 식민지 쿠바의 설탕 농장에 많은 사람이 끌려왔어요.'],
+                good: '스페인 왕실과 광산 주인', bad: '광산에서 일한 원주민과 끌려온 아프리카 사람들',
+                img: [['./images/exchange/spain.jpg', '아메리카의 은이 들어온 세비야 항구'], ['./images/es-light.jpg', '스페인이 얻은 신대륙의 부를 보여 주는 자료']] }
+        };
+        // 유럽 나라 표시 위치 [경도, 위도, 글자 방향]
+        const EX_COUNTRY_POS = { uk: [-2, 53.5, 'l'], nl: [5.5, 52.3, 'r'], fr: [2, 46.8, 'r'], pt: [-8.3, 39.6, 'l'], es: [-3.7, 40.2, 'r'] };
+
+        const EX_STORY = [
+            { title: '유럽에서 출발해요', sel: 'europe', arrow: 'a1', cargo: '📦 옷감·총·술', img: 'europe',
+              text: '유럽의 항구에서 배가 출발해요. 배에는 공장에서 만든 <b>옷감, 총, 술</b>이 실려 있어요.' },
+            { title: '아프리카에서 물건과 사람을 바꿔요', sel: 'africa', at: 'africa', cargo: '⛓️ 붙잡힌 사람들', img: 'africa',
+              text: '아프리카 해안에 도착한 상인들은 싣고 온 물건을 내주고, 전쟁이나 납치로 붙잡힌 사람들을 사들였어요. <b>사람을 물건처럼 사고판 거예요.</b>' },
+            { title: '대서양을 건너요', sel: 'america', arrow: 'a2', cargo: '⛓️ 끌려가는 사람들', img: 'africa',
+              text: '사람들은 쇠사슬에 묶인 채 좁은 배 밑바닥에 갇혀 한두 달 넘게 바다를 건넜어요. 이 바닷길을 <b>"중간 항로"</b>라고 해요. 끌려간 약 1,250만 명 가운데 <b>180만 명 정도가 배 안에서 목숨을 잃었어요.</b>' },
+            { title: '아메리카의 농장에서 일해요', sel: 'america', at: 'america', cargo: '🌿 설탕·담배·면화', img: 'america',
+              text: '살아남은 사람들은 팔려 가 사탕수수, 담배, 면화 농장에서 <b>돈도 받지 못하고</b> 힘든 일을 했어요. 농장에서 나온 설탕, 담배, 면화가 다시 배에 실렸어요.' },
+            { title: '유럽으로 돌아와요', sel: 'europe', arrow: 'a3', cargo: '🌿 설탕·담배·면화', img: 'fr',
+              text: '배는 설탕, 담배, 면화를 싣고 유럽으로 돌아왔어요. 상인들은 이것을 팔아 <b>큰돈을 벌었고</b>, 배는 다시 아프리카로 떠났어요. 한 바퀴 도는 데 보통 1년이 넘게 걸렸어요.' },
+            { title: '정리해 볼까요?', sel: null, loop: true, summary: true }
+        ];
+
+        let exSelected = null, exStory = -1, exAnim = null, exLast = null, exProjCur = null;
+        const exShip = { leg: 0, t: 0, cargo: null };
+        const exEsc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+        const exReduce = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const exGroupOf = k => (EX[k] && EX[k].parent) || k;
+
+        function openExchange(r) {
+            exStory = -1;
+            exSelected = EX[r] ? r : null;
+            showScreen('exchange-screen', exSelected ? '#exchange-' + exSelected : '#exchange');
+            renderExchange();
+            exStartShip();
+        }
+
+        function exProjection(w, h) {
+            const mobile = w < 768;
+            const panelW = mobile ? 0 : Math.min(440, w * 0.4);
+            const ext = mobile ? [[8, 64], [w - 8, h * 0.5 - 6]] : [[30, 80], [w - panelW - 30, h - 40]];
+            const box = { type: 'MultiPoint', coordinates: mobile ? [[-88, -22], [34, -22], [34, 58], [-88, 58]] : [[-105, -32], [45, -32], [45, 60], [-105, 60]] };
+            if (window.d3) return d3.geoMercator().fitExtent(ext, box);
+            const [[x0, y0], [x1, y1]] = ext;
+            const s = Math.min((x1 - x0) / 150, (y1 - y0) / 92);
+            const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
+            return ([lon, lat]) => [cx + (lon + 30) * s, cy - (lat - 14) * s];
+        }
+
+        function exArrowPath(a, b, bend) {
+            const dx = b[0] - a[0], dy = b[1] - a[1], len = Math.hypot(dx, dy) || 1;
+            const off = len * 0.2 * bend;
+            const c = [(a[0] + b[0]) / 2 - dy / len * off, (a[1] + b[1]) / 2 + dx / len * off];
+            const trim = (p, d) => { const vx = c[0] - p[0], vy = c[1] - p[1], l = Math.hypot(vx, vy) || 1; return [p[0] + vx / l * d, p[1] + vy / l * d]; };
+            const s = trim(a, 16), e = trim(b, 22);
+            // 곡선의 한가운데(라벨 위치)
+            const m = [0.25 * s[0] + 0.5 * c[0] + 0.25 * e[0], 0.25 * s[1] + 0.5 * c[1] + 0.25 * e[1]];
+            return { d: `M${s[0].toFixed(1)},${s[1].toFixed(1)} Q${c[0].toFixed(1)},${c[1].toFixed(1)} ${e[0].toFixed(1)},${e[1].toFixed(1)}`, m };
+        }
+
+        function renderExchange() {
+            const svg = document.getElementById('ex-svg');
+            const w = window.innerWidth, h = window.innerHeight, mobile = w < 768;
+            svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+            const proj = exProjCur = exProjection(w, h);
+            let out = '<defs>' + EX_ARROWS.map(a =>
+                `<marker id="exm-${a.id}" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="${mobile ? 12 : 16}" markerHeight="${mobile ? 12 : 16}" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="${a.color}"/></marker>`).join('') + '</defs>';
+
+            // 1) 땅: 유럽 5개국·아프리카·아메리카만 색칠하고 누를 수 있게
+            if (window.d3 && window.topojson && worldGeoData) {
+                const path = d3.geoPath(proj);
+                const feats = topojson.feature(worldGeoData, worldGeoData.objects.countries).features;
+                out += '<g id="ex-land">' + feats.map(f => {
+                    const id = f.id == null ? '' : String(f.id).padStart(3, '0');
+                    let cls = '', r = '';
+                    if (EUROPE_IDS[id]) { cls = 'c-europe'; r = EUROPE_IDS[id]; }
+                    else if (AFRICA_IDS.has(id)) { cls = 'c-africa'; r = 'africa'; }
+                    else {
+                        const [lon, lat] = d3.geoCentroid(f);
+                        if (lon < -30 && lat > -60 && id !== '304') { cls = 'c-america'; r = 'america'; }
+                    }
+                    const d = path(f);
+                    return d ? `<path class="ex-land ${cls}"${r ? ` data-r="${r}"` : ''} d="${d}"/>` : '';
+                }).join('') + '</g>';
+            }
+
+            // 2) 세 뱃길 화살표 + 번호 라벨
+            out += '<g id="ex-arrows">' + EX_ARROWS.map(a => {
+                const p = exArrowPath(proj(EX_HUB[a.from]), proj(EX_HUB[a.to]), a.bend);
+                const lw = (mobile ? 30 : 36) + a.label.length * (mobile ? 11 : 13);
+                return `<g class="ex-arrow-g" data-a="${a.id}">
+                    <path id="exp-${a.id}" class="ex-arrow" d="${p.d}" stroke="${a.color}" stroke-width="${mobile ? 4.5 : 6}" marker-end="url(#exm-${a.id})"/>
+                    <g class="ex-alabel" transform="translate(${p.m[0].toFixed(1)},${p.m[1].toFixed(1)})">
+                        <rect x="${-lw / 2}" y="-13" width="${lw}" height="26" rx="13" stroke="${a.color}"/>
+                        <circle cx="${-lw / 2 + 13}" cy="0" r="9" fill="${a.color}"/>
+                        <text x="${-lw / 2 + 13}" y="4.5" text-anchor="middle" style="fill:#0b1222;font-weight:900">${a.num}</text>
+                        <text x="${-lw / 2 + 28}" y="4.5">${a.label}</text>
+                    </g></g>`;
+            }).join('') + '</g>';
+
+            // 3) 대륙 이름표 (누르면 설명)
+            out += '<g>' + Object.keys(EX_PILL).map(k => {
+                const [x, y] = proj(EX_PILL[k]);
+                const pw = mobile ? 78 : 96, ph = mobile ? 30 : 36;
+                return `<g class="ex-pill" data-r="${k}" tabindex="0" role="button" aria-label="${EX[k].name} 설명 보기" transform="translate(${x.toFixed(1)},${y.toFixed(1)})">
+                    <rect x="${-pw / 2}" y="${-ph / 2}" width="${pw}" height="${ph}" rx="${ph / 2}" stroke="${EX_TINT[k]}"/>
+                    <text y="${mobile ? 5 : 6.5}" text-anchor="middle">${EX[k].name}</text></g>`;
+            }).join('') + '</g>';
+
+            // 4) 유럽 나라 점 (유럽을 골랐을 때만 보임)
+            out += '<g id="ex-countries" style="display:none">' + Object.entries(EX_COUNTRY_POS).map(([k, [lon, lat, side]]) => {
+                const [x, y] = proj([lon, lat]);
+                const left = side === 'l';
+                return `<g class="ex-country" data-r="${k}" tabindex="0" role="button" aria-label="${EX[k].name} 설명 보기" transform="translate(${x.toFixed(1)},${y.toFixed(1)})">
+                    <circle class="hit" r="14"/><circle class="dot" r="5.5"/>
+                    <text x="${left ? -9 : 9}" y="4" text-anchor="${left ? 'end' : 'start'}">${EX[k].name}</text></g>`;
+            }).join('') + '</g>';
+
+            // 5) 배
+            out += `<g id="ex-ship" style="pointer-events:none">
+                <g id="ex-ship-body">
+                    <path d="M-16,2 L16,2 L10,11 L-11,11 Z" fill="#e2e8f0" stroke="#0f172a" stroke-width="1.5"/>
+                    <path d="M0,2 L0,-18" stroke="#e2e8f0" stroke-width="2"/>
+                    <path d="M1.5,-17 L13,0 L1.5,0 Z" fill="#f8fafc" stroke="#0f172a" stroke-width="1"/>
+                    <path d="M-1.5,-15 L-11,0 L-1.5,0 Z" fill="#cbd5e1" stroke="#0f172a" stroke-width="1"/>
+                </g>
+                <g id="ex-cargo" transform="translate(0,-34)"><rect rx="10" height="22" y="-15"/><text y="0" text-anchor="middle"></text></g>
+            </g>`;
+
+            svg.innerHTML = out;
+            exShip.cargo = null;
+            applyExchange(true);
+        }
+
+        function exSetCargo(text) {
+            if (exShip.cargo === text) return;
+            exShip.cargo = text;
+            const g = document.getElementById('ex-cargo');
+            if (!g) return;
+            g.style.display = text ? '' : 'none';
+            const t = g.querySelector('text');
+            t.textContent = text || '';
+            const wdt = text ? t.getComputedTextLength() + 18 : 0;
+            const r = g.querySelector('rect');
+            r.setAttribute('width', wdt);
+            r.setAttribute('x', -wdt / 2);
+        }
+
+        function exPlaceShip(x, y, dx) {
+            const ship = document.getElementById('ex-ship');
+            if (!ship) return;
+            ship.setAttribute('transform', `translate(${x.toFixed(1)},${y.toFixed(1)})`);
+            document.getElementById('ex-ship-body').setAttribute('transform', dx < 0 ? 'scale(-1,1)' : '');
+        }
+
+        function exShipOnPath(id, t) {
+            const p = document.getElementById('exp-' + id);
+            if (!p) return;
+            const len = p.getTotalLength();
+            const e = t * t * (3 - 2 * t); // 부드럽게 출발·도착
+            const a = p.getPointAtLength(len * e);
+            const b = p.getPointAtLength(Math.min(len, len * e + 2));
+            exPlaceShip(a.x, a.y - 8, b.x - a.x || (id === 'a2' ? -1 : 1));
+        }
+
+        function exTick(ts) {
+            if (currentScreen !== 'exchange-screen') { exAnim = null; return; }
+            const dt = exLast == null ? 0 : Math.min(ts - exLast, 50);
+            exLast = ts;
+            const step = exStory >= 0 ? EX_STORY[exStory] : null;
+            if (step && !step.loop) {
+                if (step.arrow) {
+                    exShip.t = exReduce() ? 1 : Math.min(1, exShip.t + dt / 3200);
+                    exShipOnPath(step.arrow, exShip.t);
+                } else {
+                    const [x, y] = exProjCur(EX_HUB[step.at]);
+                    exPlaceShip(x, y - 8, step.at === 'africa' ? -1 : 1);
+                }
+                exSetCargo(step.cargo);
+            } else {
+                if (exReduce()) { exShip.leg = 0; exShip.t = 0.5; }
+                else {
+                    exShip.t += dt / 3600;
+                    if (exShip.t >= 1) {
+                        exShip.t = 0;
+                        const grp = !step && exSelected ? exGroupOf(exSelected) : null;
+                        for (let n = 0; n < 3; n++) {
+                            exShip.leg = (exShip.leg + 1) % 3;
+                            const a = EX_ARROWS[exShip.leg];
+                            if (!grp || a.from === grp || a.to === grp) break;
+                        }
+                    }
+                }
+                const a = EX_ARROWS[exShip.leg];
+                exShipOnPath(a.id, exShip.t);
+                exSetCargo(a.cargo);
+            }
+            exAnim = requestAnimationFrame(exTick);
+        }
+        function exStartShip() { if (exAnim) cancelAnimationFrame(exAnim); exLast = null; exAnim = requestAnimationFrame(exTick); }
+        function exStopShip() { if (exAnim) cancelAnimationFrame(exAnim); exAnim = null; }
+
+        function applyExchange(withPanel) {
+            const step = exStory >= 0 ? EX_STORY[exStory] : null;
+            const sel = step ? step.sel : exSelected;
+            const grp = sel ? exGroupOf(sel) : null;
+            document.querySelectorAll('#ex-arrows .ex-arrow-g').forEach(g => {
+                const a = EX_ARROWS.find(x => x.id === g.dataset.a);
+                let on = true;
+                if (step && !step.loop) on = step.arrow === a.id;
+                else if (!step && grp) on = a.from === grp || a.to === grp;
+                g.classList.toggle('dim', !on);
+            });
+            document.querySelectorAll('#ex-land .ex-land').forEach(el => {
+                const r = el.dataset.r;
+                el.classList.toggle('sel', !!r && (r === sel || (grp === 'europe' && sel === 'europe' && EX[r] && EX[r].parent === 'europe')));
+            });
+            document.querySelectorAll('#ex-svg .ex-pill').forEach(el => el.classList.toggle('sel', el.dataset.r === grp));
+            document.querySelectorAll('#ex-svg .ex-country').forEach(el => el.classList.toggle('sel', el.dataset.r === sel));
+            const cs = document.getElementById('ex-countries');
+            if (cs) cs.style.display = (grp === 'europe' && window.innerWidth >= 768) ? '' : 'none';
+            if (withPanel) renderExPanel();
+        }
+
+        function exFigure(key) {
+            const r = EX[key];
+            if (!r) return '';
+            return `<figure class="ex-fig"><img class="ex-img" alt="${exEsc(r.img[0][1])}" data-chain='${exEsc(JSON.stringify(r.img))}'><figcaption>${exEsc(r.img[0][1])}</figcaption></figure>`;
+        }
+
+        // 사진이 없으면 다음 후보를 쓰고, 모두 없으면 '사진 자리' 안내를 보여 줌
+        function exLoadImages(root) {
+            root.querySelectorAll('img.ex-img').forEach(img => {
+                const chain = JSON.parse(img.dataset.chain);
+                const cap = img.parentElement.querySelector('figcaption');
+                let i = 0;
+                const next = () => {
+                    if (i >= chain.length) {
+                        const ph = document.createElement('div');
+                        ph.className = 'ex-ph';
+                        ph.innerHTML = `<span>이 자리에 넣을 사진<br><b>${exEsc(chain[0][1])}</b><br><small>파일 위치: ${exEsc(chain[0][0].replace('./', ''))}</small></span>`;
+                        img.parentElement.replaceWith(ph);
+                        return;
+                    }
+                    img.src = chain[i][0];
+                    img.alt = chain[i][1];
+                    if (cap) cap.textContent = chain[i][1];
+                    i++;
+                };
+                img.onerror = next;
+                next();
+            });
+        }
+
+        function exFlagButtons(active) {
+            return '<div class="ex-flags">' + ['uk', 'fr', 'nl', 'pt', 'es'].map(k =>
+                `<button data-act="region" data-r="${k}" class="${k === active ? 'on' : ''}"><img src="${countryData[k].flag.replace('w1280', 'w40')}" alt="">${EX[k].name}</button>`).join('') + '</div>';
+        }
+
+        function renderExPanel() {
+            const p = document.getElementById('ex-panel');
+            let html = '';
+            if (exStory >= 0) {
+                const s = EX_STORY[exStory], n = exStory + 1, total = EX_STORY.length;
+                const steps = '<div class="ex-steps" role="group" aria-label="단계 이동">' + EX_STORY.map((_, i) =>
+                    `<button data-act="step" data-i="${i}" class="${i < exStory ? 'done' : i === exStory ? 'now' : ''}" aria-label="${i + 1}단계">${i + 1}</button>`).join('') + '</div>';
+                if (s.summary) {
+                    html = `${steps}<h2 class="ex-title">${s.title}</h2>
+                        <p class="ex-text">같은 배가 오갔지만, 결과는 대륙마다 전혀 달랐어요.</p>
+                        <div class="ex-sum-row"><span class="emo">😊</span><span><b>유럽</b>물건을 팔고 설탕·담배·면화를 되팔아 부자가 되었어요.</span></div>
+                        <div class="ex-sum-row"><span class="emo">😢</span><span><b>아프리카</b>수많은 젊은이를 빼앗기고, 사람을 잡으려는 전쟁이 늘었어요.</span></div>
+                        <div class="ex-sum-row"><span class="emo">😢</span><span><b>아메리카</b>농장 주인은 부자가 되었지만, 끌려온 사람들은 평생 노예로 살았어요.</span></div>
+                        <h3 class="ex-h3">물건만 오간 게 아니에요</h3>
+                        <p class="ex-text">끌려간 사람들은 고향의 음악, 춤, 음식을 지켜 냈어요. 이것이 브라질의 <b>삼바</b>, 미국의 <b>재즈</b> 같은 문화의 뿌리가 되었어요. 반대로 아메리카의 <b>옥수수와 카사바</b>는 아프리카로 전해져 중요한 식량이 되었어요.</p>
+                        <div class="ex-think"><b>생각해 보기</b><br>이 교류를 "공평한 교류"라고 할 수 있을까요? 왜 그렇게 생각하나요?</div>
+                        <div class="flex flex-wrap gap-2 mt-5">
+                            <button class="ex-btn primary" data-act="quiz">퀴즈 풀기</button>
+                            <button class="ex-btn" data-act="story">처음부터 다시</button>
+                        </div>
+                        <button class="ex-link" data-act="exit">지도 마음대로 둘러보기</button>`;
+                } else {
+                    html = `${steps}<p class="ex-tag">${n}단계</p><h2 class="ex-title">${s.title}</h2>
+                        <div class="mt-4">${exFigure(s.img)}</div>
+                        <p class="ex-text">${s.text}</p>
+                        <div class="ex-cargo-line">지금 배에 실린 것: <b>${s.cargo}</b></div>
+                        <div class="flex gap-2 mt-5">
+                            <button class="ex-btn" data-act="prev" ${n === 1 ? 'disabled' : ''}>이전</button>
+                            <button class="ex-btn primary" data-act="next">다음</button>
+                        </div>
+                        <button class="ex-link" data-act="exit">둘러보기 끝내기</button>`;
+                }
+            } else if (exSelected) {
+                const k = exSelected, r = EX[k];
+                html = `<p class="ex-tag">${r.tag}</p><h2 class="ex-title">${r.name}</h2>
+                    <p class="ex-summary">${r.summary}</p>
+                    ${exFigure(k)}
+                    <div class="ex-trade">
+                        <div class="ex-send"><span>보낸 것 ➜</span><b>${r.sent}</b></div>
+                        <div class="ex-recv"><span>➜ 받은 것</span><b>${r.recv}</b></div>
+                    </div>
+                    <h3 class="ex-h3">무슨 일이 있었을까요?</h3>
+                    <ul class="ex-story">${r.story.map(s => `<li>${s}</li>`).join('')}</ul>
+                    <div class="ex-feel">
+                        <div class="good"><span class="emo">😊</span><span><b>이익을 본 사람</b>${r.good}</span></div>
+                        <div class="bad"><span class="emo">😢</span><span><b>고통받은 사람</b>${r.bad}</span></div>
+                    </div>
+                    ${exGroupOf(k) === 'europe' ? `<h3 class="ex-h3">유럽 나라별로 보기</h3>${exFlagButtons(k)}` : ''}
+                    ${countryData[k] ? `<button class="ex-btn mt-5" data-act="detail" data-r="${k}">${r.name}의 명과 암 비교하기</button>` : ''}
+                    <button class="ex-link" data-act="home">처음 화면으로</button>`;
+            } else {
+                html = `<h2 class="ex-title">대서양 교류 지도</h2>
+                    <p class="ex-lead">배 한 척이 <b>유럽 → 아프리카 → 아메리카 → 유럽</b>을 한 바퀴 돌며 물건과 사람을 실어 날랐어요. 뱃길이 세모 모양이라서 <b>삼각무역</b>이라고 불러요.</p>
+                    <button class="ex-big-btn" data-act="story">▶ 배를 따라가 보기 (6단계)</button>
+                    <p class="ex-hint">또는 지도에서 대륙이나 나라를 눌러 보세요.</p>
+                    <div class="ex-quick">${['europe', 'africa', 'america'].map(k => `<button data-act="region" data-r="${k}" style="background:${EX_TINT[k]}33;border-color:${EX_TINT[k]}66">${EX[k].name}</button>`).join('')}</div>
+                    <h3 class="ex-h3">화살표 읽는 법</h3>
+                    <ul class="ex-arrow-list">
+                        <li><span class="ex-num" style="background:#60a5fa">1</span><span>유럽에서 아프리카로 간 <b>물건</b> (옷감·총·술)</span></li>
+                        <li><span class="ex-num" style="background:#ef4444">2</span><span>아프리카에서 아메리카로 <b>끌려간 사람들</b></span></li>
+                        <li><span class="ex-num" style="background:#eab308">3</span><span>아메리카에서 유럽으로 간 <b>설탕·담배·면화</b></span></li>
+                    </ul>
+                    <details class="ex-words"><summary>어려운 낱말 풀이</summary><dl>
+                        <dt>삼각무역</dt><dd>유럽·아프리카·아메리카 세 대륙을 세모 모양으로 오가며 한 무역</dd>
+                        <dt>식민지</dt><dd>다른 나라에 지배를 받는 땅. 브라질은 포르투갈의 식민지였어요.</dd>
+                        <dt>대농장 (플랜테이션)</dt><dd>한 가지 작물을 아주 넓게 키우는 농장. 노예의 노동으로 운영되었어요.</dd>
+                        <dt>중간 항로</dt><dd>아프리카에서 아메리카로 사람들을 싣고 간, 가장 끔찍했던 바닷길</dd>
+                    </dl></details>`;
+            }
+            p.innerHTML = html;
+            p.scrollTop = 0;
+            exLoadImages(p);
+        }
+
+        function exSelectRegion(r) {
+            exStory = -1;
+            exSelected = EX[r] ? r : null;
+            if (exSelected) {
+                const g = exGroupOf(exSelected);
+                const a = EX_ARROWS[exShip.leg];
+                if (a.from !== g && a.to !== g) { exShip.leg = EX_ARROWS.findIndex(x => x.from === g); exShip.t = 0; }
+            }
+            if (!routing && currentScreen === 'exchange-screen') history.replaceState(null, '', exSelected ? '#exchange-' + exSelected : '#exchange');
+            applyExchange(true);
+        }
+
+        function exGoStep(i) {
+            exStory = Math.max(0, Math.min(EX_STORY.length - 1, i));
+            exShip.t = 0; exShip.leg = 0;
+            applyExchange(true);
+        }
+
+        function initExchange() {
+            const svg = document.getElementById('ex-svg');
+            svg.addEventListener('click', e => {
+                const hit = e.target.closest('.ex-pill, .ex-country');
+                if (hit) { exSelectRegion(hit.dataset.r); return; }
+                if (e.target.classList.contains('ex-land') && e.target.dataset.r) {
+                    let r = e.target.dataset.r;
+                    // 프랑스령 기아나처럼 아메리카에 있는 유럽 땅을 누르면 아메리카로 처리
+                    if (exProjCur && exProjCur.invert) {
+                        const rect = svg.getBoundingClientRect();
+                        const ll = exProjCur.invert([e.clientX - rect.left, e.clientY - rect.top]);
+                        if (ll && ll[0] < -30) r = 'america';
+                    }
+                    exSelectRegion(r);
+                    return;
+                }
+                if (exStory < 0) exSelectRegion(null);
+            });
+            svg.addEventListener('keydown', e => {
+                const hit = e.target.closest && e.target.closest('.ex-pill, .ex-country');
+                if (hit && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); exSelectRegion(hit.dataset.r); }
+            });
+            document.getElementById('ex-panel').addEventListener('click', e => {
+                const b = e.target.closest('[data-act]');
+                if (!b) return;
+                const act = b.dataset.act;
+                if (act === 'region') exSelectRegion(b.dataset.r);
+                else if (act === 'home' || act === 'exit') exSelectRegion(null);
+                else if (act === 'detail') openDetail(b.dataset.r);
+                else if (act === 'story') exGoStep(0);
+                else if (act === 'step') exGoStep(+b.dataset.i);
+                else if (act === 'next') exGoStep(exStory + 1);
+                else if (act === 'prev') exGoStep(exStory - 1);
+                else if (act === 'quiz') openQuiz();
+            });
+        }
+
         /* ================= 공통 이벤트 ================= */
         document.addEventListener('keydown', e => {
             if (currentScreen === 'detail-screen') {
@@ -1054,9 +1656,12 @@
         window.addEventListener('resize', () => {
             if (currentScreen === 'detail-screen') setSliderPct(sliderPct);
             if (mapActive) resizeMap();
+            if (currentScreen === 'exchange-screen') renderExchange();
         });
 
         initApp();
+        initExchange();
+        if (location.hash) route();
     </script>
 </body>
 </html>
