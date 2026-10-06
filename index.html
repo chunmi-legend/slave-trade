@@ -321,6 +321,160 @@
             .ex-alabel text { font-size: 11px; }
         }
 
+        /* ---------- 교류 체험실 ---------- */
+        #experience-screen { background: radial-gradient(circle at top, #10203d 0%, #050505 70%); }
+        .home-btn.feature { background: linear-gradient(135deg, #a16207, #ca8a04); border-color: #facc15; box-shadow: 0 0 22px rgba(250, 204, 21, .35); }
+        .home-btn.feature:hover { background: #ca8a04; }
+        .xp-wrap { max-width: 60rem; margin: 0 auto; padding: 6rem 1.25rem 5rem; }
+        .xp-kicker { font-size: .85rem; color: #fbbf24; font-weight: 700; letter-spacing: .04em; }
+        .xp-h1 { font-size: clamp(1.8rem, 4.5vw, 2.7rem); font-weight: 900; color: #fff; line-height: 1.3; margin: .3rem 0 1rem; }
+        .xp-h2 { font-size: 1.35rem; font-weight: 900; color: #fff; margin: 2.6rem 0 .9rem; }
+        .xp-lead { line-height: 1.9; color: #cbd5e1; max-width: 46rem; }
+        .xp-lead b, .xp-text b, .xp-result b, .xp-box b { color: #fde68a; }
+        .xp-top { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.6rem; }
+
+        .xp-acts { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 2rem; }
+        .xp-act { position: relative; text-align: left; padding: 1.4rem; border-radius: 16px; background: rgba(15, 23, 42, .88); border: 1px solid #334155; color: inherit; font: inherit;
+                  display: flex; flex-direction: column; gap: .55rem; transition: transform .2s, border-color .2s; }
+        .xp-act:hover, .xp-act:focus-visible { transform: translateY(-4px); border-color: #facc15; }
+        .xp-act .emo { font-size: 2.3rem; line-height: 1; }
+        .xp-act h2 { font-size: 1.25rem; font-weight: 900; color: #fff; }
+        .xp-act p { font-size: .95rem; line-height: 1.75; color: #cbd5e1; }
+        .xp-act .meta { font-size: .8rem; color: #94a3b8; margin-top: auto; padding-top: .4rem; }
+        .xp-badge { position: absolute; top: .9rem; right: .9rem; font-size: .75rem; font-weight: 700; padding: .2rem .6rem; border-radius: 999px; background: rgba(34, 197, 94, .18); color: #86efac; border: 1px solid rgba(34, 197, 94, .5); }
+
+        /* 화물 분류 */
+        .xp-mini { width: 100%; max-width: 420px; height: auto; display: block; margin: 1rem 0 .5rem; }
+        .xp-stat { display: flex; align-items: center; gap: 1rem; margin: 1.2rem 0 .8rem; font-size: .9rem; color: #94a3b8; }
+        .xp-progress { flex: 1; height: 8px; background: #1e293b; border-radius: 999px; overflow: hidden; }
+        .xp-progress div { height: 100%; background: linear-gradient(90deg, #eab308, #f59e0b); transition: width .4s; }
+        .xp-pool { display: flex; flex-wrap: wrap; gap: .55rem; padding: 1rem; border-radius: 14px; background: #0b1222; border: 1px dashed #475569; min-height: 4.5rem; align-items: center; }
+        .xp-card { display: inline-flex; align-items: center; gap: .4rem; padding: .6rem 1rem; border-radius: 999px; background: #f8fafc; color: #0f172a; font: inherit; font-weight: 700;
+                   border: 3px solid transparent; cursor: grab; transition: transform .15s, box-shadow .15s; }
+        .xp-card:hover { transform: translateY(-2px); }
+        .xp-card.sel { border-color: #facc15; box-shadow: 0 0 0 4px rgba(250, 204, 21, .35); transform: translateY(-3px) scale(1.05); }
+        .xp-card.person { background: #450a0a; color: #fecaca; border-color: #b91c1c; }
+        .xp-card.person.sel { border-color: #facc15; }
+        .xp-card.shake { animation: xpShake .45s; }
+        @keyframes xpShake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-7px); } 40%, 80% { transform: translateX(7px); } }
+        .xp-lanes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; margin-top: 1rem; }
+        .xp-lane { text-align: left; border-radius: 14px; background: #0f172a; border: 2px solid #1e293b; border-top: 6px solid var(--c); padding: .9rem 1rem; min-height: 8.5rem;
+                   color: inherit; font: inherit; display: flex; flex-direction: column; gap: .6rem; transition: border-color .2s, background .2s; cursor: default; }
+        .xp-lane.ready { border-style: dashed; border-color: #facc15; border-top: 6px solid var(--c); cursor: pointer; }
+        .xp-lane.ready:hover, .xp-lane.over { background: #1e293b; }
+        .xp-lane-h { display: flex; align-items: center; gap: .55rem; font-weight: 900; color: #fff; font-size: 1.05rem; }
+        .xp-lane-h small { font-weight: 400; color: #94a3b8; font-size: .8rem; }
+        .xp-lane-items { display: flex; flex-wrap: wrap; gap: .35rem; }
+        .xp-placed { font: inherit; font-size: .85rem; padding: .3rem .7rem; border-radius: 999px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; cursor: pointer; }
+        .xp-placed:hover { border-color: #94a3b8; }
+        .xp-placed.person { background: #450a0a; border-color: #ef4444; color: #fecaca; }
+        .xp-empty { font-size: .85rem; color: #64748b; }
+        .xp-toast { position: fixed; left: 50%; bottom: 1rem; transform: translateX(-50%); width: min(94vw, 40rem); z-index: 40;
+                    background: rgba(2, 6, 23, .97); border: 1px solid #334155; border-left: 6px solid #64748b; border-radius: 14px; padding: 1rem 2.8rem 1rem 1.2rem;
+                    line-height: 1.8; color: #e2e8f0; box-shadow: 0 12px 40px rgba(0, 0, 0, .6); }
+        .xp-toast[hidden] { display: none; }
+        .xp-toast.ok { border-left-color: #22c55e; }
+        .xp-toast.no { border-left-color: #ef4444; }
+        .xp-toast b { color: #fde68a; }
+        .xp-toast-x { position: absolute; top: .5rem; right: .6rem; width: 2rem; height: 2rem; border-radius: 50%; color: #94a3b8; background: transparent; border: 0; font-size: 1.1rem; }
+        .xp-toast-x:hover { color: #fff; background: #1e293b; }
+        .xp-done-box { width: 100%; text-align: center; padding: .4rem; color: #fde68a; font-weight: 700; }
+
+        .xp-modal { position: fixed; inset: 0; z-index: 50; background: rgba(0, 0, 0, .85); display: flex; align-items: center; justify-content: center; padding: 1rem; }
+        .xp-modal[hidden] { display: none; }
+        .xp-modal-box { width: 100%; max-width: 42rem; max-height: 92vh; overflow-y: auto; background: #0c0a09; border: 1px solid #7f1d1d; border-radius: 18px; padding: 1.7rem;
+                        box-shadow: 0 20px 60px rgba(127, 29, 29, .4); user-select: text; -webkit-user-select: text; }
+        .xp-people { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; margin: 1.2rem 0; }
+        .xp-who { padding: .9rem .6rem; border-radius: 12px; background: #1c1917; border: 1px solid #44403c; color: #a8a29e; font: inherit; text-align: center; min-height: 8.5rem;
+                  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .45rem; transition: background .2s, border-color .2s; }
+        .xp-who svg { width: 38px; height: 38px; }
+        .xp-who .q { font-size: .85rem; line-height: 1.6; }
+        .xp-who:hover { border-color: #78716c; }
+        .xp-who.on { background: #292524; border-color: #facc15; color: #fde68a; }
+
+        .xp-summary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; }
+        .xp-box { border-radius: 14px; background: #0f172a; border: 1px solid #1e293b; padding: 1rem 1.1rem; line-height: 1.85; color: #e2e8f0; }
+        .xp-box h3 { font-weight: 900; color: #fff; margin-bottom: .3rem; }
+        .xp-insight { display: flex; gap: .9rem; align-items: flex-start; }
+        .xp-insight .n { flex: none; width: 2rem; height: 2rem; border-radius: 50%; background: #facc15; color: #0b1222; font-weight: 900; display: flex; align-items: center; justify-content: center; }
+        .xp-today { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .6rem; align-items: start; }
+        .xp-today button { text-align: left; padding: 1rem; border-radius: 14px; background: #0f172a; border: 1px solid #334155; color: #e2e8f0; font: inherit; line-height: 1.7; }
+        .xp-today button:hover { border-color: #facc15; }
+        .xp-today .emo { font-size: 1.8rem; display: block; }
+        .xp-today b { display: block; color: #fff; }
+        .xp-today .more { display: none; font-size: .88rem; color: #cbd5e1; margin-top: .4rem; }
+        .xp-today button.on .more { display: block; }
+        .xp-today button.on { border-color: #facc15; }
+
+        /* 네 사람 */
+        .xp-pick { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; margin-top: 1.8rem; }
+        .xp-person { position: relative; text-align: left; padding: 1.3rem; border-radius: 16px; background: #0f172a; border: 1px solid #334155; border-top: 5px solid var(--c);
+                     color: inherit; font: inherit; display: flex; flex-direction: column; gap: .5rem; transition: transform .2s, border-color .2s; }
+        .xp-person:hover, .xp-person:focus-visible { transform: translateY(-4px); border-color: var(--c); }
+        .xp-person b { font-size: 1.25rem; color: #fff; }
+        .xp-person span { font-size: .9rem; color: #cbd5e1; line-height: 1.6; }
+        .xp-person small { font-size: .8rem; color: #94a3b8; }
+        .xp-avatar { width: 3.2rem; height: 3.2rem; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.25rem;
+                     color: #0b1222; background: var(--c); flex: none; }
+        .xp-scene { max-width: 46rem; margin: 0 auto; }
+        .xp-who-bar { display: flex; align-items: center; gap: .8rem; }
+        .xp-who-bar b { color: #fff; font-size: 1.1rem; display: block; }
+        .xp-who-bar small { color: #94a3b8; font-size: .85rem; }
+        .xp-dots { display: flex; gap: .35rem; margin-left: auto; }
+        .xp-dots span { width: .65rem; height: .65rem; border-radius: 50%; background: #334155; }
+        .xp-dots span.on { background: var(--c); }
+        .xp-place { margin-top: 2rem; font-size: .9rem; color: var(--c); font-weight: 700; }
+        .xp-scene-title { font-size: clamp(1.5rem, 3.6vw, 2rem); font-weight: 900; color: #fff; margin: .4rem 0 1rem; line-height: 1.35; }
+        .xp-text { line-height: 2; color: #e2e8f0; font-size: 1.05rem; }
+        .xp-scene img { width: 100%; max-height: 260px; object-fit: cover; border-radius: 12px; border: 1px solid #334155; margin-bottom: 1.2rem; }
+        .xp-q { margin-top: 1.6rem; font-weight: 700; color: #fff; }
+        .xp-choices { display: flex; flex-direction: column; gap: .6rem; margin-top: .7rem; }
+        .xp-choice { text-align: left; padding: 1rem 1.15rem; border-radius: 12px; border: 1px solid #475569; background: rgba(15, 23, 42, .88); color: #f1f5f9; font: inherit; font-size: 1rem;
+                     transition: background .2s, border-color .2s; }
+        .xp-choice:hover:not(:disabled) { border-color: var(--c); background: #1e293b; }
+        .xp-choice.picked { border: 2px solid var(--c); background: #1e293b; opacity: 1 !important; }
+        .xp-choice:disabled:not(.picked) { color: #64748b; border-color: #293548; cursor: not-allowed; }
+        .xp-choice .lock { display: block; font-size: .85rem; color: #f87171; margin-top: .25rem; }
+        .xp-result { margin-top: 1.1rem; padding: 1.1rem 1.2rem; border-radius: 12px; background: #0b1222; border-left: 5px solid var(--c); line-height: 1.95; color: #e2e8f0; }
+        .xp-after { margin-top: .8rem; padding-top: .8rem; border-top: 1px dashed #334155; color: #fca5a5; font-weight: 700; }
+        .xp-note { margin-top: .8rem; font-size: .88rem; color: #94a3b8; }
+        .xp-memo::before { content: '역사 메모 · '; color: #fbbf24; font-weight: 700; }
+        .xp-link { margin-top: .6rem; font-size: .88rem; color: #c4b5fd; }
+        .xp-two { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; margin-top: 1.4rem; }
+        .xp-two > div { border-radius: 12px; padding: 1rem 1.1rem; background: #0f172a; line-height: 1.8; color: #e2e8f0; }
+        .xp-two .gain { border-top: 4px solid #eab308; } .xp-two .gain b { color: #facc15; }
+        .xp-two .loss { border-top: 4px solid #dc2626; } .xp-two .loss b { color: #f87171; }
+        .xp-two b { display: block; font-size: .9rem; margin-bottom: .2rem; }
+        .xp-path { list-style: none; padding: 0; margin: .6rem 0 0; display: flex; flex-direction: column; gap: .4rem; }
+        .xp-path li { padding: .55rem .9rem; border-radius: 10px; background: #0b1222; color: #cbd5e1; line-height: 1.6; font-size: .95rem; }
+        .xp-path li span { color: #94a3b8; font-size: .82rem; display: block; }
+        .xp-think { margin-top: 1.6rem; padding: 1rem 1.1rem; border-radius: 12px; background: rgba(250, 204, 21, .1); border: 1px solid rgba(250, 204, 21, .35); line-height: 1.85; color: #fef3c7; }
+        .xp-think b { color: #facc15; }
+        .xp-textarea { width: 100%; min-height: 7rem; margin-top: .7rem; border-radius: 12px; background: #0b1222; border: 1px solid #475569; color: #f1f5f9; padding: .85rem 1rem;
+                       font: inherit; line-height: 1.75; resize: vertical; user-select: text; -webkit-user-select: text; }
+        .xp-textarea:focus { border-color: #facc15; outline: none; }
+        .xp-saved { font-size: .8rem; color: #64748b; margin-top: .3rem; }
+
+        /* 설탕 한 숟가락 */
+        .xp-chain { list-style: none; padding: 0; margin: 1.6rem 0 0; display: flex; flex-direction: column; }
+        .xp-chain li { display: flex; gap: 1rem; align-items: flex-start; padding: 1rem 1.1rem; border-radius: 14px; background: #0f172a; border: 1px solid #1e293b; border-left: 5px solid var(--c); line-height: 1.8; color: #e2e8f0; }
+        .xp-chain li b { color: #fff; display: block; }
+        .xp-chain li small { color: #94a3b8; }
+        .xp-chain li.arrow { justify-content: center; color: #64748b; font-size: 1.1rem; padding: .3rem 0; background: none; border: 0; }
+        .xp-scale { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .6rem; margin-top: 1rem; }
+        .xp-scale > div { border-radius: 12px; background: #0f172a; padding: .9rem; border-top: 4px solid var(--c); font-size: .9rem; line-height: 1.7; color: #cbd5e1; }
+        .xp-scale b { display: block; color: #fff; font-size: 1rem; }
+        .xp-meter { height: 8px; border-radius: 999px; background: #1e293b; margin: .5rem 0; display: flex; overflow: hidden; }
+        .xp-meter i { display: block; height: 100%; }
+
+        @media (max-width: 768px) {
+            .xp-lanes, .xp-summary { grid-template-columns: 1fr; }
+            .xp-today, .xp-scale { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .xp-people { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .xp-two { grid-template-columns: 1fr; }
+            .xp-dots { display: none; }
+        }
+
         @media (max-width: 768px) {
             .content-wrapper { position: absolute; inset: 0; width: 100%; padding: 5rem 1rem 1rem; }
             .content-left, .content-right { align-items: center; }
@@ -334,6 +488,8 @@
         @media (prefers-reduced-motion: reduce) {
             .screen, .flag-card, .event-toast { transition: none !important; }
             .slider-button.hint::after { animation: none; }
+            .xp-card.shake { animation: none; }
+            .xp-act, .xp-person, .xp-card { transition: none; }
         }
     </style>
 </head>
@@ -352,8 +508,13 @@
                     16세기부터 19세기까지 약 1,250만 명의 아프리카인이 강제로 배에 실려 대서양을 건넜습니다.
                     유럽의 항구 도시가 누린 번영은 이들의 고통 위에 세워졌습니다.
                     교류 지도에서 대서양을 오간 사람·물건·문화를 따라가 보고, 나라를 골라 가운데 막대를 움직이며 두 얼굴을 비교해 보세요.
+                    교류 체험실에서는 직접 화물을 싣고, 그 시대를 살았던 네 사람이 되어 볼 수 있어요.
                 </p>
                 <div class="mt-7 flex flex-wrap gap-3 justify-center">
+                    <button onclick="openExperience()" class="home-btn feature">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 20h20"/><path d="M5 20l2-6h10l2 6"/><path d="M12 14V3l6 6h-6"/></svg>
+                        교류 체험실
+                    </button>
                     <button onclick="openExchange()" class="home-btn primary">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h13l-3-3M21 17H8l3 3"/></svg>
                         대서양 교류 지도
@@ -583,6 +744,7 @@
             <p class="text-xs text-slate-500 mt-12">참고: SlaveVoyages(slavevoyages.org) 대서양 노예무역 데이터베이스 추정치. 수치는 반올림했으며 연구에 따라 다를 수 있습니다.</p>
             <div class="mt-8 flex flex-wrap gap-3">
                 <button onclick="openQuiz()" class="home-btn primary">배운 내용 퀴즈로 확인하기</button>
+                <button onclick="openExperience('people')" class="home-btn feature">네 사람의 이야기 체험하기</button>
                 <button onclick="openExchange()" class="home-btn">교류 지도에서 따라가기</button>
             </div>
         </article>
@@ -597,6 +759,19 @@
             </button>
         </div>
         <article id="quiz-body"></article>
+    </section>
+
+    <!-- 교류 체험실 -->
+    <section id="experience-screen" class="screen scroll-screen" aria-label="교류 체험실">
+        <div class="detail-header" style="position:fixed">
+            <button onclick="showScreen('home-screen')" class="px-5 py-2.5 bg-slate-900/90 hover:bg-slate-700 text-white rounded-full flex items-center gap-2 text-sm border border-slate-600 shadow-xl backdrop-blur-md">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                홈으로
+            </button>
+        </div>
+        <div id="xp-body"></div>
+        <div id="xp-toast" class="xp-toast" role="status" aria-live="polite" hidden></div>
+        <div id="xp-modal" class="xp-modal" role="dialog" aria-modal="true" aria-labelledby="xp-modal-title" hidden></div>
     </section>
 
     <script>
@@ -631,7 +806,7 @@
 
         /* ================= 화면 전환 ================= */
         let currentScreen = 'home-screen', currentCountry = null, routing = false;
-        const screenHash = { 'home-screen': '', 'map-screen': '#timelapse', 'voices-screen': '#history', 'quiz-screen': '#quiz', 'exchange-screen': '#exchange', 'detail-screen': '' };
+        const screenHash = { 'home-screen': '', 'map-screen': '#timelapse', 'voices-screen': '#history', 'quiz-screen': '#quiz', 'exchange-screen': '#exchange', 'experience-screen': '#experience', 'detail-screen': '' };
 
         function showScreen(id, hash) {
             if (currentScreen === 'map-screen' && id !== 'map-screen') stopMap();
@@ -653,6 +828,7 @@
                 else if (h === 'history') showScreen('voices-screen');
                 else if (h === 'quiz') openQuiz();
                 else if (h.startsWith('exchange')) openExchange(h.split('-')[1]);
+                else if (h.startsWith('experience')) openExperience(h.split('-')[1]);
                 else if (h.startsWith('country-') && countryData[h.slice(8)]) openDetail(h.slice(8));
                 else showScreen('home-screen');
             } finally { routing = false; }
@@ -1167,6 +1343,7 @@
                     <p class="mt-4">${msg}</p>
                     <div class="mt-8 flex flex-wrap gap-3">
                         <button class="home-btn primary" onclick="openQuiz()">다시 풀기</button>
+                        <button class="home-btn feature" onclick="openExperience()">교류 체험실</button>
                         <button class="home-btn" onclick="showScreen('voices-screen')">중간 항로와 저항 읽기</button>
                         <button class="home-btn" onclick="showScreen('home-screen')">홈으로</button>
                     </div>`;
@@ -1527,7 +1704,8 @@
                         <p class="ex-text">끌려간 사람들은 고향의 음악, 춤, 음식을 지켜 냈어요. 이것이 브라질의 <b>삼바</b>, 미국의 <b>재즈</b> 같은 문화의 뿌리가 되었어요. 반대로 아메리카의 <b>옥수수와 카사바</b>는 아프리카로 전해져 중요한 식량이 되었어요.</p>
                         <div class="ex-think"><b>생각해 보기</b><br>이 교류를 "공평한 교류"라고 할 수 있을까요? 왜 그렇게 생각하나요?</div>
                         <div class="flex flex-wrap gap-2 mt-5">
-                            <button class="ex-btn primary" data-act="quiz">퀴즈 풀기</button>
+                            <button class="ex-btn primary" data-act="experience">직접 체험해 보기</button>
+                            <button class="ex-btn" data-act="quiz">퀴즈 풀기</button>
                             <button class="ex-btn" data-act="story">처음부터 다시</button>
                         </div>
                         <button class="ex-link" data-act="exit">지도 마음대로 둘러보기</button>`;
@@ -1636,11 +1814,762 @@
                 else if (act === 'next') exGoStep(exStory + 1);
                 else if (act === 'prev') exGoStep(exStory - 1);
                 else if (act === 'quiz') openQuiz();
+                else if (act === 'experience') openExperience();
+            });
+        }
+
+        /* ================= 교류 체험실 ================= */
+        // 체험 1: 어느 뱃길에 실렸을까? (화물 분류)
+        const XP_LANES = [
+            { id: 'l1', num: 1, from: '유럽', to: '아프리카', color: '#60a5fa' },
+            { id: 'l2', num: 2, from: '아프리카', to: '아메리카', color: '#ef4444', sub: '중간 항로' },
+            { id: 'l3', num: 3, from: '아메리카', to: '유럽', color: '#eab308' },
+            { id: 'l4', num: 4, from: '아메리카', to: '아프리카', color: '#34d399', sub: '세모 밖의 뱃길' }
+        ];
+        const XP_CARGO = [
+            { id: 'cloth', emo: '🧵', name: '면직물', lane: 'l1',
+              hint: '공장에서 많이 만든 물건이에요. 공장이 많았던 대륙은 어디일까요?',
+              fact: '아프리카 상인들이 가장 원한 물건은 옷감이었어요. 노예선이 싣고 간 물건의 절반 가까이가 인도와 영국에서 만든 면직물이었어요.' },
+            { id: 'gun', emo: '🔫', name: '총과 화약', lane: 'l1',
+              hint: '영국 버밍엄 같은 유럽 도시의 공장에서 만들었어요.',
+              fact: '유럽에서 만든 총이 아프리카로 갔어요. 이 총은 사람을 붙잡는 전쟁에 쓰였고, 전쟁이 늘수록 더 많은 사람이 끌려가는 <b>악순환</b>이 생겼어요.' },
+            { id: 'manilla', emo: '➰', name: '놋쇠 고리(마닐라)', lane: 'l1',
+              hint: '유럽에서 놋쇠로 만들어 사람과 바꾸는 데 쓴 물건이에요.',
+              fact: '마닐라는 서아프리카 일부 지역에서 돈처럼 쓰인 놋쇠 고리예요. 유럽은 이것을 대량으로 만들어 실어 갔어요.' },
+            { id: 'cowrie', emo: '🐚', name: '개오지 조개껍데기', lane: 'l1',
+              hint: '서아프리카에서 돈으로 쓰였어요. 그렇다면 어디로 가져가야 쓸모가 있었을까요?',
+              fact: '인도양의 몰디브에서 나는 조개로, 서아프리카에서 돈으로 쓰였어요. 네덜란드와 영국 배가 이것을 유럽을 거쳐 아프리카로 실어 갔어요. <b>대서양 무역은 아시아와도 이어져 있었어요.</b>' },
+            { id: 'people', emo: '⛓️', name: '붙잡힌 사람들', lane: 'l2', person: true,
+              hint: '이 카드는 대서양을 건넌 가장 끔찍한 뱃길과 관련이 있어요.',
+              fact: '약 1,250만 명이 아프리카에서 배에 실려 아메리카로 끌려갔어요. 장부에는 "화물"로 적혔지만, 이들은 <b>물건이 아니라 사람</b>이었어요.' },
+            { id: 'rice', emo: '🌾', name: '벼농사 기술', lane: 'l2',
+              hint: '이 지식을 가진 사람들이 원래 살던 곳은 어디일까요?',
+              fact: '서아프리카 사람들은 오래전부터 벼를 키웠어요. 북아메리카 캐롤라이나의 농장 주인들은 벼농사를 잘 아는 아프리카인을 일부러 사들였어요. 많은 역사학자들은 쌀 농장의 부가 <b>끌려간 사람들의 지식</b>에서 나왔다고 봐요.' },
+            { id: 'drum', emo: '🥁', name: '북 장단과 노래', lane: 'l2',
+              hint: '이 문화는 끌려간 사람들의 기억 속에 담겨 바다를 건넜어요.',
+              fact: '끌려간 사람들은 가진 것을 모두 빼앗겼지만 기억 속의 음악은 빼앗기지 않았어요. 이 리듬이 <b>삼바, 블루스, 재즈</b>의 뿌리가 되었어요.' },
+            { id: 'anansi', emo: '🕷️', name: '거미 아난시 이야기', lane: 'l2',
+              hint: '가나에서 시작된 옛이야기가 지금은 카리브해에서도 전해져요.',
+              fact: '꾀 많은 거미 아난시는 가나 아칸족 옛이야기의 주인공이에요. 자메이카와 카리브해로 건너가 지금도 전해져요. 약한 거미가 꾀로 강한 동물을 이기는 이야기는 노예들에게 희망이 되었어요.' },
+            { id: 'sugar', emo: '🍬', name: '설탕', lane: 'l3',
+              hint: '사탕수수 농장에서 만들었어요. 그것을 즐겨 먹은 사람들은 어디에 살았을까요?',
+              fact: '카리브해와 브라질 농장의 설탕은 유럽 사람들의 차와 과자에 들어갔어요. 귀족만 먹던 설탕이 1700년대에는 보통 사람도 먹는 식품이 되었어요.' },
+            { id: 'tobacco', emo: '🍂', name: '담배', lane: 'l3',
+              hint: '북아메리카 버지니아의 농장에서 키운 작물이에요.',
+              fact: '버지니아 등 북아메리카 농장에서 키운 담배는 유럽으로 팔려 가 큰돈이 되었어요.' },
+            { id: 'cotton', emo: '☁️', name: '면화', lane: 'l3',
+              hint: '농장에서 키워 공장으로 보냈어요. 큰 방직 공장이 있던 곳은 어디일까요?',
+              fact: '미국 남부 농장의 면화는 영국 맨체스터의 공장으로 가서 옷감이 되었어요. 그 옷감이 다시 1번 뱃길로 아프리카에 실려 갔어요. <b>뱃길이 한 바퀴 이어진 거예요!</b>' },
+            { id: 'coffee', emo: '☕', name: '커피', lane: 'l3',
+              hint: '카리브해 생도맹그의 농장에서 길렀어요. 카페가 유행한 곳은 어디였을까요?',
+              fact: '1700년대 후반 생도맹그(지금의 아이티)는 세계 커피의 절반 가까이를 만들었어요. 유럽의 카페 문화는 이 커피 덕분에 퍼졌어요.' },
+            { id: 'maize', emo: '🌽', name: '옥수수와 카사바', lane: 'l4',
+              hint: '아메리카에서 처음 키운 작물인데, 지금은 아프리카의 중요한 주식이에요.',
+              fact: '아메리카의 옥수수와 카사바가 포르투갈 상인을 통해 아프리카로 전해졌어요. 지금도 아프리카 여러 나라에서 가장 중요한 주식이에요.' },
+            { id: 'bahia', emo: '🍃', name: '브라질 담배와 사탕수수 술', lane: 'l4',
+              hint: '브라질에서 만들어 유럽을 거치지 않고 곧장 바다를 건넌 물건이에요.',
+              fact: '브라질 바이아의 담배와 사탕수수 술(카샤사)은 서아프리카에서 인기가 많아 <b>곧장 아프리카로</b> 갔어요. 그 대가로 사람들이 다시 브라질로 끌려왔어요. 뱃길이 꼭 세모 모양만은 아니었던 거예요.' }
+        ];
+        const XP_WHO = [
+            ['🔨', '쇠를 녹여 농기구를 만들던 대장장이였을지도 몰라요.'],
+            ['🌾', '물길을 내어 벼를 키우던 농부였을지도 몰라요.'],
+            ['📜', '마을의 역사를 노래로 외워 전하던 이야기꾼(그리오)이었을지도 몰라요.'],
+            ['🧺', '장터에서 옷감을 팔던 세 아이의 어머니였을지도 몰라요.'],
+            ['🧒', '동생 손을 잡고 뛰어놀던 열두 살 아이였을지도 몰라요.'],
+            ['🧵', '알록달록한 천을 짜던 솜씨 좋은 직조공이었을지도 몰라요.']
+        ];
+        const XP_TODAY = [
+            ['🍪', '과자 속 설탕', '설탕을 누구나 먹게 된 것은 대서양의 사탕수수 농장 때문이었어요. 지금도 일부 농장의 노동 환경이 문제가 되고 있어요.'],
+            ['👕', '면 티셔츠', '면직물은 1번 뱃길, 면화는 3번 뱃길에 실렸어요. 오늘날에도 면화를 따는 아동 노동이 문제가 되기도 해요.'],
+            ['☕', '아메리카노', '유럽의 카페 문화는 카리브해 농장의 커피로 퍼졌어요. 공정무역 커피는 농부에게 정당한 값을 주려는 노력이에요.'],
+            ['🎤', '힙합과 K-pop의 리듬', '힙합과 R&B는 아프리카계 미국인의 음악에서 나왔고, 그 뿌리에는 끌려간 사람들이 지켜 낸 리듬이 있어요. K-pop도 이 음악의 영향을 크게 받았어요.']
+        ];
+
+        // 체험 2: 같은 배, 네 사람 (실제 기록을 바탕으로 만든 가상 인물)
+        const XP_PEOPLE = {
+            thomas: { name: '토머스', initial: '토', age: '15살', home: '영국 리버풀', color: '#60a5fa', role: '노예선을 탄 견습 선원', next: 'ada',
+                scenes: [
+                    { place: '영국 리버풀 항구 · 1788년 봄', title: '일자리를 찾아서',
+                      text: '토머스는 가난한 밧줄 장인의 둘째 아들이에요. 항구 벽에 <b>"아프리카행 배, 견습 선원 구함. 돌아오면 두둑한 임금!"</b>이라는 광고가 붙었어요. 리버풀은 당시 영국에서 노예선이 가장 많이 떠나는 항구였어요.',
+                      q: '토머스는 어떻게 할까요?',
+                      choices: [
+                          { label: '배에 타겠다고 한다', result: '어머니는 걱정했지만 집에는 돈이 필요했어요. 토머스는 처음으로 먼 바다로 떠나는 배에 이름을 올렸어요.' },
+                          { label: '항구에서 다른 일을 찾아본다', result: '밧줄 공장, 배 만드는 곳, 총포 가게, 설탕 공장… 어디를 가도 노예무역과 이어진 일뿐이었어요. <b>도시 전체가 이 무역으로 먹고살았던 거예요.</b> 결국 토머스는 배에 올랐어요.' }
+                      ], note: '1700년대 후반, 영국 노예선의 절반 이상이 리버풀에서 출발했어요.' },
+                    { place: '노예선 "희망호"의 화물칸', title: '배에 짐을 싣다',
+                      text: '화물칸에 맨체스터의 면직물, 버밍엄의 총, 놋쇠 고리, 브랜디 통이 가득 실렸어요. 그런데 목수들이 화물칸 아래에 앉기도 힘들 만큼 낮은 선반을 여러 층으로 짜고 있었어요.',
+                      q: '토머스는 무엇을 할까요?',
+                      choices: [
+                          { label: '선원에게 선반이 뭐냐고 묻는다', result: '늙은 선원이 웃으며 말했어요. "돌아갈 땐 여기가 꽉 찰 거다." 토머스는 그 말의 뜻을 몇 달 뒤에야 알게 되었어요.' },
+                          { label: '선장실의 장부를 몰래 들여다본다', result: '장부에는 "옷감 ○○필, 총 ○○자루" 아래에 <b>"노예 350명 예정"</b>이라고 적혀 있었어요. 사람의 수가 물건과 똑같은 줄에 적혀 있었어요.' }
+                      ] },
+                    { place: '서아프리카 보니 항구 (지금의 나이지리아) · 1788년 여름', title: '해안에서 보낸 몇 달',
+                      text: '배는 몇 달 동안 해안에 머물며 싣고 온 물건과 사람을 바꿨어요. 매일 작은 배로 사람들이 끌려왔어요. 쇠사슬에 묶인 열두 살쯤 된 여자아이가 토머스를 똑바로 쳐다봤어요.',
+                      q: '토머스는 어떻게 할까요?',
+                      choices: [
+                          { label: '몰래 물 한 바가지를 더 건넨다', result: '들키면 매를 맞을 일이었어요. 아이는 물을 받고 고개를 숙였어요. 작은 친절이었지만, 아이를 배에서 내려 줄 수는 없었어요.' },
+                          { label: '못 본 척 고개를 돌린다', result: '대부분의 선원이 그렇게 했어요. 하지만 그 눈빛은 토머스의 기억에서 오래도록 지워지지 않았어요.' }
+                      ], link: '이 아이의 이야기는 "아다"에서 이어져요.' },
+                    { place: '대서양 한가운데 · 중간 항로', title: '모두가 병든 배',
+                      text: '두 달 가까운 항해 동안 화물칸 아래에서는 매일 신음 소리가 들렸어요. 열병이 돌아 갇힌 사람들이 숨졌고, 선원들도 쓰러졌어요.',
+                      q: '토머스는 무엇을 할까요?',
+                      choices: [
+                          { label: '보고 들은 것을 일기에 적는다', result: '장부에는 "화물 손실"이라고만 적혔지만, 토머스의 일기에는 <b>"오늘 또 아이가 죽었다"</b>고 적혔어요.' },
+                          { label: '선장에게 사람들을 갑판에 더 오래 있게 해 달라고 한다', result: '선장은 "건방지다"며 토머스에게 채찍질을 했어요. 노예선에서는 선원도 거친 벌을 받는 일이 흔했어요.' }
+                      ], note: '노예선 선원은 다른 배의 선원보다 훨씬 많이 목숨을 잃었어요. 노예무역은 선원에게도 위험한 일이었어요.' },
+                    { place: '다시 리버풀 · 1789년', title: '돌아온 항구',
+                      text: '배는 자메이카에서 사람들을 팔고, 설탕과 럼주를 싣고 돌아왔어요. 배 주인은 큰 이익을 남겼지만 토머스의 임금은 이런저런 이유로 깎여 있었어요. 그때 <b>토머스 클라크슨</b>이라는 사람이 선원들을 찾아다니며 노예선 이야기를 모으고 있었어요.',
+                      q: '토머스는 어떻게 할까요?',
+                      choices: [
+                          { label: '클라크슨에게 본 것을 증언한다', result: '클라크슨은 수많은 선원의 증언을 모아 노예무역을 없애자는 운동의 증거로 썼어요. 토머스의 이야기도 그 증거 가운데 하나가 되었어요.' },
+                          { label: '일자리를 잃을까 봐 입을 다문다', result: '배 주인에게 밉보이면 다시는 배를 탈 수 없었어요. 많은 선원이 입을 다물었어요. 그래도 클라크슨은 끈질기게 증언을 모았어요.' }
+                      ] }
+                ],
+                ending: { text: '일자리이자 돈벌이였지만, 평생 지울 수 없는 기억이기도 했어요.',
+                    gain: '임금과 바다 경험, 그리고 리버풀이라는 도시의 번영', loss: '함께 떠난 동료 선원들, 그리고 화물칸 아래에서 본 수많은 죽음',
+                    q: '토머스 한 사람이 배를 타지 않았다면 노예무역이 멈췄을까요? 한 사람의 선택과 도시 전체가 얽힌 구조 가운데 무엇이 더 큰 힘을 가졌을까요?' } },
+
+            ada: { name: '아다', initial: '아', age: '12살', home: '서아프리카 이그보 마을', color: '#f59e0b', role: '납치되어 바다를 건넌 소녀', next: 'kofi',
+                scenes: [
+                    { place: '이그보 마을 (지금의 나이지리아 동남부) · 1788년', title: '맏딸 아다',
+                      text: '"아다"는 이그보 말로 <b>"맏딸"</b>이라는 뜻이에요. 아다의 마을 사람들은 얌을 키우고 천을 짜고, 나흘마다 열리는 장에서 물건을 사고팔았어요. 요즘 어른들은 아이들끼리만 있지 말라고 자주 당부해요. 아이를 훔쳐 가는 사람들이 있다는 소문 때문이에요.',
+                      q: '오늘 아다는 무엇을 할까요?',
+                      choices: [
+                          { label: '어른들이 일하러 간 사이 지붕에 올라 망을 본다', result: '아다는 동생과 함께 지붕 위에서 낯선 사람이 오는지 살폈어요. 올라우다 에퀴아노도 어린 시절 이렇게 망을 봤다고 자서전에 썼어요.' },
+                          { label: '어머니를 따라 장에 간다', result: '장터에는 바닷가에서 온 유럽 옷감과 놋쇠 고리, 총이 놓여 있었어요. 아다는 이 물건들이 <b>무엇과 바뀌어</b> 여기까지 왔는지 아직 몰랐어요.' }
+                      ] },
+                    { place: '마을 · 어느 날 오후', title: '담을 넘어온 사람들',
+                      text: '어른들이 모두 밭에 나간 오후, 낯선 사람 둘이 담을 넘어 들어왔어요. 그들은 아다와 남동생을 붙잡았어요.',
+                      q: '아다는 어떻게 할까요?',
+                      choices: [
+                          { label: '소리를 질러 도움을 청한다', result: '입이 막혔어요. 아무도 오지 않았어요.' },
+                          { label: '동생 손을 잡고 도망친다', result: '몇 걸음 가지 못해 붙잡혔어요.' }
+                      ], after: '아다가 무엇을 골랐든 결과는 같았어요. 이 순간부터 아다는 자기 삶을 스스로 고를 수 없게 되었어요.' },
+                    { place: '바닷가로 가는 길 · 몇 주 동안', title: '헤어짐',
+                      text: '아다와 동생은 몇 주 동안 걸으며 여러 번 다른 사람에게 팔렸어요. 어느 날 아침, 낯선 상인이 동생만 데려가려 했어요.',
+                      q: '아다는 어떻게 할까요?',
+                      choices: [
+                          { label: '동생의 손을 끝까지 놓지 않는다', result: '어른들이 억지로 둘을 떼어 놓았어요. 아다는 그 뒤로 다시는 동생을 보지 못했어요.' },
+                          { label: '동생과 함께 팔려 가겠다고 한다', locked: '고를 수 없어요. 아다에게는 그런 권리가 없었어요.' }
+                      ], note: '에퀴아노도 납치된 뒤 함께 끌려온 누나와 헤어졌고, 다시는 만나지 못했어요.' },
+                    { place: '보니 항구 · 처음 본 바다', title: '집채만 한 배',
+                      text: '아다는 처음으로 바다를 보았어요. 바다 위에는 집채만 한 배가 떠 있었고, 낯선 얼굴의 선원들이 알아들을 수 없는 말로 소리쳤어요. 한 어린 선원이 아다를 오래 바라보았어요.',
+                      q: '배 위에서 아다는 어떻게 할까요?',
+                      choices: [
+                          { label: '이그보 말을 하는 사람을 찾는다', result: '"얘야, 이리 오렴." 같은 고향 말을 하는 아주머니가 아다를 꼭 안아 주었어요. 같은 배에 탄 사람들은 서로를 <b>"배 동무"</b>라고 부르며 평생 가족처럼 여겼어요.' },
+                          { label: '아무 말 없이 바다만 바라본다', result: '겁에 질린 아다의 손을 옆에 있던 아주머니가 말없이 잡아 주었어요. 같은 배에 탄 사람들은 서로를 <b>"배 동무"</b>라고 부르며 평생 가족처럼 여겼어요.' }
+                      ], note: '에퀴아노는 자서전에서 노예선에 처음 올랐을 때 선원들이 자신을 잡아먹으려는 줄 알았다고 썼어요.' },
+                    { place: '중간 항로 · 두 달 가까이', title: '배 밑바닥에서',
+                      text: '사람들은 쇠사슬에 묶인 채 겨우 누울 만한 선반에 갇혔어요. 공기는 뜨겁고 더러웠어요. 날씨가 좋은 날에는 갑판으로 끌려 올라가 억지로 춤을 춰야 했어요. 몸이 약해지면 값이 떨어진다는 이유였어요.',
+                      q: '아다는 어떻게 버틸까요?',
+                      choices: [
+                          { label: '아주머니와 고향 노래를 부른다', result: '낮은 목소리로 시작한 노래를 다른 사람들이 따라 불렀어요. 말이 다른 사람들도 장단을 맞췄어요. <b>노래는 서로가 살아 있다는 신호</b>였어요.' },
+                          { label: '고향의 모든 것을 하나하나 떠올린다', result: '아다는 장날의 소리, 어머니의 얼굴, 동생의 웃음을 매일 밤 떠올렸어요. 빼앗긴 것이 많았지만 <b>기억만은 빼앗기지 않으려</b> 했어요.' }
+                      ], after: '함께 배에 오른 사람 가운데 여러 명이 끝내 육지를 보지 못했어요.' },
+                    { place: '자메이카 킹스턴 · 1788년 가을', title: '두 개의 이름',
+                      text: '배가 자메이카에 닿자 사람들은 시장에 세워져 팔렸어요. 아다를 산 사탕수수 농장 주인은 아다를 <b>"메리"</b>라고 불렀어요.',
+                      q: '아다는 어떻게 할까요?',
+                      choices: [
+                          { label: '"메리"라는 이름에 대답한다', result: '대답하지 않으면 매를 맞았어요. 아다는 낮에는 메리로 불렸어요. 하지만 밤이 되면 배 동무 아주머니는 여전히 "아다"라고 불러 주었어요.' },
+                          { label: '마음속으로 "나는 아다야"라고 되뇐다', result: '겉으로는 메리라고 불렸지만 마음속 이름은 지켜 냈어요. 많은 노예들이 이렇게 <b>두 개의 이름</b>을 지니고 살았어요.' }
+                      ], link: '아다가 간 농장의 이야기는 "코피"에서 이어져요.' }
+                ],
+                ending: { text: '모든 것을 빼앗긴 일이었어요. 하지만 아다는 고향의 말과 노래와 기억을 지닌 채 바다를 건넜고, 그것은 아메리카 문화의 한 조각이 되었어요.',
+                    gain: '함께 버틴 배 동무, 그리고 끝까지 지켜 낸 이름과 노래', loss: '가족과 고향과 자유, 그리고 자기 삶을 스스로 고를 권리',
+                    q: '아다의 이야기에서 "고를 수 없는" 순간을 만났을 때 어떤 느낌이 들었나요? 토머스가 고를 수 있었던 것과 비교해 보세요.' } },
+
+            kofi: { name: '코피', initial: '코', age: '16살', home: '자메이카 사탕수수 농장', color: '#34d399', role: '농장에서 노예로 태어난 소년', next: 'eliza',
+                scenes: [
+                    { place: '자메이카 사탕수수 농장 · 1789년 수확기', title: '금요일에 태어난 아이',
+                      text: '"코피"는 가나 아칸 말로 <b>"금요일에 태어난 남자아이"</b>라는 뜻이에요. 아칸 출신인 어머니가 지어 준 이름이에요. 코피는 이 농장에서 노예로 태어났어요. 노예의 자식은 태어날 때부터 노예였어요. 수확기에는 사탕수수를 베고, 즙을 짜고, 끓이는 일이 밤낮없이 이어졌어요.',
+                      q: '오늘 코피는 어디서 일할까요?',
+                      choices: [
+                          { label: '밭에서 사탕수수를 벤다', result: '뜨거운 햇볕 아래 감독관의 채찍이 하루 종일 따라다녔어요.' },
+                          { label: '설탕 끓이는 공장에서 일한다', result: '펄펄 끓는 솥 옆에서 밤새 일하다 졸면 크게 다치기 일쑤였어요.' }
+                      ], after: '사실 코피는 어디서 일할지 고를 수 없었어요. 감독관이 정했지요. 설탕 한 숟가락에는 이런 노동이 담겨 있었어요.' },
+                    { place: '농장 오두막 · 새로 온 사람들', title: '말이 통하지 않는 소녀',
+                      text: '노예선이 들어온 뒤, 이그보 말만 하는 소녀가 농장에 왔어요. 주인은 소녀를 "메리"라고 불렀지만 소녀는 대답하지 않았어요. 농장에는 아칸, 이그보, 콩고 등 <b>서로 다른 말을 쓰던 사람들</b>이 함께 살았어요.',
+                      q: '코피는 소녀에게 무엇을 해 줄까요?',
+                      choices: [
+                          { label: '농장에서 쓰는 말을 가르쳐 준다', result: '영어와 여러 아프리카 말이 섞인 농장의 말을 하나씩 알려 주었어요. 이렇게 섞여 만들어진 말이 지금 자메이카 사람들이 쓰는 <b>"파트와"</b>의 뿌리가 되었어요.' },
+                          { label: '거미 아난시 이야기를 들려준다', result: '작은 거미 아난시가 꾀로 힘센 호랑이를 골탕 먹이는 이야기에 소녀가 처음으로 웃었어요. <b>약한 자가 꾀로 이기는 이야기</b>는 노예들에게 작은 희망이었어요.' }
+                      ], link: '이 소녀가 바로 "아다"예요.' },
+                    { place: '일요일의 텃밭과 장터', title: '일요일의 작은 자유',
+                      text: '일요일에는 노예들도 작은 텃밭을 가꿀 수 있었어요. 아프리카에서 온 <b>얌과 오크라</b>, 아메리카의 <b>옥수수</b>를 함께 키웠어요. 남은 것은 장터에 내다 팔았어요.',
+                      q: '코피는 일요일에 무엇을 할까요?',
+                      choices: [
+                          { label: '채소를 팔아 돈을 모은다', result: '코피는 언젠가 자유를 사려고 동전을 모았어요. 하지만 자유의 값은 몇 년을 모아도 닿기 힘들 만큼 비쌌어요.' },
+                          { label: '밤에 사람들과 모여 북을 친다', result: '북소리에 사람들이 모여 춤을 추었어요. 하지만 농장 주인들은 북을 금지하기도 했어요. <b>북소리로 반란 신호를 주고받을까</b> 두려웠기 때문이에요.' }
+                      ] },
+                    { place: '푸른 산 아래 · 밤', title: '할머니의 이야기',
+                      text: '코피의 할머니는 1760년 이야기를 몰래 들려주었어요. 아칸 출신 <b>"태키"</b>가 이끈 사람들이 농장에서 들고일어났던 큰 반란 이야기였어요. 산속에는 오래전 도망친 사람들이 세운 <b>"마룬"</b> 마을도 있다고 했어요.',
+                      q: '코피는 무엇을 마음먹을까요?',
+                      choices: [
+                          { label: '언젠가 산으로 도망칠 꿈을 꾼다', result: '붙잡힌 사람은 끔찍한 벌을 받았어요. 게다가 마룬들은 영국과 맺은 약속 때문에 새로 도망친 사람을 돌려보내야 했어요. 탈출은 목숨을 건 일이었어요.' },
+                          { label: '이 이야기를 다음 아이들에게 전하기로 한다', result: '저항의 이야기는 이렇게 입에서 입으로 전해졌어요. 1831년 자메이카에서는 또 한 번 큰 봉기가 일어났어요.' }
+                      ] },
+                    { place: '농장 · 1791년', title: '바다 건너 들려온 소식',
+                      text: '항구를 오가는 선원들이 소식을 전했어요. 영국에서 노예무역을 없애자는 사람들이 늘고 있고, 가까운 프랑스 식민지 생도맹그에서는 노예들이 들고일어났다는 거예요.',
+                      q: '코피는 이 소식을 어떻게 받아들일까요?',
+                      choices: [
+                          { label: '곧 자유가 올 거라고 믿는다', result: '바다 건너의 움직임은 정말로 코피의 삶을 바꾸었어요. 하지만 자유는 생각보다 훨씬 늦게 왔어요.' },
+                          { label: '"우리와는 상관없는 일"이라고 생각한다', result: '그러나 바다 건너의 움직임은 결국 코피의 삶을 바꾸었어요. 아주 늦게였지만요.' }
+                      ], after: '영국은 1807년 노예무역을, 1834년 노예제를 폐지했어요. 그래도 "견습생"이라는 이름으로 일은 계속되었고, 코피가 정말 자유를 얻은 것은 1838년, 예순다섯 살이 되어서였어요.' }
+                ],
+                ending: { text: '평생 이어진 고된 노동이었어요. 그러나 그 농장은 아칸, 이그보, 콩고 사람들이 만나 새로운 말과 음식, 음악을 만든 곳이기도 했어요.',
+                    gain: '여러 고향에서 온 사람들과 함께 만든 말과 이야기, 음악', loss: '평생의 자유와 노동의 대가, 그리고 어머니의 고향',
+                    q: '끌려온 사람들이 만든 문화는 "빼앗긴 교류"일까요, "지켜 낸 교류"일까요? 둘 다라면 왜 그렇게 생각하나요?' } },
+
+            eliza: { name: '엘리자', initial: '엘', age: '14살', home: '영국 런던', color: '#c084fc', role: '설탕을 먹던 런던의 소녀', next: 'thomas',
+                scenes: [
+                    { place: '런던의 식료품 가게 · 1791년 아침', title: '홍차에 설탕 두 숟가락',
+                      text: '엘리자의 아버지는 런던에서 식료품 가게를 해요. 엘리자는 아침마다 홍차에 설탕을 두 숟가락씩 넣어요. 100년 전에는 부자들만 먹던 설탕을, 이제는 가난한 집도 먹을 만큼 영국 사람들은 설탕을 많이 먹게 되었어요.',
+                      q: '엘리자는 어떻게 할까요?',
+                      choices: [
+                          { label: '설탕을 한 숟가락 더 넣는다', result: '달콤한 차는 엘리자의 하루를 여는 즐거움이었어요. 엘리자는 설탕이 어디서 오는지 생각해 본 적이 없었어요.' },
+                          { label: '아버지께 설탕이 어디서 오는지 묻는다', result: '"카리브해의 자메이카 같은 곳에서 오지. 덕분에 우리 가게도 장사가 잘된단다." 아버지는 <b>누가</b> 그 설탕을 만들었는지는 말하지 않았어요.' }
+                      ], link: '그 설탕을 만든 사람의 이야기는 "코피"에서 볼 수 있어요.' },
+                    { place: '엘리자의 방', title: '오빠가 가져온 것',
+                      img: ['./images/exchange/africa.jpg', '노예선 브룩스호에 사람들을 실은 모습을 그린 그림 (1788년경)'],
+                      text: '오빠가 요즘 런던에서 화제라며 책 한 권과 그림 한 장을 가져왔어요. 책은 노예였던 <b>올라우다 에퀴아노</b>가 쓴 자서전이고, 그림은 노예선 <b>"브룩스호"</b>에 사람들을 실은 모습을 그린 것이에요.',
+                      q: '엘리자는 무엇을 먼저 볼까요?',
+                      choices: [
+                          { label: '에퀴아노의 책을 읽는다', result: '열한 살에 납치되어 누나와 헤어지고, 배 밑바닥에서 바다를 건넌 이야기였어요. <b>엘리자와 비슷한 나이의 아이</b> 이야기였어요.' },
+                          { label: '노예선 그림을 들여다본다', result: '사람들이 숟가락을 포개 놓은 것처럼 빈틈없이 줄지어 누워 있었어요. 이 그림은 영국 곳곳에 퍼져 많은 사람에게 충격을 주었어요.' }
+                      ] },
+                    { place: '런던 · 1791년 가을', title: '설탕을 끊을까?',
+                      text: '윌리엄 폭스라는 사람이 쓴 소책자가 큰 화제가 되었어요. 노예가 만든 설탕을 먹는 것은 <b>그 사람들의 고통을 먹는 것과 같다</b>는 거센 내용이었어요. 사람들은 노예가 만든 설탕을 사지 말자고 했어요.',
+                      q: '엘리자는 어떻게 할까요?',
+                      choices: [
+                          { label: '가족에게 설탕을 끊자고 한다', result: '엘리자의 가족도 설탕 없이 차를 마시기 시작했어요. 이렇게 설탕을 끊은 영국 사람이 <b>약 30만 명</b>이나 되었어요. 아버지 가게에는 "노예가 만들지 않은 동인도 설탕"이라는 팻말이 붙었어요.' },
+                          { label: '"나 하나 안 먹는다고 뭐가 달라져?" 하고 망설인다', result: '많은 사람이 그렇게 생각했어요. 하지만 <b>약 30만 명</b>이 함께 설탕을 끊자 가게들이 "노예가 만들지 않은 설탕"을 따로 팔기 시작했어요. 한 사람 한 사람의 선택이 모이자 시장이 움직였어요.' }
+                      ] },
+                    { place: '런던 · 1792년', title: '목소리를 내는 방법',
+                      text: '노예무역을 없애 달라는 청원서가 전국에서 500개 넘게 의회로 보내졌어요. 당시 여성은 투표를 할 수 없었지만, 불매 운동과 모임으로 목소리를 냈어요.',
+                      q: '엘리자는 무엇을 할까요?',
+                      choices: [
+                          { label: '"나는 사람이 아닌가요, 형제가 아닌가요?" 메달을 단다', result: '도자기 회사 웨지우드가 만든 이 메달에는 무릎 꿇은 노예가 새겨져 있었어요. 사람들은 이것을 브로치나 머리핀으로 달고 다니며 생각을 드러냈어요.' },
+                          { label: '친구들에게 에퀴아노의 책을 빌려준다', result: '에퀴아노는 영국 곳곳을 돌며 강연하고 책을 팔았어요. 그의 책은 여러 번 다시 찍을 만큼 널리 읽혔어요.' }
+                      ] },
+                    { place: '런던 · 1792년 이후', title: '긴 기다림',
+                      text: '1792년 의회는 노예무역을 "점차" 없애기로 결정했어요. 하지만 프랑스와의 전쟁 등을 핑계로 결정은 계속 미뤄졌어요.',
+                      q: '엘리자는 어떻게 할까요?',
+                      choices: [
+                          { label: '계속 설탕을 끊는다', result: '불매 운동은 몇 번이나 잦아들었다가 다시 일어나며 이어졌어요.' },
+                          { label: '다시 설탕을 먹는다', result: '운동이 시들해지면서 많은 사람이 다시 설탕을 먹었어요. 꾸준히 목소리를 내는 일은 쉽지 않았어요.' }
+                      ], after: '영국이 마침내 노예무역을 금지한 것은 1807년, 엘리자가 서른 살이 되었을 때였어요. 노예제가 폐지되기까지는 그 뒤로 27년이 더 걸렸어요.' }
+                ],
+                ending: { text: '처음에는 식탁 위의 달콤함일 뿐이었어요. 그러나 그 뒤에 있는 사람을 알게 되자, 교류는 엘리자가 바꿀 수 있는 것이 되었어요.',
+                    gain: '값싸고 달콤한 설탕, 그리고 장사가 잘되는 가게', loss: '엘리자가 잃은 것은 거의 없었어요. 그 대가는 바다 건너 사람들이 치렀어요.',
+                    q: '오늘 우리가 쓰는 초콜릿, 옷, 스마트폰 뒤에도 보이지 않는 사람이 있을까요? 엘리자처럼 우리가 할 수 있는 일은 무엇일까요?' } }
+        };
+        const XP_ORDER = ['thomas', 'ada', 'kofi', 'eliza'];
+
+        // 체험 3: 설탕 한 숟가락의 여행
+        const XP_CHAIN = [
+            { who: 'eliza', title: '런던, 엘리자의 홍차', text: '엘리자가 아침마다 넣은 설탕 두 숟가락. 그 설탕은 아버지 가게에 들어온 자메이카산 설탕이었어요.' },
+            { who: 'kofi', title: '자메이카, 코피의 손', text: '그 설탕은 코피가 베고, 짜고, 밤새 끓인 사탕수수에서 나왔어요. 코피는 그 대가로 아무것도 받지 못했어요.' },
+            { who: 'ada', title: '보니에서 자메이카로, 아다', text: '농장 주인은 일손을 늘리려고 노예선에서 사람을 샀어요. 그중 한 명이 이름을 빼앗긴 열두 살 아다였어요.' },
+            { who: 'thomas', title: '리버풀, 토머스의 배', text: '아다를 실어 온 배는 리버풀에서 옷감과 총을 싣고 떠난 배였어요. 그 배는 돌아올 때 설탕을 싣고 와 다시 엘리자의 가게로 보냈어요.' }
+        ];
+        const XP_SCALE = { thomas: [55, 45], ada: [3, 97], kofi: [10, 90], eliza: [92, 8] };
+
+        const XP_STORE_KEY = 'slave-trade-experience';
+        let xpStore = { done: {}, notes: {}, sort: false };
+        try { const s = JSON.parse(localStorage.getItem(XP_STORE_KEY)); if (s && typeof s === 'object') xpStore = { done: s.done || {}, notes: s.notes || {}, sort: !!s.sort }; } catch (e) {}
+        function xpSave() { try { localStorage.setItem(XP_STORE_KEY, JSON.stringify(xpStore)); } catch (e) {} }
+
+        const xp = { view: 'hub', sort: null, sel: null, person: null, scene: 0, pick: null, path: [] };
+        const xpShuffle = a => { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; };
+        const xpCard = id => XP_CARGO.find(c => c.id === id);
+        const xpLane = id => XP_LANES.find(l => l.id === id);
+        const xpDoneCount = () => XP_ORDER.filter(k => xpStore.done[k]).length;
+        const XP_BACK = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline;vertical-align:-2px"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>';
+        const XP_PERSON_SVG = '<svg viewBox="0 0 40 40" fill="currentColor" aria-hidden="true"><circle cx="20" cy="12" r="7"/><path d="M6 38c0-9 6-15 14-15s14 6 14 15z"/></svg>';
+
+        function openExperience(sub) {
+            const views = { sort: 'sort', people: 'people', sugar: 'chain' };
+            xpHideToast();
+            xpCloseModal();
+            xp.view = views[sub] || 'hub';
+            if (xp.view === 'sort' && !xp.sort) xpSortReset();
+            showScreen('experience-screen', '#experience' + (sub && views[sub] ? '-' + sub : ''));
+            xpRender(true);
+        }
+
+        function xpGo(view, sub) {
+            xpHideToast();
+            xp.view = view;
+            if (!routing && currentScreen === 'experience-screen') history.replaceState(null, '', '#experience' + (sub ? '-' + sub : ''));
+            xpRender(true);
+        }
+
+        function xpRender(toTop) {
+            const body = document.getElementById('xp-body');
+            const html = { hub: xpHubHTML, sort: xpSortHTML, sortDone: xpSortDoneHTML, people: xpPeopleHTML, story: xpStoryHTML, ending: xpEndingHTML, chain: xpChainHTML }[xp.view]();
+            body.innerHTML = html;
+            if (toTop) document.getElementById('experience-screen').scrollTop = 0;
+        }
+
+        /* ----- 체험실 첫 화면 ----- */
+        function xpHubHTML() {
+            const n = xpDoneCount();
+            return `<div class="xp-wrap">
+                <p class="xp-kicker">교류 체험실</p>
+                <h1 class="xp-h1">대서양을 건넌 것은<br>물건만이 아니었어요</h1>
+                <p class="xp-lead">대서양 교류는 세 대륙을 하나로 이었어요. 하지만 그 연결 속에서 <b>누가 무엇을 주고, 누가 무엇을 잃었을까요?</b> 화물을 직접 싣고, 그 시대를 살았던 네 사람이 되어 교류의 명과 암을 체험해 보세요.</p>
+                <div class="xp-acts">
+                    <button class="xp-act" data-act="go-sort">
+                        ${xpStore.sort ? '<span class="xp-badge">완료</span>' : ''}
+                        <span class="emo">📦</span>
+                        <h2>체험 1. 어느 뱃길에 실렸을까?</h2>
+                        <p>14개의 화물 카드를 알맞은 뱃길에 실어 보세요. 상품뿐 아니라 사람, 문화, 작물이 어떻게 오갔는지 알 수 있어요.</p>
+                        <span class="meta">분류 게임 · 약 10분</span>
+                    </button>
+                    <button class="xp-act" data-act="go-people">
+                        ${n ? `<span class="xp-badge">${n} / 4명</span>` : ''}
+                        <span class="emo">🧭</span>
+                        <h2>체험 2. 같은 배, 네 사람</h2>
+                        <p>선원, 끌려간 소녀, 농장의 소년, 런던의 소녀 가운데 한 명이 되어 1788년의 대서양을 살아 보세요. 고를 수 있는 것과 고를 수 없는 것이 사람마다 달라요.</p>
+                        <span class="meta">선택형 이야기 · 한 사람당 약 5분</span>
+                    </button>
+                    <button class="xp-act" data-act="go-chain">
+                        <span class="emo">🍵</span>
+                        <h2>체험 3. 설탕 한 숟가락의 여행</h2>
+                        <p>네 사람의 이야기는 사실 하나로 이어져 있어요. 홍차 속 설탕 한 숟가락을 거꾸로 따라가며 교류의 명과 암을 정리해요.</p>
+                        <span class="meta">마무리 활동 · ${n === 4 ? '준비 완료' : '네 사람 이야기를 먼저 들으면 좋아요'}</span>
+                    </button>
+                </div>
+                <p class="text-xs text-slate-500 mt-10 leading-relaxed">체험 2의 네 사람은 실제 기록(에퀴아노의 자서전, 선원 증언, 농장 기록, 불매 운동 자료 등)을 바탕으로 만든 가상 인물이에요. 적은 생각은 이 기기에만 저장돼요.</p>
+            </div>`;
+        }
+
+        /* ----- 체험 1: 화물 분류 ----- */
+        function xpSortReset() {
+            xp.sort = { order: xpShuffle(XP_CARGO.map(c => c.id)), placed: {}, tries: 0, wrong: 0, personSeen: false };
+            xp.sel = null;
+        }
+
+        function xpMiniMap() {
+            return `<svg class="xp-mini" viewBox="0 0 420 210" role="img" aria-label="뱃길 지도: 1번 유럽에서 아프리카, 2번 아프리카에서 아메리카, 3번 아메리카에서 유럽, 4번 아메리카에서 아프리카로 곧장">
+                <defs>${XP_LANES.map(l => `<marker id="xpm-${l.id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="${l.color}"/></marker>`).join('')}</defs>
+                <path d="M330,48 C380,80 380,130 345,160" fill="none" stroke="#60a5fa" stroke-width="4" marker-end="url(#xpm-l1)"/>
+                <path d="M310,185 C230,215 140,200 82,140" fill="none" stroke="#ef4444" stroke-width="5" marker-end="url(#xpm-l2)"/>
+                <path d="M75,105 C120,40 220,25 300,35" fill="none" stroke="#eab308" stroke-width="4" marker-end="url(#xpm-l3)"/>
+                <path d="M95,128 C170,150 240,160 305,168" fill="none" stroke="#34d399" stroke-width="3" stroke-dasharray="7 5" marker-end="url(#xpm-l4)"/>
+                <circle cx="318" cy="38" r="9" fill="#3b82f6"/><text x="318" y="18" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">유럽</text>
+                <circle cx="325" cy="175" r="9" fill="#f59e0b"/><text x="372" y="200" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">아프리카</text>
+                <circle cx="72" cy="120" r="9" fill="#10b981"/><text x="40" y="95" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">아메리카</text>
+                <g font-size="13" font-weight="900" text-anchor="middle">
+                    <circle cx="378" cy="100" r="11" fill="#60a5fa"/><text x="378" y="105" fill="#0b1222">1</text>
+                    <circle cx="175" cy="196" r="11" fill="#ef4444"/><text x="175" y="201" fill="#0b1222">2</text>
+                    <circle cx="170" cy="40" r="11" fill="#eab308"/><text x="170" y="45" fill="#0b1222">3</text>
+                    <circle cx="205" cy="152" r="11" fill="#34d399"/><text x="205" y="157" fill="#0b1222">4</text>
+                </g>
+            </svg>`;
+        }
+
+        function xpSortHTML() {
+            const s = xp.sort, total = XP_CARGO.length, placedN = Object.keys(s.placed).length;
+            const pool = s.order.filter(id => !s.placed[id]).map(id => {
+                const c = xpCard(id);
+                return `<button class="xp-card${c.person ? ' person' : ''}${xp.sel === id ? ' sel' : ''}" draggable="true" data-act="card" data-id="${id}" aria-pressed="${xp.sel === id}">${c.emo} ${c.name}</button>`;
+            }).join('');
+            const lanes = XP_LANES.map(l => {
+                const items = s.order.filter(id => s.placed[id] === l.id).map(id => {
+                    const c = xpCard(id);
+                    return `<button class="xp-placed${c.person ? ' person' : ''}" data-act="placed" data-id="${id}">${c.emo} ${c.name}</button>`;
+                }).join('');
+                return `<div class="xp-lane${xp.sel ? ' ready' : ''}" style="--c:${l.color}" data-act="lane" data-lane="${l.id}" role="button" tabindex="0" aria-label="${l.num}번 뱃길, ${l.from}에서 ${l.to}로 싣기">
+                    <span class="xp-lane-h"><span class="ex-num" style="background:${l.color}">${l.num}</span>${l.from} → ${l.to}${l.sub ? ` <small>${l.sub}</small>` : ''}</span>
+                    <span class="xp-lane-items">${items || '<span class="xp-empty">아직 실린 것이 없어요</span>'}</span>
+                </div>`;
+            }).join('');
+            return `<div class="xp-wrap" style="padding-bottom:13rem">
+                <div class="xp-top"><button class="ex-btn" data-act="hub">${XP_BACK} 체험실</button></div>
+                <p class="xp-kicker">체험 1</p>
+                <h1 class="xp-h1">어느 뱃길에 실렸을까?</h1>
+                <p class="xp-lead">여러분은 1700년대 대서양 항구의 기록 담당자예요. 아래 카드를 하나 고른 다음, 그 화물이 실렸던 <b>뱃길</b>을 눌러 보세요. 컴퓨터에서는 카드를 끌어다 놓아도 돼요. 카드를 다 실으면 교류의 결산표를 볼 수 있어요.</p>
+                ${xpMiniMap()}
+                <div class="xp-stat"><span>${placedN} / ${total}</span><div class="xp-progress"><div style="width:${placedN / total * 100}%"></div></div><span>다시 생각한 횟수 ${s.wrong}</span></div>
+                <div class="xp-pool" id="xp-pool" aria-label="실을 화물 카드">${pool || `<div class="xp-done-box">모든 화물을 실었어요! <button class="ex-btn primary ml-2" data-act="sort-done">교류 결산표 보기</button></div>`}</div>
+                <p class="xp-note" style="margin-top:.8rem" aria-live="polite">${xp.sel ? `지금 고른 화물: <b style="color:#fde68a">${xpCard(xp.sel).emo} ${xpCard(xp.sel).name}</b> · 이제 아래에서 뱃길을 눌러 보세요.` : '카드를 먼저 고르세요. 이미 실린 카드를 누르면 설명을 다시 볼 수 있어요.'}</p>
+                <div class="xp-lanes">${lanes}</div>
+            </div>`;
+        }
+
+        function xpSelectCard(id) {
+            xp.sel = xp.sel === id ? null : id;
+            xpHideToast();
+            xpRender();
+            const btn = document.querySelector(`.xp-card[data-id="${id}"]`);
+            if (btn) btn.focus({ preventScroll: true });
+        }
+
+        function xpPlace(laneId) {
+            const s = xp.sort;
+            if (!xp.sel) { xpToast('먼저 위에서 화물 카드를 하나 골라 주세요.'); return; }
+            const c = xpCard(xp.sel), lane = xpLane(laneId);
+            s.tries++;
+            if (c.lane !== laneId) {
+                s.wrong++;
+                xpRender();
+                const btn = document.querySelector(`.xp-card[data-id="${c.id}"]`);
+                if (btn) { btn.classList.add('shake'); btn.focus({ preventScroll: true }); }
+                xpToast(`<b>다시 생각해 볼까요?</b> ${c.emo} ${c.name}은(는) ${lane.num}번 뱃길(${lane.from} → ${lane.to})에 실리지 않았어요.<br>힌트: ${c.hint}`, 'no');
+                return;
+            }
+            s.placed[c.id] = laneId;
+            xp.sel = null;
+            xpRender();
+            const first = document.querySelector('#xp-pool .xp-card, #xp-pool button');
+            if (first) first.focus({ preventScroll: true });
+            if (c.person) { xpHideToast(); xpPersonModal(); }
+            else xpToast(`<b>맞아요! ${c.emo} ${c.name} → ${lane.num}번 뱃길</b><br>${c.fact}`, 'ok');
+        }
+
+        function xpPersonModal() {
+            const m = document.getElementById('xp-modal');
+            m.innerHTML = `<div class="xp-modal-box">
+                <p class="xp-kicker" style="color:#f87171">잠깐, 이 카드는 다른 카드와 달라요</p>
+                <h2 id="xp-modal-title" class="text-2xl font-black text-white mt-1 mb-3">장부에는 "화물"로 적혔지만</h2>
+                <p class="xp-text" style="font-size:1rem">노예선의 장부에는 사람이 옷감·총과 같은 줄에 적혔어요. 이름 대신 <b>"남자 ○명, 여자 ○명, 아이 ○명"</b>이라는 숫자만 남았지요. 하지만 한 사람 한 사람에게는 이름과 가족, 할 줄 아는 일이 있었어요. <b>아래 사람들을 눌러 보세요.</b></p>
+                <div class="xp-people">${XP_WHO.map((w, i) => `<button class="xp-who" data-act="who" data-i="${i}" aria-label="이 사람은 누구였을까요?">${XP_PERSON_SVG}<span class="q">이 사람은 누구였을까요?</span></button>`).join('')}</div>
+                <p class="xp-text" style="font-size:.95rem;color:#cbd5e1">이들이 지닌 <b>기술과 문화</b>도 함께 바다를 건넜어요. 그래서 2번 뱃길에는 벼농사 기술, 북 장단, 아난시 이야기도 실려 있어요. 이것들은 빼앗긴 사람들이 <b>몸과 기억 속에 지켜 낸</b> 것들이에요.</p>
+                <div class="flex flex-wrap gap-2 mt-5">
+                    <button class="ex-btn primary" data-act="modal-close">기억할게요, 계속하기</button>
+                    <button class="ex-btn" data-act="modal-ada">끌려간 소녀 "아다"의 이야기 듣기</button>
+                </div>
+            </div>`;
+            m.hidden = false;
+            xp.sort.personSeen = true;
+            m.querySelector('.xp-who').focus();
+        }
+
+        function xpCloseModal() {
+            const m = document.getElementById('xp-modal');
+            if (!m || m.hidden) return;
+            m.hidden = true;
+            m.innerHTML = '';
+            const first = document.querySelector('#xp-pool button');
+            if (first) first.focus({ preventScroll: true });
+        }
+
+        function xpSortDoneHTML() {
+            const s = xp.sort;
+            const msg = s.wrong === 0 ? '한 번도 틀리지 않았어요! 대서양 교류를 정확하게 이해하고 있네요.'
+                : s.wrong <= 5 ? '잘했어요. 헷갈렸던 카드는 결산표에서 다시 눌러 확인해 보세요.'
+                : '쉽지 않았죠? 헷갈렸던 카드는 아래 결산표에서 다시 눌러 확인해 보세요.';
+            const lanes = XP_LANES.map(l => `<div class="xp-box" style="border-top:5px solid ${l.color}">
+                    <h3><span class="ex-num" style="background:${l.color};margin-right:.4rem">${l.num}</span>${l.from} → ${l.to}</h3>
+                    <div class="xp-lane-items" style="margin-top:.5rem">${XP_CARGO.filter(c => c.lane === l.id).map(c => `<button class="xp-placed${c.person ? ' person' : ''}" data-act="placed" data-id="${c.id}">${c.emo} ${c.name}</button>`).join('')}</div>
+                </div>`).join('');
+            return `<div class="xp-wrap">
+                <div class="xp-top"><button class="ex-btn" data-act="hub">${XP_BACK} 체험실</button></div>
+                <p class="xp-kicker">체험 1 결과</p>
+                <h1 class="xp-h1">대서양 교류 결산표</h1>
+                <p class="xp-lead">14개의 화물을 모두 실었어요. 다시 생각한 횟수는 <b>${s.wrong}번</b>이에요. ${msg}</p>
+                <div class="xp-summary" style="margin-top:1.5rem">${lanes}</div>
+
+                <h2 class="xp-h2">결산표에서 무엇을 발견했나요?</h2>
+                <div class="xp-summary">
+                    <div class="xp-box xp-insight"><span class="n">1</span><span><b>공평한 맞바꿈이 아니었어요.</b> 1번 뱃길의 옷감·총·놋쇠 고리는 2번 뱃길의 <b>사람</b>과 바뀌었어요. 물건과 사람을 맞바꾼 교류였어요.</span></div>
+                    <div class="xp-box xp-insight"><span class="n">2</span><span><b>문화는 사람과 함께 건너갔어요.</b> 벼농사 기술, 북 장단, 아난시 이야기는 모두 2번 뱃길에 있어요. 아프리카의 문화는 <b>끌려간 사람들의 기억</b>을 통해 아메리카에 뿌리내렸어요.</span></div>
+                    <div class="xp-box xp-insight"><span class="n">3</span><span><b>한 바퀴로 이어진 고리였어요.</b> 3번 뱃길의 면화가 유럽에서 옷감이 되어 다시 1번 뱃길로 갔어요. 이익은 계속 불어났고, 그만큼 더 많은 사람이 끌려갔어요.</span></div>
+                    <div class="xp-box xp-insight"><span class="n">4</span><span><b>세모 모양만은 아니었어요.</b> 인도양의 조개가 유럽을 거쳐 아프리카로 가고, 브라질의 담배는 곧장 아프리카로 갔어요. 교류는 <b>온 세계</b>를 잇고 있었어요.</span></div>
+                </div>
+
+                <h2 class="xp-h2">오늘 우리 곁의 대서양 교류</h2>
+                <p class="xp-lead" style="margin-bottom:1rem">눌러서 우리 일상과 어떻게 이어지는지 확인해 보세요.</p>
+                <div class="xp-today">${XP_TODAY.map(t => `<button data-act="today"><span class="emo">${t[0]}</span><b>${t[1]}</b><span class="more">${t[2]}</span></button>`).join('')}</div>
+
+                <div class="xp-think"><b>생각해 보기</b><br>여러분이 1번 뱃길의 상인이었다면, 이 교류를 "공정한 거래"라고 불렀을까요? 2번 뱃길에 실린 사람이었다면 뭐라고 불렀을까요?
+                    <textarea class="xp-textarea" data-note="sort" placeholder="내 생각을 적어 보세요.">${exEsc(xpStore.notes.sort || '')}</textarea>
+                    <p class="xp-saved">적은 내용은 이 기기에 저장돼요.</p>
+                </div>
+                <div class="flex flex-wrap gap-2 mt-6">
+                    <button class="ex-btn primary" data-act="go-people">체험 2. 네 사람의 이야기로</button>
+                    <button class="ex-btn" data-act="sort-again">다시 하기</button>
+                </div>
+            </div>`;
+        }
+
+        /* ----- 체험 2: 네 사람 ----- */
+        function xpPeopleHTML() {
+            return `<div class="xp-wrap">
+                <div class="xp-top"><button class="ex-btn" data-act="hub">${XP_BACK} 체험실</button></div>
+                <p class="xp-kicker">체험 2</p>
+                <h1 class="xp-h1">같은 배, 네 사람</h1>
+                <p class="xp-lead">1788년, 배 한 척이 리버풀을 떠나 아프리카와 자메이카를 거쳐 돌아왔어요. 이 배와 얽힌 네 사람 가운데 한 명을 골라 그 사람이 되어 보세요. 장면마다 선택을 할 수 있지만, <b>사람마다 고를 수 있는 것이 달라요.</b></p>
+                <div class="xp-pick">${XP_ORDER.map(k => {
+                    const p = XP_PEOPLE[k];
+                    return `<button class="xp-person" style="--c:${p.color}" data-act="person" data-k="${k}">
+                        ${xpStore.done[k] ? '<span class="xp-badge">들었어요</span>' : ''}
+                        <span class="xp-avatar">${p.initial}</span>
+                        <b>${p.name} <small>${p.age}</small></b>
+                        <span>${p.role}</span>
+                        <small>${p.home}</small>
+                    </button>`;
+                }).join('')}</div>
+                <p class="xp-lead" style="margin-top:1.6rem;font-size:.95rem">추천 순서: 토머스 → 아다 → 코피 → 엘리자. 네 사람의 이야기를 모두 들으면 <b>체험 3</b>에서 하나로 이어 볼 수 있어요. (지금 ${xpDoneCount()} / 4명)</p>
+            </div>`;
+        }
+
+        function xpStartPerson(k) {
+            if (!XP_PEOPLE[k]) return;
+            xp.person = k; xp.scene = 0; xp.pick = null; xp.path = [];
+            xpGo('story', 'people');
+        }
+
+        function xpWhoBar(p, idx) {
+            return `<div class="xp-who-bar">
+                <span class="xp-avatar">${p.initial}</span>
+                <span><b>${p.name}</b><small>${p.age} · ${p.role}</small></span>
+                ${idx != null ? `<span class="xp-dots" aria-label="${idx + 1} / ${p.scenes.length} 장면">${p.scenes.map((_, i) => `<span class="${i <= idx ? 'on' : ''}"></span>`).join('')}</span>` : ''}
+            </div>`;
+        }
+
+        function xpStoryHTML() {
+            const p = XP_PEOPLE[xp.person], sc = p.scenes[xp.scene], picked = xp.pick != null;
+            const choices = sc.choices.map((c, i) => {
+                const cls = 'xp-choice' + (picked && xp.pick === i ? ' picked' : '');
+                if (c.locked) return `<button class="${cls}" disabled>${c.label}<span class="lock">🔒 ${c.locked}</span></button>`;
+                return `<button class="${cls}" data-act="choose" data-i="${i}" ${picked ? 'disabled' : ''}>${c.label}</button>`;
+            }).join('');
+            const last = xp.scene === p.scenes.length - 1;
+            const result = picked ? `<div class="xp-result" id="xp-result" tabindex="-1">
+                    ${sc.choices[xp.pick].result}
+                    ${sc.after ? `<p class="xp-after">${sc.after}</p>` : ''}
+                    ${sc.note ? `<p class="xp-note xp-memo">${sc.note}</p>` : ''}
+                    ${sc.link ? `<p class="xp-link">🔗 ${sc.link}</p>` : ''}
+                </div>
+                <div class="flex gap-2 mt-5"><button class="ex-btn primary" data-act="scene-next">${last ? '이야기 마무리하기' : '다음 장면'}</button></div>` : '';
+            return `<div class="xp-wrap"><div class="xp-scene" style="--c:${p.color}">
+                <div class="xp-top"><button class="ex-btn" data-act="go-people">${XP_BACK} 인물 고르기</button></div>
+                ${xpWhoBar(p, xp.scene)}
+                <p class="xp-place">${sc.place}</p>
+                <h1 class="xp-scene-title">${sc.title}</h1>
+                ${sc.img ? `<img src="${sc.img[0]}" alt="${exEsc(sc.img[1])}" onerror="this.remove()">` : ''}
+                <p class="xp-text">${sc.text}</p>
+                <p class="xp-q">${sc.q}</p>
+                <div class="xp-choices">${choices}</div>
+                ${result}
+            </div></div>`;
+        }
+
+        function xpChoose(i) {
+            const sc = XP_PEOPLE[xp.person].scenes[xp.scene];
+            if (xp.pick != null || !sc.choices[i] || sc.choices[i].locked) return;
+            xp.pick = i;
+            xp.path[xp.scene] = i;
+            xpRender();
+            const r = document.getElementById('xp-result');
+            if (r) { r.focus({ preventScroll: true }); r.scrollIntoView({ behavior: exReduce() ? 'auto' : 'smooth', block: 'center' }); }
+        }
+
+        function xpNextScene() {
+            const p = XP_PEOPLE[xp.person];
+            if (xp.scene < p.scenes.length - 1) { xp.scene++; xp.pick = null; xpRender(true); }
+            else {
+                xpStore.done[xp.person] = true;
+                xpSave();
+                xp.view = 'ending';
+                xpRender(true);
+            }
+        }
+
+        function xpEndingHTML() {
+            const k = xp.person, p = XP_PEOPLE[k], e = p.ending, nx = XP_PEOPLE[p.next];
+            const path = p.scenes.map((sc, i) => xp.path[i] != null ? `<li><span>${sc.title}</span>${sc.choices[xp.path[i]].label}</li>` : '').join('');
+            const all = xpDoneCount() === 4;
+            return `<div class="xp-wrap"><div class="xp-scene" style="--c:${p.color}">
+                <div class="xp-top"><button class="ex-btn" data-act="go-people">${XP_BACK} 인물 고르기</button></div>
+                ${xpWhoBar(p)}
+                <p class="xp-place">이야기를 마치며</p>
+                <h1 class="xp-scene-title">${p.name}에게 대서양 교류란?</h1>
+                <p class="xp-text">${e.text}</p>
+                <div class="xp-two">
+                    <div class="gain"><b>교류로 얻은 것</b>${e.gain}</div>
+                    <div class="loss"><b>교류로 잃은 것</b>${e.loss}</div>
+                </div>
+                ${path ? `<h2 class="xp-h2" style="margin-top:2rem;font-size:1.1rem">내가 고른 길</h2><ul class="xp-path">${path}</ul>` : ''}
+                <div class="xp-think"><b>생각해 보기</b><br>${e.q}
+                    <textarea class="xp-textarea" data-note="${k}" placeholder="내 생각을 적어 보세요.">${exEsc(xpStore.notes[k] || '')}</textarea>
+                    <p class="xp-saved">적은 내용은 이 기기에 저장돼요.</p>
+                </div>
+                <div class="flex flex-wrap gap-2 mt-6">
+                    ${all ? '<button class="ex-btn primary" data-act="go-chain">체험 3. 네 이야기를 하나로 잇기</button>' : ''}
+                    <button class="ex-btn${all ? '' : ' primary'}" data-act="person" data-k="${p.next}">이어서 ${nx.name}의 이야기 듣기${xpStore.done[p.next] ? ' (다시)' : ''}</button>
+                    <button class="ex-btn" data-act="person" data-k="${k}">처음부터 다른 선택 해 보기</button>
+                </div>
+                <p class="xp-note" style="margin-top:1.2rem">들은 이야기: ${xpDoneCount()} / 4명</p>
+            </div></div>`;
+        }
+
+        /* ----- 체험 3: 설탕 한 숟가락의 여행 ----- */
+        function xpChainHTML() {
+            const n = xpDoneCount();
+            const items = XP_CHAIN.map((c, i) => {
+                const p = XP_PEOPLE[c.who];
+                return `${i ? '<li class="arrow" aria-hidden="true">▼</li>' : ''}
+                    <li style="--c:${p.color}"><span class="xp-avatar">${p.initial}</span><span><b>${c.title}</b>${c.text}${xpStore.done[c.who] ? '' : `<br><small>아직 ${p.name}의 이야기를 듣지 않았어요.</small>`}</span></li>`;
+            }).join('');
+            const scale = XP_ORDER.map(k => {
+                const p = XP_PEOPLE[k], [g, l] = XP_SCALE[k];
+                return `<div style="--c:${p.color}"><b>${p.name}</b>
+                    <div class="xp-meter" aria-hidden="true"><i style="width:${g}%;background:#eab308"></i><i style="width:${l}%;background:#dc2626"></i></div>
+                    <span style="color:#facc15">얻음</span> ${p.ending.gain}<br><span style="color:#f87171">잃음</span> ${p.ending.loss}</div>`;
+            }).join('');
+            const notes = [['sort', '체험 1 결산표']].concat(XP_ORDER.map(k => [k, XP_PEOPLE[k].name + '의 이야기'])).concat([['chain', '체험 3 마무리']]);
+            return `<div class="xp-wrap">
+                <div class="xp-top"><button class="ex-btn" data-act="hub">${XP_BACK} 체험실</button></div>
+                <p class="xp-kicker">체험 3 · 마무리</p>
+                <h1 class="xp-h1">설탕 한 숟가락의 여행</h1>
+                ${n < 4 ? `<p class="xp-lead" style="color:#fca5a5">아직 ${4 - n}명의 이야기를 듣지 않았어요. 먼저 들으면 더 잘 이해할 수 있어요. <button class="ex-btn ml-1" data-act="go-people">이야기 들으러 가기</button></p>` : ''}
+                <p class="xp-lead">1791년 런던, 엘리자의 홍차 속 설탕 한 숟가락을 거꾸로 따라가 볼까요?</p>
+                <ol class="xp-chain">${items}</ol>
+                <p class="xp-lead" style="margin-top:1.5rem">네 사람은 한 번도 한자리에 모인 적이 없어요. 하지만 <b>대서양을 오간 배 한 척</b>으로 모두 이어져 있었어요. 교류는 세계를 하나로 이었지만, 그 연결은 평등하지 않았어요.</p>
+
+                <h2 class="xp-h2">교류의 저울: 누가 얻고 누가 잃었나</h2>
+                <p class="xp-lead" style="font-size:.95rem">노란색은 얻은 것, 빨간색은 잃은 것의 크기를 대략 나타내요.</p>
+                <div class="xp-scale">${scale}</div>
+
+                <div class="xp-think"><b>마지막 질문</b><br>여러분이 생각하는 "공정한 교류"는 무엇인가요? 노예무역과 무엇이 달라야 할까요? 오늘날 우리가 할 수 있는 일도 함께 적어 보세요.
+                    <textarea class="xp-textarea" data-note="chain" placeholder="내 생각을 적어 보세요.">${exEsc(xpStore.notes.chain || '')}</textarea>
+                    <p class="xp-saved">적은 내용은 이 기기에 저장돼요.</p>
+                </div>
+
+                <h2 class="xp-h2">내 생각 노트</h2>
+                <p class="xp-lead" style="font-size:.95rem">체험하면서 적은 생각을 한꺼번에 모아 복사할 수 있어요. 활동지나 과제 제출에 붙여 넣어 보세요.</p>
+                <div class="flex flex-wrap gap-2 mt-3">
+                    <button class="ex-btn primary" data-act="copy-notes">내 생각 모두 복사하기</button>
+                    <button class="ex-btn" data-act="quiz">확인 퀴즈 풀기</button>
+                    <button class="ex-btn" data-act="reset-all">체험 기록 지우기</button>
+                </div>
+                <p class="xp-note" id="xp-copy-msg" style="margin-top:.8rem">${notes.filter(([k]) => (xpStore.notes[k] || '').trim()).length}개의 생각이 저장되어 있어요.</p>
+            </div>`;
+        }
+
+        function xpNotesText() {
+            const parts = [['sort', '체험 1. 어느 뱃길에 실렸을까?']].concat(XP_ORDER.map(k => [k, `체험 2. ${XP_PEOPLE[k].name}의 이야기 — ${XP_PEOPLE[k].ending.q}`])).concat([['chain', '체험 3. 공정한 교류란?']]);
+            return '[교류 체험실 · 내 생각 노트]\n\n' + parts.filter(([k]) => (xpStore.notes[k] || '').trim())
+                .map(([k, t]) => `■ ${t}\n${xpStore.notes[k].trim()}`).join('\n\n');
+        }
+
+        function xpCopyNotes() {
+            const msg = document.getElementById('xp-copy-msg');
+            const text = xpNotesText();
+            if (!/■/.test(text)) { msg.textContent = '아직 적은 생각이 없어요. 생각해 보기 칸에 먼저 적어 보세요.'; return; }
+            const done = () => { msg.textContent = '복사했어요! 원하는 곳에 붙여 넣으세요.'; };
+            const fallback = () => {
+                const ta = document.createElement('textarea');
+                ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+                document.body.appendChild(ta); ta.select();
+                try { document.execCommand('copy'); done(); } catch (e) { msg.textContent = '복사하지 못했어요. 직접 선택해서 복사해 주세요.'; }
+                ta.remove();
+            };
+            if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, fallback);
+            else fallback();
+        }
+
+        /* ----- 공통: 알림 ----- */
+        function xpToast(html, kind) {
+            const t = document.getElementById('xp-toast');
+            t.className = 'xp-toast' + (kind ? ' ' + kind : '');
+            t.innerHTML = `${html}<button class="xp-toast-x" data-act="toast-x" aria-label="닫기">✕</button>`;
+            t.hidden = false;
+        }
+        function xpHideToast() { const t = document.getElementById('xp-toast'); if (t) t.hidden = true; }
+
+        function initExperience() {
+            const scr = document.getElementById('experience-screen');
+            scr.addEventListener('click', e => {
+                // 카드를 고른 상태라면 뱃길 안 어디를 눌러도(이미 실린 카드 위라도) 싣기
+                const laneEl = e.target.closest('.xp-lane');
+                if (laneEl && xp.sel) { xpPlace(laneEl.dataset.lane); return; }
+                const b = e.target.closest('[data-act]');
+                if (!b) return;
+                const act = b.dataset.act;
+                if (act === 'hub') xpGo('hub');
+                else if (act === 'go-sort') {
+                    if (!xp.sort) xpSortReset();
+                    const full = Object.keys(xp.sort.placed).length === XP_CARGO.length;
+                    if (full) { xpStore.sort = true; xpSave(); }
+                    xpGo(full ? 'sortDone' : 'sort', 'sort');
+                }
+                else if (act === 'go-people') xpGo('people', 'people');
+                else if (act === 'go-chain') xpGo('chain', 'sugar');
+                else if (act === 'card') xpSelectCard(b.dataset.id);
+                else if (act === 'lane') xpPlace(b.dataset.lane);
+                else if (act === 'placed') { const c = xpCard(b.dataset.id), l = xpLane(c.lane); xpToast(`<b>${c.emo} ${c.name} → ${l.num}번 뱃길</b><br>${c.fact}`, 'ok'); }
+                else if (act === 'sort-done') { xpStore.sort = true; xpSave(); xpGo('sortDone', 'sort'); }
+                else if (act === 'sort-again') { xpSortReset(); xpGo('sort', 'sort'); }
+                else if (act === 'who') { b.classList.add('on'); const w = XP_WHO[+b.dataset.i]; b.innerHTML = `<span style="font-size:1.8rem">${w[0]}</span><span class="q">${w[1]}</span>`; b.removeAttribute('aria-label'); }
+                else if (act === 'modal-close') { xpCloseModal(); const c = xpCard('people'); xpToast(`<b>${c.emo} ${c.name} → 2번 뱃길 (중간 항로)</b><br>${c.fact}`, 'ok'); }
+                else if (act === 'modal-ada') { xpCloseModal(); xpStartPerson('ada'); }
+                else if (act === 'today') b.classList.toggle('on');
+                else if (act === 'person') xpStartPerson(b.dataset.k);
+                else if (act === 'choose') xpChoose(+b.dataset.i);
+                else if (act === 'scene-next') xpNextScene();
+                else if (act === 'toast-x') xpHideToast();
+                else if (act === 'copy-notes') xpCopyNotes();
+                else if (act === 'quiz') openQuiz();
+                else if (act === 'reset-all') {
+                    if (!confirm('체험 기록과 적은 생각을 모두 지울까요?')) return;
+                    xpStore = { done: {}, notes: {}, sort: false }; xpSave(); xp.sort = null; xpGo('hub');
+                }
+            });
+            scr.addEventListener('keydown', e => {
+                if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('xp-lane')) {
+                    e.preventDefault();
+                    xpPlace(e.target.dataset.lane);
+                }
+            });
+            scr.addEventListener('input', e => {
+                const k = e.target.dataset && e.target.dataset.note;
+                if (!k) return;
+                xpStore.notes[k] = e.target.value;
+                xpSave();
+            });
+            // 컴퓨터에서는 카드를 끌어다 뱃길에 놓을 수도 있음
+            scr.addEventListener('dragstart', e => {
+                const c = e.target.closest && e.target.closest('.xp-card');
+                if (!c) return;
+                xp.sel = c.dataset.id;
+                e.dataTransfer.setData('text/plain', c.dataset.id);
+                e.dataTransfer.effectAllowed = 'move';
+                document.querySelectorAll('.xp-lane').forEach(l => l.classList.add('ready'));
+            });
+            scr.addEventListener('dragover', e => {
+                const l = e.target.closest && e.target.closest('.xp-lane');
+                if (!l) return;
+                e.preventDefault();
+                document.querySelectorAll('.xp-lane.over').forEach(x => x !== l && x.classList.remove('over'));
+                l.classList.add('over');
+            });
+            scr.addEventListener('dragleave', e => {
+                const l = e.target.closest && e.target.closest('.xp-lane');
+                if (l && !l.contains(e.relatedTarget)) l.classList.remove('over');
+            });
+            scr.addEventListener('drop', e => {
+                const l = e.target.closest && e.target.closest('.xp-lane');
+                if (!l) return;
+                e.preventDefault();
+                const id = e.dataTransfer.getData('text/plain');
+                if (id && xpCard(id)) xp.sel = id;
+                xpPlace(l.dataset.lane);
+            });
+            scr.addEventListener('dragend', () => {
+                if (xp.view === 'sort' && document.querySelector('.xp-lane.over, .xp-lane.ready')) xpRender();
             });
         }
 
         /* ================= 공통 이벤트 ================= */
         document.addEventListener('keydown', e => {
+            if (currentScreen === 'experience-screen' && e.key === 'Escape' && !document.getElementById('xp-modal').hidden) {
+                xpCloseModal();
+                return;
+            }
             if (currentScreen === 'detail-screen') {
                 if (e.key === 'ArrowLeft') { animateSliderTo(Math.max(0, Math.round(sliderPct - 10))); e.preventDefault(); }
                 if (e.key === 'ArrowRight') { animateSliderTo(Math.min(100, Math.round(sliderPct + 10))); e.preventDefault(); }
@@ -1661,6 +2590,7 @@
 
         initApp();
         initExchange();
+        initExperience();
         if (location.hash) route();
     </script>
 </body>
