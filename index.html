@@ -44,27 +44,85 @@
         }
         .scroll-screen { overflow-y: auto; -webkit-overflow-scrolling: touch; user-select: text; -webkit-user-select: text; }
 
+        /* ---------- 배경 장식 (밤바다 · 옛 해도) ---------- */
+        .deco { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+                --g1: rgba(202, 138, 4, .22); --g2: rgba(185, 28, 28, .22); --wave: 37, 66, 112; --rose: rgba(250, 204, 21, .06); --grid: rgba(148, 163, 184, .07); }
+        /* 옛 해도의 격자선 */
+        .deco::before { content: ''; position: absolute; inset: 0;
+                        background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+                        background-size: 80px 80px; background-position: center;
+                        -webkit-mask-image: radial-gradient(ellipse at 50% 45%, #000 15%, transparent 72%); mask-image: radial-gradient(ellipse at 50% 45%, #000 15%, transparent 72%); }
+        /* 별빛 */
+        .deco::after { content: ''; position: absolute; inset: 0; opacity: .75;
+                       background-image: radial-gradient(1.3px 1.3px at 22px 34px, rgba(255, 255, 255, .9), transparent),
+                                         radial-gradient(1px 1px at 128px 92px, rgba(255, 255, 255, .7), transparent),
+                                         radial-gradient(1.6px 1.6px at 214px 168px, rgba(254, 240, 138, .8), transparent),
+                                         radial-gradient(1px 1px at 76px 210px, rgba(255, 255, 255, .6), transparent),
+                                         radial-gradient(1.2px 1.2px at 250px 40px, rgba(255, 255, 255, .7), transparent);
+                       background-size: 280px 260px;
+                       -webkit-mask-image: linear-gradient(#000, transparent 62%); mask-image: linear-gradient(#000, transparent 62%);
+                       animation: decoTwinkle 7s ease-in-out infinite alternate; }
+        .deco-glow { position: absolute; width: 60vmax; height: 60vmax; border-radius: 50%; filter: blur(80px); mix-blend-mode: screen; animation: decoBreath 16s ease-in-out infinite alternate; }
+        .deco-glow.a { background: var(--g1); top: -24vmax; left: -20vmax; }
+        .deco-glow.b { background: var(--g2); bottom: -26vmax; right: -20vmax; animation-delay: -8s; }
+        .deco-rose { position: absolute; width: min(60vmin, 560px); aspect-ratio: 1; top: -8vmin; right: -10vmin; color: var(--rose); animation: decoSpin 300s linear infinite; }
+        .deco-rose.left { right: auto; left: -14vmin; top: auto; bottom: 8vh; width: min(44vmin, 380px); animation-direction: reverse; }
+        .deco-sea { position: absolute; left: 0; right: 0; bottom: 0; height: 20vh; min-height: 110px; }
+        .deco-wave { position: absolute; left: 0; bottom: 0; width: 200%; height: 100%; background: rgb(var(--wave));
+                     -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0 60 Q150 30 300 60 T600 60 T900 60 T1200 60 V120 H0Z'/%3E%3C/svg%3E") repeat-x bottom / 50% 100%;
+                             mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0 60 Q150 30 300 60 T600 60 T900 60 T1200 60 V120 H0Z'/%3E%3C/svg%3E") repeat-x bottom / 50% 100%;
+                     animation: decoWave 30s linear infinite; }
+        .deco-wave.w1 { opacity: .22; height: 100%; }
+        .deco-wave.w2 { opacity: .3; height: 72%; animation-duration: 22s; animation-direction: reverse; }
+        .deco-wave.w3 { opacity: .45; height: 46%; animation-duration: 16s; }
+        .deco-ship { position: absolute; bottom: calc(max(20vh, 110px) * .62); left: 0; width: clamp(70px, 9vw, 120px); color: #0b1222; opacity: .9;
+                     filter: drop-shadow(0 0 6px rgba(250, 204, 21, .25)); animation: decoSail 90s linear infinite; }
+        .deco-ship svg { display: block; width: 100%; animation: decoBob 4s ease-in-out infinite; }
+        @keyframes decoTwinkle { from { opacity: .45; } to { opacity: .85; } }
+        @keyframes decoBreath { from { transform: scale(.92); opacity: .75; } to { transform: scale(1.08); opacity: 1; } }
+        @keyframes decoSpin { to { transform: rotate(360deg); } }
+        @keyframes decoWave { to { transform: translateX(-50%); } }
+        @keyframes decoSail { from { transform: translateX(-15vw); } to { transform: translateX(110vw); } }
+        @keyframes decoBob { 0%, 100% { transform: translateY(0) rotate(-1.5deg); } 50% { transform: translateY(5px) rotate(1.5deg); } }
+        /* 탭별 색 */
+        .deco.ember { --g1: rgba(234, 88, 12, .13); --g2: rgba(153, 27, 27, .24); --wave: 92, 28, 28; --rose: rgba(251, 146, 60, .07); --grid: rgba(214, 160, 120, .06); }
+        .deco.quiz  { --g1: rgba(250, 204, 21, .14); --g2: rgba(59, 130, 246, .18); --wave: 30, 64, 120; --rose: rgba(147, 197, 253, .08); }
+        .deco.lab   { --g1: rgba(45, 212, 191, .13); --g2: rgba(250, 204, 21, .12); --wave: 17, 78, 89; --rose: rgba(94, 234, 212, .08); --grid: rgba(94, 234, 212, .06); }
+        /* 장식 위에 내용이 오도록 */
+        .home-inner, .reading article, #xp-body { position: relative; z-index: 1; }
+
         /* ---------- 홈 ---------- */
         #home-screen {
-            background: radial-gradient(circle at center, #1a1a2e 0%, #050505 100%);
+            background: linear-gradient(180deg, #0b1533 0%, #080d22 50%, #050814 100%);
             overflow-y: auto;
             padding: 3rem 1.25rem 2rem;
         }
         .home-inner { max-width: 72rem; min-height: 100%; margin: 0 auto; display: flex; flex-direction: column; justify-content: center; }
+        .home-kicker { display: inline-flex; align-items: center; gap: .6rem; font-size: .8rem; letter-spacing: .35em; color: #fbbf24; font-weight: 700; margin-bottom: 1rem; }
+        .home-kicker::before, .home-kicker::after { content: ''; width: 2.4rem; height: 1px; background: linear-gradient(90deg, transparent, #fbbf24); }
+        .home-kicker::after { background: linear-gradient(90deg, #fbbf24, transparent); }
+        .home-title .light { color: #facc15; text-shadow: 0 0 28px rgba(250, 204, 21, .55); }
+        .home-title .dark { color: #ef4444; text-shadow: 0 0 28px rgba(239, 68, 68, .5); }
+        .ornament { display: flex; align-items: center; justify-content: center; gap: .8rem; margin: -.4rem auto 1.4rem; color: #fbbf24; }
+        .ornament span { width: min(18vw, 9rem); height: 1px; background: linear-gradient(90deg, transparent, rgba(250, 204, 21, .7)); }
+        .ornament span:last-child { background: linear-gradient(90deg, rgba(220, 38, 38, .7), transparent); }
+        .ornament svg { width: 22px; height: 22px; }
         .intro { max-width: 40rem; margin: 0 auto; line-height: 1.9; color: #cbd5e1; }
         .flag-card {
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            filter: grayscale(100%) opacity(0.75);
+            background: linear-gradient(180deg, rgba(30, 41, 59, .55), rgba(15, 23, 42, .7));
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+            filter: grayscale(100%) opacity(0.8);
             color: inherit;
             font: inherit;
         }
         .flag-card:hover, .flag-card:focus-visible {
             transform: translateY(-10px) scale(1.02);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
-            border-color: rgba(255, 255, 255, 0.4);
+            border-color: rgba(250, 204, 21, 0.55);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 24px rgba(250, 204, 21, .18);
             filter: grayscale(0%) opacity(1);
         }
         .home-btn {
@@ -186,7 +244,8 @@
         .timeline-labels { display: flex; justify-content: space-between; width: min(90vw, 720px); margin: .35rem auto 0; font-size: .75rem; color: #94a3b8; }
 
         /* ---------- 읽기 화면 ---------- */
-        .reading { background: radial-gradient(circle at top, #1c1917 0%, #050505 70%); }
+        .reading { background: linear-gradient(180deg, #1f1210 0%, #120a0a 45%, #070505 100%); }
+        #quiz-screen.reading { background: linear-gradient(180deg, #0d1733 0%, #0a1024 50%, #050814 100%); }
         .reading article { max-width: 46rem; margin: 0 auto; padding: 6rem 1.25rem 4rem; }
         .reading h2 { font-size: 1.6rem; font-weight: 900; margin: 3.5rem 0 1rem; color: #fff; }
         .reading p { line-height: 1.95; color: #cbd5e1; margin-bottom: 1rem; }
@@ -207,7 +266,9 @@
         .quiz-opt.wrong { border-color: #ef4444; background: rgba(127,29,29,.6); }
 
         /* ---------- 교류 지도 (중학생용) ---------- */
-        #exchange-screen { background: radial-gradient(circle at 35% 45%, #0f1b33 0%, #020617 80%); }
+        #exchange-screen { background: linear-gradient(rgba(148, 163, 184, .05) 1px, transparent 1px) center / 80px 80px,
+                                       linear-gradient(90deg, rgba(148, 163, 184, .05) 1px, transparent 1px) center / 80px 80px,
+                                       radial-gradient(circle at 35% 45%, #12224a 0%, #071030 45%, #020617 85%); }
         #ex-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
         #ex-svg text { font-family: inherit; }
         .ex-land { fill: #121a2b; stroke: #1f2b42; stroke-width: .6; }
@@ -322,7 +383,7 @@
         }
 
         /* ---------- 교류 체험실 ---------- */
-        #experience-screen { background: radial-gradient(circle at top, #10203d 0%, #050505 70%); }
+        #experience-screen { background: linear-gradient(180deg, #0a2230 0%, #081620 50%, #040a10 100%); }
         .home-btn.feature { background: linear-gradient(135deg, #a16207, #ca8a04); border-color: #facc15; box-shadow: 0 0 22px rgba(250, 204, 21, .35); }
         .home-btn.feature:hover { background: #ca8a04; }
         .xp-wrap { max-width: 60rem; margin: 0 auto; padding: 6rem 1.25rem 5rem; }
@@ -570,6 +631,8 @@
             .slider-button.hint::after { animation: none; }
             .xp-card.shake { animation: none; }
             .xp-act, .xp-person, .xp-card { transition: none; }
+            .deco::after, .deco-glow, .deco-rose, .deco-wave, .deco-ship, .deco-ship svg { animation: none !important; }
+            .deco-ship { transform: translateX(70vw); }
         }
     </style>
 </head>
@@ -579,11 +642,17 @@
     <main id="home-screen" class="screen active">
         <div class="home-inner">
             <div class="text-center mb-10">
-                <h1 class="text-4xl md:text-6xl font-black mb-6 tracking-tight drop-shadow-lg">
+                <p class="home-kicker">1500 – 1870 · 대서양</p>
+                <h1 class="home-title text-4xl md:text-6xl font-black mb-6 tracking-tight drop-shadow-lg">
                     <span class="text-slate-200">대서양 노예 무역의</span><br class="md:hidden">
-                    <span class="text-yellow-500">명</span>과
-                    <span class="text-red-600">암</span>
+                    <span class="light">명</span>과
+                    <span class="dark">암</span>
                 </h1>
+                <div class="ornament" aria-hidden="true">
+                    <span></span>
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1l2.2 8.8L23 12l-8.8 2.2L12 23l-2.2-8.8L1 12l8.8-2.2z"/></svg>
+                    <span></span>
+                </div>
                 <p class="intro text-sm md:text-base">
                     16세기부터 19세기까지 약 1,250만 명의 아프리카인이 강제로 배에 실려 대서양을 건넜습니다.
                     유럽의 항구 도시가 누린 번영은 이들의 고통 위에 세워졌습니다.
@@ -946,6 +1015,41 @@
             } finally { routing = false; }
         }
         window.addEventListener('popstate', route);
+
+        /* ================= 배경 장식 ================= */
+        const DECO_ROSE = (() => {
+            let ticks = '';
+            for (let i = 0; i < 64; i++) ticks += `<line x1="100" y1="${i % 8 ? 7 : 4}" x2="100" y2="${i % 8 ? 11 : 15}" transform="rotate(${i * 5.625} 100 100)"/>`;
+            const pt = (len, w, rot) => `<path d="M100 ${100 - len} L${100 + w} ${100 - w} L100 100 L${100 - w} ${100 - w}Z" transform="rotate(${rot} 100 100)"/>`;
+            return `<svg viewBox="0 0 200 200" fill="none" stroke="currentColor" aria-hidden="true">
+                <circle cx="100" cy="100" r="97" stroke-width="1.2"/><circle cx="100" cy="100" r="88" stroke-width=".6"/>
+                <circle cx="100" cy="100" r="62" stroke-width=".6" stroke-dasharray="2 4"/><circle cx="100" cy="100" r="22" stroke-width=".8"/>
+                <g stroke-width=".8">${ticks}</g>
+                <g fill="currentColor" stroke="none">${[0, 90, 180, 270].map(r => pt(84, 11, r)).join('')}${[45, 135, 225, 315].map(r => pt(58, 7, r)).join('')}</g>
+                <g fill="currentColor" stroke="none" font-size="13" font-weight="700" text-anchor="middle" font-family="serif"><text x="100" y="30">N</text></g>
+            </svg>`;
+        })();
+        const DECO_SHIP = `<svg viewBox="0 0 120 80" fill="currentColor" aria-hidden="true">
+            <path d="M6 56 L114 56 L101 71 L19 71Z"/>
+            <path d="M40 8 V56 M62 2 V56 M84 12 V56" stroke="currentColor" stroke-width="2.2"/>
+            <path d="M42 12 Q57 21 42 32Z M42 34 Q60 44 42 54Z M64 6 Q81 17 64 29Z M64 31 Q84 42 64 54Z M86 16 Q99 25 86 35Z M86 37 Q101 46 86 54Z"/>
+            <path d="M62 2 L74 5 L62 8Z"/>
+        </svg>`;
+        function addDeco(screenId, variant, opts = {}) {
+            const scr = document.getElementById(screenId);
+            if (!scr) return;
+            const d = document.createElement('div');
+            d.className = 'deco' + (variant ? ' ' + variant : '');
+            d.setAttribute('aria-hidden', 'true');
+            d.innerHTML = `<div class="deco-glow a"></div><div class="deco-glow b"></div>
+                <div class="deco-rose">${DECO_ROSE}</div>${opts.rose2 ? `<div class="deco-rose left">${DECO_ROSE}</div>` : ''}
+                <div class="deco-sea">${opts.ship ? `<div class="deco-ship">${DECO_SHIP}</div>` : ''}<div class="deco-wave w1"></div><div class="deco-wave w2"></div><div class="deco-wave w3"></div></div>`;
+            scr.prepend(d);
+        }
+        addDeco('home-screen', '', { ship: true, rose2: true });
+        addDeco('voices-screen', 'ember');
+        addDeco('quiz-screen', 'quiz');
+        addDeco('experience-screen', 'lab', { ship: true });
 
         /* ================= 홈 ================= */
         const container = document.getElementById('flags-container');
