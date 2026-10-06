@@ -1146,15 +1146,14 @@
         addDeco('experience-screen', 'lab', { ship: true });
 
         /* ================= 홈: 배움의 순서 ================= */
-        const PATH_KEY = 'slave-trade-path';
         const PATH_OF = { 'exchange-screen': 1, 'map-screen': 1, 'detail-screen': 2, 'voices-screen': 3, 'experience-screen': 4, 'quiz-screen': 5 };
-        let pathSeen = {};
-        try { pathSeen = JSON.parse(localStorage.getItem(PATH_KEY)) || {}; } catch (e) { pathSeen = {}; }
+        // '봤어요' 표시는 페이지를 연 동안만 기억함 (새로고침하면 처음부터)
+        const pathSeen = {};
+        try { localStorage.removeItem('slave-trade-path'); } catch (e) {} // 예전 버전이 저장해 둔 표시 지우기
         function pathMark(id) {
             const n = PATH_OF[id];
             if (!n || pathSeen[n]) return;
             pathSeen[n] = true;
-            try { localStorage.setItem(PATH_KEY, JSON.stringify(pathSeen)); } catch (e) {}
             pathRender();
         }
         function pathRender() {
