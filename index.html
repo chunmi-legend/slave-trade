@@ -467,6 +467,86 @@
         .xp-meter { height: 8px; border-radius: 999px; background: #1e293b; margin: .5rem 0; display: flex; overflow: hidden; }
         .xp-meter i { display: block; height: 100%; }
 
+        /* ---------- 바람길 레이스 ---------- */
+        #race-screen { background: #020617; overflow: hidden; touch-action: none; }
+        .race-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+        .race-hud { position: absolute; bottom: .8rem; left: 50%; transform: translateX(-50%); z-index: 21; display: flex; gap: .5rem; width: min(560px, calc(100vw - 22rem)); pointer-events: none; }
+        .race-hud > * { flex: 1; min-width: 0; }
+        .race-pcard { background: rgba(2, 6, 23, .88); border: 1px solid #1e293b; border-left: 6px solid var(--c); border-radius: 12px; padding: .6rem .8rem; backdrop-filter: blur(6px); }
+        .race-pcard .nm { display: flex; justify-content: space-between; align-items: baseline; gap: .5rem; font-weight: 900; color: #fff; }
+        .race-pcard .days { font-size: 1.5rem; font-variant-numeric: tabular-nums; color: var(--c); }
+        .race-pcard .leg { font-size: .8rem; color: #94a3b8; }
+        .race-pcard .wind { font-size: .82rem; font-weight: 700; margin-top: .15rem; }
+        .race-pcard .bar { height: 5px; border-radius: 999px; background: #1e293b; margin-top: .35rem; overflow: hidden; }
+        .race-pcard .bar i { display: block; height: 100%; background: var(--c); transition: width .2s; }
+        .race-msg { position: absolute; top: 5rem; left: 50%; transform: translateX(-50%); z-index: 25; width: min(92vw, 30rem); pointer-events: none; display: flex; flex-direction: column; gap: .4rem; }
+        .race-msg > div { background: rgba(2, 6, 23, .95); border: 1px solid #334155; border-left: 6px solid var(--c, #facc15); border-radius: 12px; padding: .7rem 1rem; line-height: 1.7; color: #e2e8f0; font-size: .92rem; animation: raceIn .3s ease-out; }
+        .race-msg b { color: #fff; }
+        .race-count { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 26; pointer-events: none; font-size: clamp(4rem, 14vw, 9rem); font-weight: 900; color: #fff; text-shadow: 0 0 40px rgba(250, 204, 21, .6); }
+        @keyframes raceIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+        .race-pads { position: absolute; left: 0; right: 0; bottom: 1rem; z-index: 20; display: flex; justify-content: space-between; padding: 0 1rem; pointer-events: none; }
+        .race-pad { display: flex; gap: .6rem; pointer-events: auto; align-items: flex-end; }
+        .race-pad[hidden] { display: none; }
+        .race-pad button { width: 4.4rem; height: 4.4rem; border-radius: 50%; border: 3px solid var(--c); background: rgba(2, 6, 23, .8); color: #fff; font: inherit; font-weight: 900; font-size: 1.4rem;
+                           display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.1; touch-action: none; -webkit-user-select: none; user-select: none; }
+        .race-pad button small { font-size: .65rem; color: #94a3b8; font-weight: 700; }
+        .race-pad button.on { background: var(--c); color: #0b1222; }
+        .race-pad button.on small { color: #0b1222; }
+        .race-pad .who { align-self: center; font-size: .75rem; font-weight: 900; color: var(--c); writing-mode: vertical-rl; }
+        .race-overlay { position: absolute; inset: 0; z-index: 30; display: flex; align-items: center; justify-content: center; padding: 1rem; background: rgba(2, 6, 23, .78); }
+        .race-overlay[hidden] { display: none; }
+        .race-overlay.side { inset: 0 0 0 auto; width: min(460px, 42vw); padding: 0; background: none; align-items: stretch; }
+        .race-box { width: 100%; max-width: 40rem; max-height: calc(100vh - 2rem); overflow-y: auto; background: #0b1222; border: 1px solid #334155; border-radius: 18px; padding: 1.6rem;
+                    box-shadow: 0 20px 60px rgba(0, 0, 0, .6); user-select: text; -webkit-user-select: text; }
+        .race-overlay.side .race-box { max-height: none; border-radius: 0; border-width: 0 0 0 1px; padding: 5rem 1.5rem 2rem; background: rgba(2, 6, 23, .96); }
+        .race-box h1 { font-size: clamp(1.7rem, 4vw, 2.3rem); font-weight: 900; color: #fff; margin: .2rem 0 .8rem; }
+        .race-box p, .race-box li { line-height: 1.85; color: #cbd5e1; }
+        .race-box b { color: #fde68a; }
+        .race-modes { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin: 1.2rem 0; }
+        .race-modes button { padding: .9rem; border-radius: 12px; border: 2px solid #334155; background: #0f172a; color: #e2e8f0; font: inherit; font-weight: 900; text-align: left; line-height: 1.5; }
+        .race-modes button small { display: block; font-weight: 400; color: #94a3b8; font-size: .82rem; }
+        .race-modes button.on { border-color: #facc15; background: rgba(250, 204, 21, .1); }
+        .race-names { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+        .race-names label { font-size: .82rem; color: #94a3b8; display: flex; flex-direction: column; gap: .3rem; }
+        .race-names input { padding: .6rem .8rem; border-radius: 10px; border: 2px solid var(--c); background: #020617; color: #fff; font: inherit; user-select: text; -webkit-user-select: text; }
+        .race-how { list-style: none; padding: 0; margin: 1.1rem 0; display: flex; flex-direction: column; gap: .45rem; }
+        .race-how li { display: flex; gap: .6rem; align-items: flex-start; font-size: .95rem; }
+        .race-how .ic { flex: none; width: 1.8rem; text-align: center; font-size: 1.15rem; }
+        .race-keys { display: inline-block; padding: 0 .4rem; border-radius: 5px; border: 1px solid #475569; background: #1e293b; font-size: .82rem; color: #fff; font-weight: 700; }
+        .race-rank { list-style: none; padding: 0; margin: 1rem 0; display: flex; flex-direction: column; gap: .5rem; }
+        .race-rank li { display: flex; align-items: center; gap: .8rem; padding: .8rem 1rem; border-radius: 12px; background: #0f172a; border-left: 6px solid var(--c); }
+        .race-rank .pl { font-size: 1.4rem; font-weight: 900; color: #fff; width: 2.2rem; }
+        .race-rank b { color: #fff; display: block; }
+        .race-rank small { color: #94a3b8; }
+        .race-rank .d { margin-left: auto; font-size: 1.3rem; font-weight: 900; color: var(--c); font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .race-lesson { margin-top: .8rem; padding: .9rem 1rem; border-radius: 12px; background: #0f172a; border: 1px solid #1e293b; line-height: 1.85; color: #e2e8f0; }
+        .race-lesson h3 { font-weight: 900; color: #fff; margin-bottom: .2rem; }
+        .race-lesson.dark { border-color: #7f1d1d; background: #1c0a0a; }
+        .race-lesson.dark h3 { color: #fca5a5; }
+        .race-rotate { display: none; font-size: .88rem; color: #fde68a !important; margin-bottom: .8rem; }
+        @media (orientation: portrait) and (max-width: 768px) { .race-rotate { display: block; } }
+        @media (max-height: 560px) and (min-width: 600px) {
+            .race-hud { bottom: .6rem; }
+            .race-pcard { padding: .4rem .6rem; }
+            .race-pcard .days { font-size: 1.1rem; }
+            .race-pcard .wind { font-size: .75rem; }
+            .race-msg { top: 1rem; }
+            .race-pad button { width: 3.6rem; height: 3.6rem; }
+        }
+        .race-legend { display: flex; flex-wrap: wrap; gap: .4rem 1rem; font-size: .82rem; color: #94a3b8; margin-top: .4rem; }
+        .race-legend i { display: inline-block; width: 1.4rem; height: 0; border-top: 3px dashed #facc15; vertical-align: middle; margin-right: .3rem; }
+
+        @media (max-width: 768px) {
+            .race-hud { top: 4.3rem; bottom: auto; left: .6rem; right: .6rem; width: auto; transform: none; }
+            .race-pcard { flex: 1; padding: .45rem .6rem; }
+            .race-pcard .days { font-size: 1.15rem; }
+            .race-msg { top: 9.5rem; }
+            .race-pad button { width: 3.9rem; height: 3.9rem; }
+            .race-overlay.side { inset: auto 0 0 0; width: 100%; height: 58%; }
+            .race-overlay.side .race-box { padding: 1.3rem 1.1rem 2rem; border-width: 1px 0 0 0; border-radius: 18px 18px 0 0; }
+            .race-modes, .race-names { grid-template-columns: 1fr; }
+        }
+
         @media (max-width: 768px) {
             .xp-lanes, .xp-summary { grid-template-columns: 1fr; }
             .xp-today, .xp-scale { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -514,6 +594,10 @@
                     <button onclick="openExperience()" class="home-btn feature">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 20h20"/><path d="M5 20l2-6h10l2 6"/><path d="M12 14V3l6 6h-6"/></svg>
                         교류 체험실
+                    </button>
+                    <button onclick="openRace()" class="home-btn feature">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h11a3 3 0 1 0-3-3"/><path d="M3 12h16a3 3 0 1 1-3 3"/><path d="M3 16h7"/></svg>
+                        친구와 대결: 바람길 레이스
                     </button>
                     <button onclick="openExchange()" class="home-btn primary">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h13l-3-3M21 17H8l3 3"/></svg>
@@ -774,6 +858,32 @@
         <div id="xp-modal" class="xp-modal" role="dialog" aria-modal="true" aria-labelledby="xp-modal-title" hidden></div>
     </section>
 
+    <!-- 바람길 레이스 -->
+    <section id="race-screen" class="screen" aria-label="바람길 레이스">
+        <canvas id="race-bg" class="race-canvas"></canvas>
+        <canvas id="race-fg" class="race-canvas" role="img" aria-label="대서양 지도 위에서 범선이 바람을 타고 움직이는 레이스 화면"></canvas>
+        <div class="detail-header flex items-center gap-2 z-20">
+            <button onclick="openExperience()" class="px-5 py-2.5 bg-slate-900/90 hover:bg-slate-700 text-white rounded-full flex items-center gap-2 text-sm border border-slate-600 shadow-xl backdrop-blur-md">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                체험실
+            </button>
+        </div>
+        <div id="race-hud" class="race-hud" aria-live="off"></div>
+        <div id="race-msg" class="race-msg" role="status" aria-live="polite"></div>
+        <div id="race-count" class="race-count" aria-live="assertive"></div>
+        <div class="race-pads">
+            <div class="race-pad" data-p="0" style="--c:#38bdf8">
+                <button data-p="0" data-dir="-1" aria-label="1번 배 왼쪽으로">◀<small>A</small></button>
+                <button data-p="0" data-dir="1" aria-label="1번 배 오른쪽으로">▶<small>D</small></button>
+            </div>
+            <div class="race-pad" data-p="1" style="--c:#fbbf24">
+                <button data-p="1" data-dir="-1" aria-label="2번 배 왼쪽으로">◀<small>←</small></button>
+                <button data-p="1" data-dir="1" aria-label="2번 배 오른쪽으로">▶<small>→</small></button>
+            </div>
+        </div>
+        <div id="race-overlay" class="race-overlay"></div>
+    </section>
+
     <script>
         /* ================= 국가 데이터 ================= */
         const countryData = {
@@ -806,11 +916,12 @@
 
         /* ================= 화면 전환 ================= */
         let currentScreen = 'home-screen', currentCountry = null, routing = false;
-        const screenHash = { 'home-screen': '', 'map-screen': '#timelapse', 'voices-screen': '#history', 'quiz-screen': '#quiz', 'exchange-screen': '#exchange', 'experience-screen': '#experience', 'detail-screen': '' };
+        const screenHash = { 'home-screen': '', 'map-screen': '#timelapse', 'voices-screen': '#history', 'quiz-screen': '#quiz', 'exchange-screen': '#exchange', 'experience-screen': '#experience', 'race-screen': '#race', 'detail-screen': '' };
 
         function showScreen(id, hash) {
             if (currentScreen === 'map-screen' && id !== 'map-screen') stopMap();
             if (currentScreen === 'exchange-screen' && id !== 'exchange-screen') exStopShip();
+            if (currentScreen === 'race-screen' && id !== 'race-screen') raceStop();
             document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
             currentScreen = id;
             const el = document.getElementById(id);
@@ -829,6 +940,7 @@
                 else if (h === 'quiz') openQuiz();
                 else if (h.startsWith('exchange')) openExchange(h.split('-')[1]);
                 else if (h.startsWith('experience')) openExperience(h.split('-')[1]);
+                else if (h === 'race') openRace();
                 else if (h.startsWith('country-') && countryData[h.slice(8)]) openDetail(h.slice(8));
                 else showScreen('home-screen');
             } finally { routing = false; }
@@ -1068,6 +1180,7 @@
             if (!data) document.getElementById('map-error').classList.remove('hidden');
             if (mapActive) drawRealWorldMap();
             if (currentScreen === 'exchange-screen') renderExchange();
+            if (currentScreen === 'race-screen') raceResize();
         });
 
         function drawRealWorldMap() {
@@ -2075,8 +2188,8 @@
         const XP_SCALE = { thomas: [55, 45], ada: [3, 97], kofi: [10, 90], eliza: [92, 8] };
 
         const XP_STORE_KEY = 'slave-trade-experience';
-        let xpStore = { done: {}, notes: {}, sort: false };
-        try { const s = JSON.parse(localStorage.getItem(XP_STORE_KEY)); if (s && typeof s === 'object') xpStore = { done: s.done || {}, notes: s.notes || {}, sort: !!s.sort }; } catch (e) {}
+        let xpStore = { done: {}, notes: {}, sort: false, raceBest: null };
+        try { const s = JSON.parse(localStorage.getItem(XP_STORE_KEY)); if (s && typeof s === 'object') xpStore = { done: s.done || {}, notes: s.notes || {}, sort: !!s.sort, raceBest: s.raceBest || null }; } catch (e) {}
         function xpSave() { try { localStorage.setItem(XP_STORE_KEY, JSON.stringify(xpStore)); } catch (e) {} }
 
         const xp = { view: 'hub', sort: null, sel: null, person: null, scene: 0, pick: null, path: [] };
@@ -2138,6 +2251,13 @@
                         <h2>체험 3. 설탕 한 숟가락의 여행</h2>
                         <p>네 사람의 이야기는 사실 하나로 이어져 있어요. 홍차 속 설탕 한 숟가락을 거꾸로 따라가며 교류의 명과 암을 정리해요.</p>
                         <span class="meta">마무리 활동 · ${n === 4 ? '준비 완료' : '네 사람 이야기를 먼저 들으면 좋아요'}</span>
+                    </button>
+                    <button class="xp-act" data-act="go-race">
+                        ${xpStore.raceBest ? `<span class="xp-badge">최고 ${xpStore.raceBest}일</span>` : ''}
+                        <span class="emo">⛵</span>
+                        <h2>체험 4. 바람길 레이스</h2>
+                        <p>노 없이 바람만으로 대서양을 왕복하는 범선 경주예요. 친구와 한 화면에서 대결하며, 대서양 교류의 길을 바람이 어떻게 정했는지 알아내 보세요.</p>
+                        <span class="meta">1~2명 조작 게임 · 한 판 약 2분</span>
                     </button>
                 </div>
                 <p class="text-xs text-slate-500 mt-10 leading-relaxed">체험 2의 네 사람은 실제 기록(에퀴아노의 자서전, 선원 증언, 농장 기록, 불매 운동 자료 등)을 바탕으로 만든 가상 인물이에요. 적은 생각은 이 기기에만 저장돼요.</p>
@@ -2420,7 +2540,7 @@
                     <div class="xp-meter" aria-hidden="true"><i style="width:${g}%;background:#eab308"></i><i style="width:${l}%;background:#dc2626"></i></div>
                     <span style="color:#facc15">얻음</span> ${p.ending.gain}<br><span style="color:#f87171">잃음</span> ${p.ending.loss}</div>`;
             }).join('');
-            const notes = [['sort', '체험 1 결산표']].concat(XP_ORDER.map(k => [k, XP_PEOPLE[k].name + '의 이야기'])).concat([['chain', '체험 3 마무리']]);
+            const notes = [['sort', '체험 1 결산표']].concat(XP_ORDER.map(k => [k, XP_PEOPLE[k].name + '의 이야기'])).concat([['chain', '체험 3 마무리'], ['race', '체험 4 바람길 레이스']]);
             return `<div class="xp-wrap">
                 <div class="xp-top"><button class="ex-btn" data-act="hub">${XP_BACK} 체험실</button></div>
                 <p class="xp-kicker">체험 3 · 마무리</p>
@@ -2451,7 +2571,7 @@
         }
 
         function xpNotesText() {
-            const parts = [['sort', '체험 1. 어느 뱃길에 실렸을까?']].concat(XP_ORDER.map(k => [k, `체험 2. ${XP_PEOPLE[k].name}의 이야기 — ${XP_PEOPLE[k].ending.q}`])).concat([['chain', '체험 3. 공정한 교류란?']]);
+            const parts = [['sort', '체험 1. 어느 뱃길에 실렸을까?']].concat(XP_ORDER.map(k => [k, `체험 2. ${XP_PEOPLE[k].name}의 이야기 — ${XP_PEOPLE[k].ending.q}`])).concat([['chain', '체험 3. 공정한 교류란?'], ['race', '체험 4. 바람길 레이스']]);
             return '[교류 체험실 · 내 생각 노트]\n\n' + parts.filter(([k]) => (xpStore.notes[k] || '').trim())
                 .map(([k, t]) => `■ ${t}\n${xpStore.notes[k].trim()}`).join('\n\n');
         }
@@ -2499,6 +2619,7 @@
                 }
                 else if (act === 'go-people') xpGo('people', 'people');
                 else if (act === 'go-chain') xpGo('chain', 'sugar');
+                else if (act === 'go-race') openRace();
                 else if (act === 'card') xpSelectCard(b.dataset.id);
                 else if (act === 'lane') xpPlace(b.dataset.lane);
                 else if (act === 'placed') { const c = xpCard(b.dataset.id), l = xpLane(c.lane); xpToast(`<b>${c.emo} ${c.name} → ${l.num}번 뱃길</b><br>${c.fact}`, 'ok'); }
@@ -2516,7 +2637,7 @@
                 else if (act === 'quiz') openQuiz();
                 else if (act === 'reset-all') {
                     if (!confirm('체험 기록과 적은 생각을 모두 지울까요?')) return;
-                    xpStore = { done: {}, notes: {}, sort: false }; xpSave(); xp.sort = null; xpGo('hub');
+                    xpStore = { done: {}, notes: {}, sort: false, raceBest: null }; xpSave(); xp.sort = null; xpGo('hub');
                 }
             });
             scr.addEventListener('keydown', e => {
@@ -2564,6 +2685,529 @@
             });
         }
 
+        /* ================= 바람길 레이스 (체험 4) ================= */
+        // 노 없이 바람과 해류만으로 유럽 → 카리브해 → 유럽을 왕복하는 범선 경주
+        const RACE_VIEW = { lon0: -92, lon1: 8, lat0: 0, lat1: 58 };
+        const RACE_START = [-10.5, 37];
+        const RACE_GOALS = [
+            { label: '① 카리브해', ll: [-68, 19], r: 4.5 },
+            { label: '② 유럽으로 귀환', ll: [-9.5, 38.6], r: 3.2 }
+        ];
+        const RACE_COLORS = ['#38bdf8', '#fbbf24'];
+        const RACE_KEYS = [{ '-1': ['a', 'A', 'ㅁ'], '1': ['d', 'D', 'ㅇ'] }, { '-1': ['ArrowLeft'], '1': ['ArrowRight'] }];
+        const RACE_BASE = 2.2;        // 순풍일 때 1초에 움직이는 거리(위경도 1도 단위)
+        const RACE_TURN = 110;        // 1초에 돌 수 있는 각도
+        const RACE_DAY_LIMIT = 240;   // 게임 속 1초 = 하루
+        const RACE_GRACE = 30;        // 둘이 대결할 때 먼저 도착한 뒤 기다려 주는 날짜
+        const RACE_CURRENTS = [
+            { name: '카나리아 해류', box: [-24, -11, 14, 33], dir: 250, s: 0.35 },
+            { name: '북적도 해류', box: [-60, -25, 10, 19], dir: 182, s: 0.25 },
+            { name: '멕시코 만류', box: [-81, -70, 24, 37], dir: 45, s: 0.55 },
+            { name: '북대서양 해류', box: [-70, -25, 37, 46], dir: 12, s: 0.3 }
+        ];
+        // 콜럼버스의 첫 항해 (1492년 가는 길, 1493년 돌아오는 길)를 단순하게 나타낸 선
+        const RACE_COLUMBUS = [
+            [[-6.9, 37.2], [-15.4, 28.1], [-30, 28], [-50, 26.5], [-65, 25], [-74.5, 24.1]],
+            [[-71, 19.8], [-67, 23], [-62, 30], [-52, 35], [-38, 37.2], [-25.2, 37.5], [-9.2, 38.7]]
+        ];
+        // 세계 지도를 불러오지 못했을 때 쓰는 간단한 육지 모양 [경도, 위도]
+        const RACE_LAND_FALLBACK = [
+            [[-92, 58], [-60, 58], [-60, 52], [-55.5, 51.5], [-56, 49.5], [-52.7, 47.6], [-53.6, 46.6], [-59.5, 47.5], [-61, 45.5], [-66, 44], [-70, 41.8], [-74, 40.5], [-75, 38.5], [-76, 35.2], [-78, 33.8], [-81, 31.5], [-80.2, 27], [-80.5, 25.2], [-81.8, 26.5], [-82.7, 28], [-84, 30], [-89, 30.3], [-92, 29.6]],
+            [[-92, 21], [-87, 21.5], [-88, 16], [-83.2, 15], [-83.5, 10.8], [-79.5, 9.3], [-77, 8.5], [-75.5, 10.7], [-71.5, 12.3], [-68, 10.5], [-63, 10.7], [-61, 9.5], [-58, 7], [-52, 5], [-50, 1.5], [-50, 0], [-92, 0]],
+            [[-85, 21.9], [-82, 23.2], [-77.5, 22.3], [-74.2, 20.2], [-77.6, 19.8], [-80, 21.6], [-84.8, 21.7]],
+            [[-74.5, 19.9], [-72, 20], [-68.4, 18.6], [-70, 18.1], [-71.5, 17.6], [-74.4, 18.3]],
+            [[-78.4, 18.45], [-76.2, 18.45], [-76.3, 17.85], [-78.3, 18.15]],
+            [[-67.3, 18.5], [-65.6, 18.4], [-65.7, 17.95], [-67.2, 17.95]],
+            [[8, 58], [8, 44], [3.2, 43.2], [3.2, 41.8], [0, 39.5], [-0.7, 37.6], [-5.5, 36.1], [-6.4, 36.8], [-7.4, 37.2], [-8.9, 37], [-8.8, 38.7], [-9.5, 39.3], [-8.8, 42], [-9.3, 43], [-8, 43.7], [-1.6, 43.4], [-1.2, 46.2], [-2.5, 47.3], [-4.7, 48.4], [-1.6, 48.7], [1.6, 50.8], [3.5, 51.4], [4.8, 53], [8, 54], [8, 58]],
+            [[8, 37.2], [-2, 35.3], [-5.9, 35.8], [-6.9, 34], [-9.8, 30.6], [-13.2, 27.6], [-16, 23.7], [-17.1, 21], [-16.5, 16.2], [-17.5, 14.7], [-16.7, 12.3], [-15, 10.8], [-13.2, 9], [-11.5, 6.9], [-7.6, 4.4], [-4, 5.2], [1, 6], [5, 4.3], [8, 4.5]],
+            [[-5.7, 50.1], [1.4, 51.2], [1.7, 52.7], [0.2, 53.5], [-1.6, 55.6], [-2, 57.7], [-3.4, 58.6], [-5, 58.6], [-5.7, 56.5], [-4.9, 54.8], [-3, 53.4], [-4.7, 52.8], [-5.3, 51.7], [-3.2, 51.4]],
+            [[-6, 52.1], [-6.1, 54], [-7.5, 55.3], [-10, 54.2], [-10.3, 51.6]]
+        ];
+        const RACE_POLAR = [[0, 0.72], [45, 0.92], [90, 1], [120, 0.75], [135, 0.45], [150, 0.22], [180, 0.12]];
+
+        const race = { mode: 2, names: ['1번 배', '2번 배'], players: [], phase: 'setup', raf: null, last: null, w: 0, h: 0,
+                       k: 1, ox: 0, oy: 0, mask: null, particles: [], held: [[false, false], [false, false]], msgId: 0, count: 0, elapsed: 0 };
+        const raceRad = d => d * Math.PI / 180;
+        const raceSmooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+        const raceXY = ([lon, lat]) => [race.ox + (lon - RACE_VIEW.lon0) * race.k, race.oy + (RACE_VIEW.lat1 - lat) * race.k];
+
+        // 바람 (동쪽 성분, 북쪽 성분). 북위 30° 아래는 북동 무역풍, 위는 편서풍. 그 사이와 적도 근처는 바람이 약함.
+        function raceWind(lon, lat) {
+            const t = raceSmooth(24, 36, lat);
+            const tr = raceRad(195), we = raceRad(15);
+            const calm = 0.12 + 0.88 * raceSmooth(1, 8, lat);
+            return [((1 - t) * Math.cos(tr) + t * Math.cos(we)) * calm, ((1 - t) * Math.sin(tr) + t * Math.sin(we)) * calm];
+        }
+        function raceCurrent(lon, lat) {
+            let u = 0, v = 0;
+            for (const c of RACE_CURRENTS) {
+                const [x0, x1, y0, y1] = c.box;
+                if (lon > x0 && lon < x1 && lat > y0 && lat < y1) { u += Math.cos(raceRad(c.dir)) * c.s; v += Math.sin(raceRad(c.dir)) * c.s; }
+            }
+            return [u, v];
+        }
+        function racePolar(theta) {
+            for (let i = 1; i < RACE_POLAR.length; i++) {
+                const [a, fa] = RACE_POLAR[i - 1], [b, fb] = RACE_POLAR[i];
+                if (theta <= b) return fa + (fb - fa) * (theta - a) / (b - a);
+            }
+            return RACE_POLAR[RACE_POLAR.length - 1][1];
+        }
+        function raceIsLand(lon, lat) {
+            if (!race.mask) return false;
+            const [x, y] = raceXY([lon, lat]);
+            const xi = Math.round(x), yi = Math.round(y);
+            if (xi < 0 || yi < 0 || xi >= race.w || yi >= race.h) return false;
+            return race.mask[(yi * race.w + xi) * 4 + 3] > 100;
+        }
+
+        function openRace() {
+            showScreen('race-screen');
+            raceResize();
+            raceSetup();
+        }
+
+        function raceStop() {
+            if (race.raf) cancelAnimationFrame(race.raf);
+            race.raf = null;
+            race.held = [[false, false], [false, false]];
+            document.querySelectorAll('.race-pad button.on').forEach(b => b.classList.remove('on'));
+        }
+
+        function raceResize() {
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            const w = window.innerWidth, h = window.innerHeight;
+            race.w = w; race.h = h;
+            const mobile = w < 768;
+            // 화면 위아래(정보판·조작 버튼)를 피해서 지도를 놓음
+            const top = mobile ? 150 : 20, bottom = mobile ? 100 : 20;
+            const left = 10, right = 10;
+            const lonSpan = RACE_VIEW.lon1 - RACE_VIEW.lon0, latSpan = RACE_VIEW.lat1 - RACE_VIEW.lat0;
+            const aw = w - left - right, ah = h - top - bottom;
+            race.k = Math.max(1, Math.min(aw / lonSpan, ah / latSpan));
+            race.ox = left + (aw - lonSpan * race.k) / 2;
+            race.oy = top + (ah - latSpan * race.k) / 2;
+            ['race-bg', 'race-fg'].forEach(id => {
+                const c = document.getElementById(id);
+                c.width = Math.round(w * dpr); c.height = Math.round(h * dpr);
+                c.getContext('2d').setTransform(dpr, 0, 0, dpr, 0, 0);
+            });
+            // 육지 판정용 마스크 (화면 1px = 1칸)
+            const m = document.createElement('canvas');
+            m.width = w; m.height = h;
+            const mc = m.getContext('2d');
+            mc.fillStyle = '#fff';
+            raceDrawLand(mc);
+            race.mask = mc.getImageData(0, 0, w, h).data;
+            raceDrawBg();
+            race.particles = [];
+            for (let i = 0; i < (mobile ? 220 : 420); i++) race.particles.push(raceNewParticle(true));
+            if (!race.raf) raceDrawFg();
+        }
+
+        function raceDrawLand(ctx) {
+            ctx.beginPath();
+            if (window.d3 && window.topojson && worldGeoData) {
+                const proj = d3.geoEquirectangular().scale(race.k * 180 / Math.PI)
+                    .translate([race.ox - RACE_VIEW.lon0 * race.k, race.oy + RACE_VIEW.lat1 * race.k]);
+                d3.geoPath(proj, ctx)(topojson.feature(worldGeoData, worldGeoData.objects.countries));
+            } else {
+                RACE_LAND_FALLBACK.forEach(poly => poly.forEach((ll, i) => { const [x, y] = raceXY(ll); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }));
+            }
+            ctx.fill();
+        }
+
+        function raceArrow(ctx, x, y, ang, len) {
+            const dx = Math.cos(ang), dy = -Math.sin(ang);
+            ctx.beginPath();
+            ctx.moveTo(x - dx * len / 2, y - dy * len / 2);
+            ctx.lineTo(x + dx * len / 2, y + dy * len / 2);
+            ctx.lineTo(x + dx * len / 2 - (dx * 6 - dy * 4), y + dy * len / 2 - (dy * 6 + dx * 4));
+            ctx.moveTo(x + dx * len / 2, y + dy * len / 2);
+            ctx.lineTo(x + dx * len / 2 - (dx * 6 + dy * 4), y + dy * len / 2 - (dy * 6 - dx * 4));
+            ctx.stroke();
+        }
+
+        function raceDrawBg() {
+            const ctx = document.getElementById('race-bg').getContext('2d');
+            const { w, h, k } = race;
+            const [x0, y0] = raceXY([RACE_VIEW.lon0, RACE_VIEW.lat1]), [x1, y1] = raceXY([RACE_VIEW.lon1, RACE_VIEW.lat0]);
+            ctx.fillStyle = '#020617';
+            ctx.fillRect(0, 0, w, h);
+            const g = ctx.createLinearGradient(0, y0, 0, y1);
+            g.addColorStop(0, '#0c1a33'); g.addColorStop(1, '#0a2540');
+            ctx.fillStyle = g;
+            ctx.fillRect(x0, y0, x1 - x0, y1 - y0);
+            // 바람 띠 색칠
+            const band = (la, lb, col) => { const [, ya] = raceXY([0, la]), [, yb] = raceXY([0, lb]); ctx.fillStyle = col; ctx.fillRect(x0, ya, x1 - x0, yb - ya); };
+            band(25, 8, 'rgba(56, 189, 248, .06)');
+            band(55, 36, 'rgba(250, 204, 21, .05)');
+            band(33, 27, 'rgba(148, 163, 184, .05)');
+            // 위도선
+            ctx.strokeStyle = 'rgba(148, 163, 184, .18)'; ctx.setLineDash([4, 6]); ctx.lineWidth = 1;
+            ctx.font = `600 ${k > 6 ? 12 : 10}px "Noto Serif KR", serif`; ctx.fillStyle = 'rgba(148, 163, 184, .7)'; ctx.textAlign = 'left';
+            [[0, '적도'], [15, '북위 15°'], [30, '북위 30°'], [45, '북위 45°']].forEach(([la, t]) => {
+                const [, y] = raceXY([0, la]);
+                ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y); ctx.stroke();
+                ctx.fillText(t, x0 + 4, y - 4);
+            });
+            ctx.setLineDash([]);
+            // 육지
+            ctx.fillStyle = '#1e293b'; ctx.strokeStyle = '#334155'; ctx.lineWidth = 1;
+            raceDrawLand(ctx);
+            ctx.stroke();
+            // 해류
+            ctx.strokeStyle = 'rgba(103, 232, 249, .55)'; ctx.lineWidth = 1.6;
+            ctx.fillStyle = 'rgba(103, 232, 249, .8)'; ctx.font = `600 ${k > 6 ? 11 : 9}px "Noto Serif KR", serif`; ctx.textAlign = 'center';
+            RACE_CURRENTS.forEach(c => {
+                const [a, b, la, lb] = c.box;
+                for (let lon = a + 3; lon < b; lon += 6) for (let lat = la + 2.5; lat < lb; lat += 5) {
+                    if (raceIsLand(lon, lat)) continue;
+                    const [x, y] = raceXY([lon, lat]);
+                    raceArrow(ctx, x, y, raceRad(c.dir), k * 2.2);
+                }
+                const [cx, cy] = raceXY([(a + b) / 2, lb + 0.8]);
+                ctx.fillText(c.name, cx, cy);
+            });
+            // 바람 이름
+            ctx.font = `900 ${k > 6 ? 15 : 11}px "Noto Serif KR", serif`;
+            [[[-42, 16.5], '← 북동 무역풍 (동쪽에서 서쪽으로)', 'rgba(125, 211, 252, .9)'],
+             [[-42, 30.2], '바람이 거의 없는 곳 (말 위도)', 'rgba(203, 213, 225, .75)'],
+             [[-42, 50], '편서풍 (서쪽에서 동쪽으로) →', 'rgba(253, 224, 71, .9)'],
+             [[-30, 3.2], '적도 무풍대', 'rgba(203, 213, 225, .6)']].forEach(([ll, t, col]) => {
+                const [x, y] = raceXY(ll); ctx.fillStyle = col; ctx.fillText(t, x, y);
+            });
+            // 출발점
+            const [sx, sy] = raceXY(RACE_START);
+            ctx.fillStyle = '#e2e8f0'; ctx.font = `700 ${k > 6 ? 12 : 10}px "Noto Serif KR", serif`; ctx.textAlign = 'left';
+            ctx.fillText('출발: 리스본·세비야', sx + 8, sy + 14);
+        }
+
+        function raceNewParticle(randomAge) {
+            let lon, lat, n = 0;
+            do { lon = RACE_VIEW.lon0 + Math.random() * (RACE_VIEW.lon1 - RACE_VIEW.lon0); lat = RACE_VIEW.lat0 + Math.random() * (RACE_VIEW.lat1 - RACE_VIEW.lat0); n++; }
+            while (raceIsLand(lon, lat) && n < 20);
+            const life = 1.5 + Math.random() * 2.5;
+            return { lon, lat, age: randomAge ? Math.random() * life : 0, life };
+        }
+
+        /* ----- 준비 화면 ----- */
+        function raceSetup() {
+            raceStop();
+            race.phase = 'setup';
+            race.players = [];
+            document.getElementById('race-hud').innerHTML = '';
+            document.getElementById('race-msg').innerHTML = '';
+            document.getElementById('race-count').textContent = '';
+            const o = document.getElementById('race-overlay');
+            o.className = 'race-overlay';
+            o.hidden = false;
+            o.innerHTML = `<div class="race-box">
+                <p class="xp-kicker">체험 4 · 친구와 대결</p>
+                <h1>바람길 레이스</h1>
+                <p>1492년 콜럼버스는 노 없이 <b>오직 바람의 힘</b>으로 대서양을 건넜어요. 여러분도 범선의 선장이 되어 유럽에서 <b>카리브해</b>에 갔다가 다시 <b>유럽</b>으로 돌아오세요. 더 적은 날짜로 돌아온 배가 이겨요.</p>
+                <div class="race-modes" role="group" aria-label="인원 고르기">
+                    <button data-race="mode" data-m="1" class="${race.mode === 1 ? 'on' : ''}">⛵ 혼자 기록 도전<small>최고 기록을 깨 보세요${xpStore.raceBest ? ` (지금 최고 ${xpStore.raceBest}일)` : ''}</small></button>
+                    <button data-race="mode" data-m="2" class="${race.mode === 2 ? 'on' : ''}">⛵⛵ 둘이 대결<small>한 화면에서 친구와 함께</small></button>
+                </div>
+                <div class="race-names">
+                    <label style="--c:${RACE_COLORS[0]}">1번 배 선장 이름<input data-race="name" data-p="0" maxlength="8" value="${exEsc(race.names[0])}"></label>
+                    ${race.mode === 2 ? `<label style="--c:${RACE_COLORS[1]}">2번 배 선장 이름<input data-race="name" data-p="1" maxlength="8" value="${exEsc(race.names[1])}"></label>` : ''}
+                </div>
+                <ul class="race-how">
+                    <li><span class="ic">🧭</span><span>배는 <b>방향만</b> 바꿀 수 있어요. 1번 배는 <span class="race-keys">A</span> <span class="race-keys">D</span>, 2번 배는 <span class="race-keys">←</span> <span class="race-keys">→</span> 키, 또는 화면 아래 버튼을 누르고 있으세요.</span></li>
+                    <li><span class="ic">💨</span><span>바다 위의 <b>하얀 줄무늬</b>가 바람이에요. 바람을 등지거나 옆으로 받으면 빠르고, <b>바람을 정면으로 거슬러서는</b> 거의 나아가지 못해요.</span></li>
+                    <li><span class="ic">🌊</span><span><b>파란 화살표</b>는 해류예요. 배를 조금씩 밀어 줘요.</span></li>
+                    <li><span class="ic">🤔</span><span>힌트: 곧장 서쪽으로 가는 길이 정말 가장 빠를까요?</span></li>
+                </ul>
+                <p class="race-rotate">📱 휴대폰은 가로로 돌리면 지도가 더 크게 보여요.</p>
+                <button class="ex-big-btn" data-race="start">⚓ 출항하기</button>
+            </div>`;
+            // 준비 화면 뒤에서도 바람이 흐르도록
+            race.last = null;
+            race.raf = requestAnimationFrame(raceTick);
+        }
+
+        function raceStart() {
+            document.getElementById('race-overlay').hidden = true;
+            race.firstDone = null;
+            race.players = Array.from({ length: race.mode }, (_, i) => ({
+                i, name: (race.names[i] || '').trim() || `${i + 1}번 배`, color: RACE_COLORS[i],
+                lon: RACE_START[0] - i * 0.4, lat: RACE_START[1] - i * 0.7, heading: 200, speed: 0,
+                leg: 0, days: 0, legDays: [], done: false, dnf: false, trail: [], trailT: 0, blocked: false, theta: 0, mag: 0, slowT: 0, hinted: [false, false]
+            }));
+            document.querySelectorAll('.race-pad').forEach(p => { p.hidden = +p.dataset.p >= race.mode; });
+            race.phase = 'count';
+            race.count = 3.999;
+            race.elapsed = 0;
+            raceHud();
+            race.last = null;
+            if (race.raf) cancelAnimationFrame(race.raf);
+            race.raf = requestAnimationFrame(raceTick);
+        }
+
+        /* ----- 게임 진행 ----- */
+        function raceTick(ts) {
+            if (currentScreen !== 'race-screen') { race.raf = null; return; }
+            const dt = race.last == null ? 0 : Math.min((ts - race.last) / 1000, 0.05);
+            race.last = ts;
+            if (race.phase === 'count') {
+                race.players.forEach(p => { const turn = (race.held[p.i][1] ? 1 : 0) - (race.held[p.i][0] ? 1 : 0); p.heading = (p.heading - turn * RACE_TURN * dt + 360) % 360; });
+                race.count -= dt;
+                const n = Math.ceil(race.count - 1);
+                document.getElementById('race-count').textContent = n > 0 ? n : '출항!';
+                if (race.count <= 0) { race.phase = 'run'; document.getElementById('race-count').textContent = ''; }
+            } else if (race.phase === 'run') {
+                race.players.forEach(p => { if (!p.done) raceStep(p, dt); });
+                race.elapsed += dt;
+                // 둘이 대결: 먼저 도착한 배가 생기면 남은 배에게 정해진 날짜만 더 줌
+                const first = race.players.find(p => p.done && !p.dnf);
+                if (first && race.firstDone == null) race.firstDone = race.elapsed;
+                if (race.firstDone != null && race.elapsed - race.firstDone > RACE_GRACE)
+                    race.players.forEach(p => { if (!p.done) { p.done = true; p.dnf = true; } });
+                if (race.players.every(p => p.done)) raceFinish();
+                else if (Math.floor(race.elapsed * 4) !== Math.floor((race.elapsed - dt) * 4)) raceHud();
+            }
+            raceParticles(dt);
+            raceDrawFg();
+            race.raf = requestAnimationFrame(raceTick);
+        }
+
+        function raceStep(p, dt) {
+            const turn = (race.held[p.i][1] ? 1 : 0) - (race.held[p.i][0] ? 1 : 0);
+            p.heading = (p.heading - turn * RACE_TURN * dt + 360) % 360; // 오른쪽 버튼 = 시계 방향
+            const [wu, wv] = raceWind(p.lon, p.lat);
+            p.mag = Math.hypot(wu, wv);
+            const wdir = Math.atan2(wv, wu) * 180 / Math.PI;
+            p.theta = Math.abs(((p.heading - wdir) % 360 + 540) % 360 - 180);
+            const target = RACE_BASE * Math.max(0.05, p.mag * racePolar(p.theta));
+            p.speed += (target - p.speed) * Math.min(1, dt * 1.6);
+            const [cu, cv] = raceCurrent(p.lon, p.lat);
+            const h = raceRad(p.heading);
+            const dlon = (Math.cos(h) * p.speed + cu * RACE_BASE * 0.35) * dt;
+            const dlat = (Math.sin(h) * p.speed + cv * RACE_BASE * 0.35) * dt;
+            p.blocked = false;
+            const ok = (lo, la) => !raceIsLand(lo, la) && lo > RACE_VIEW.lon0 + 0.5 && lo < RACE_VIEW.lon1 - 0.5 && la > RACE_VIEW.lat0 + 0.5 && la < RACE_VIEW.lat1 - 0.5;
+            if (ok(p.lon + dlon, p.lat + dlat)) { p.lon += dlon; p.lat += dlat; }
+            else if (ok(p.lon + dlon, p.lat)) { p.lon += dlon; p.blocked = true; p.speed *= 0.9; }
+            else if (ok(p.lon, p.lat + dlat)) { p.lat += dlat; p.blocked = true; p.speed *= 0.9; }
+            else { p.blocked = true; p.speed *= 0.5; }
+            p.days += dt;
+            p.slowT = (p.speed < RACE_BASE * 0.3) ? p.slowT + dt : 0;
+            if (p.slowT > 5 && !p.hinted[p.leg]) {
+                p.hinted[p.leg] = true;
+                raceMsg(p, p.leg === 0
+                    ? `💡 <b>${exEsc(p.name)}</b>, 배가 거의 움직이지 않아요. 북위 30° 위에서는 바람이 서쪽에서 불어와요. <b>남쪽으로 내려가</b> 동쪽에서 부는 무역풍을 타 보세요.`
+                    : `💡 <b>${exEsc(p.name)}</b>, 이 바람은 서쪽으로 불어요. <b>북쪽으로 올라가</b> 동쪽으로 부는 편서풍을 타 보세요.`);
+            }
+            p.trailT += dt;
+            if (p.trailT > 0.2) { p.trailT = 0; p.trail.push([p.lon, p.lat]); }
+            const g = RACE_GOALS[p.leg];
+            if (Math.hypot(p.lon - g.ll[0], p.lat - g.ll[1]) < g.r) {
+                p.legDays.push(p.days - (p.legDays.reduce((a, b) => a + b, 0)));
+                p.leg++;
+                if (p.leg === 1) raceMsg(p, `<b>${exEsc(p.name)}</b> 카리브해 도착! (${Math.round(p.days)}일)<br>🐎 말·밀·사탕수수 모종을 내리고 🌽 옥수수·🍫 카카오·🍂 담배를 실었어요. 이제 유럽으로!`);
+                else { p.done = true; raceMsg(p, `<b>${exEsc(p.name)}</b> 유럽 귀환! 총 <b>${Math.round(p.days)}일</b> 걸렸어요.`); }
+                raceHud();
+            } else if (p.days >= RACE_DAY_LIMIT) {
+                p.done = true; p.dnf = true;
+            }
+        }
+
+        function raceParticles(dt) {
+            const sp = 7; // 바람 줄무늬 속도
+            race.particles.forEach((q, i) => {
+                const [u, v] = raceWind(q.lon, q.lat);
+                q.lon += u * sp * dt; q.lat += v * sp * dt; q.age += dt;
+                if (q.age > q.life || q.lon < RACE_VIEW.lon0 || q.lon > RACE_VIEW.lon1 || q.lat < RACE_VIEW.lat0 || q.lat > RACE_VIEW.lat1 || raceIsLand(q.lon, q.lat))
+                    race.particles[i] = raceNewParticle(false);
+            });
+        }
+
+        function raceDrawFg() {
+            const ctx = document.getElementById('race-fg').getContext('2d');
+            ctx.clearRect(0, 0, race.w, race.h);
+            const k = race.k;
+            // 바람 줄무늬
+            ctx.lineWidth = 1.4; ctx.lineCap = 'round';
+            race.particles.forEach(q => {
+                const [u, v] = raceWind(q.lon, q.lat), m = Math.hypot(u, v);
+                if (m < 0.08) return;
+                const a = Math.min(1, q.age / 0.4, (q.life - q.age) / 0.6) * Math.min(1, m) * 0.55;
+                const [x, y] = raceXY([q.lon, q.lat]), [xb, yb] = raceXY([q.lon - u * 1.6, q.lat - v * 1.6]);
+                ctx.strokeStyle = `rgba(241, 245, 249, ${a.toFixed(3)})`;
+                ctx.beginPath(); ctx.moveTo(xb, yb); ctx.lineTo(x, y); ctx.stroke();
+            });
+            // 목표 지점
+            const pulse = (performance.now() / 1000) % 1.6 / 1.6;
+            RACE_GOALS.forEach((g, gi) => {
+                const [x, y] = raceXY(g.ll), r = g.r * k;
+                const active = race.players.some(p => !p.done && p.leg === gi) || race.phase === 'setup' || race.phase === 'count';
+                ctx.strokeStyle = active ? 'rgba(250, 204, 21, .85)' : 'rgba(250, 204, 21, .3)'; ctx.lineWidth = 2; ctx.setLineDash([5, 5]);
+                ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
+                if (active) { ctx.strokeStyle = `rgba(250, 204, 21, ${(1 - pulse) * 0.5})`; ctx.beginPath(); ctx.arc(x, y, r * (1 + pulse * 0.35), 0, Math.PI * 2); ctx.stroke(); }
+                ctx.fillStyle = '#fde68a'; ctx.font = `900 ${k > 6 ? 13 : 10}px "Noto Serif KR", serif`; ctx.textAlign = 'center';
+                ctx.fillText(g.label, x, y - r - 7);
+            });
+            // 콜럼버스 항로 (경기가 끝난 뒤)
+            if (race.phase === 'done') {
+                ctx.strokeStyle = 'rgba(250, 204, 21, .9)'; ctx.lineWidth = 2.5; ctx.setLineDash([7, 6]);
+                RACE_COLUMBUS.forEach(line => { ctx.beginPath(); line.forEach((ll, i) => { const [x, y] = raceXY(ll); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.stroke(); });
+                ctx.setLineDash([]);
+                const [lx, ly] = raceXY([-40, 25.5]);
+                ctx.fillStyle = '#fde68a'; ctx.font = `700 ${k > 6 ? 12 : 10}px "Noto Serif KR", serif`; ctx.textAlign = 'center';
+                ctx.fillText('콜럼버스의 항로 (1492~1493)', lx, ly);
+            }
+            // 항적과 배
+            race.players.forEach(p => {
+                if (p.trail.length) {
+                    ctx.strokeStyle = p.color; ctx.globalAlpha = 0.7; ctx.lineWidth = 2;
+                    ctx.beginPath(); p.trail.forEach((ll, i) => { const [x, y] = raceXY(ll); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
+                    const [cx, cy] = raceXY([p.lon, p.lat]); ctx.lineTo(cx, cy); ctx.stroke(); ctx.globalAlpha = 1;
+                }
+                raceDrawShip(ctx, p);
+            });
+        }
+
+        function raceDrawShip(ctx, p) {
+            const [x, y] = raceXY([p.lon, p.lat]);
+            const s = Math.max(0.8, Math.min(1.4, race.k / 9));
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(-raceRad(p.heading));
+            ctx.scale(s, s);
+            ctx.fillStyle = p.color; ctx.strokeStyle = '#020617'; ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.moveTo(14, 0); ctx.lineTo(4, -6); ctx.lineTo(-10, -6); ctx.lineTo(-10, 6); ctx.lineTo(4, 6); ctx.closePath(); ctx.fill(); ctx.stroke();
+            // 돛: 바람을 받는 쪽으로 부풀어 보이게
+            const [wu, wv] = raceWind(p.lon, p.lat), wdir = Math.atan2(wv, wu) - raceRad(p.heading);
+            const bulge = Math.sin(-wdir) * 7;
+            ctx.fillStyle = '#f8fafc';
+            ctx.beginPath(); ctx.moveTo(1, -11); ctx.quadraticCurveTo(1 + bulge * 0.6, 0, 1, 11); ctx.lineTo(-2, 11); ctx.quadraticCurveTo(-2 + bulge * 0.6, 0, -2, -11); ctx.closePath(); ctx.fill();
+            ctx.restore();
+            ctx.font = `900 ${race.k > 6 ? 12 : 10}px "Noto Serif KR", serif`; ctx.textAlign = 'center';
+            ctx.lineWidth = 3; ctx.strokeStyle = '#020617'; ctx.strokeText(p.name, x, y - 16 * s);
+            ctx.fillStyle = p.color; ctx.fillText(p.name, x, y - 16 * s);
+        }
+
+        function raceWindText(p) {
+            if (p.done) return p.dnf ? ['돌아오지 못했어요', '#f87171'] : ['도착!', '#4ade80'];
+            if (p.blocked) return ['육지에 막혔어요! 방향을 바꿔요', '#f87171'];
+            if (p.mag < 0.25) return ['바람이 거의 없어요 😶', '#94a3b8'];
+            if (p.theta > 140) return ['역풍! 바람을 거슬러 갈 수 없어요', '#f87171'];
+            if (p.theta > 110) return ['맞바람에 가까워요', '#fb923c'];
+            return ['순풍을 받고 있어요 ⛵', '#4ade80'];
+        }
+
+        function raceHud() {
+            document.getElementById('race-hud').innerHTML = race.players.map(p => {
+                const [wt, wc] = raceWindText(p);
+                const leg = p.done ? (p.dnf ? '기권' : '완주') : p.leg === 0 ? '1구간: 카리브해로' : '2구간: 유럽으로';
+                return `<div class="race-pcard" style="--c:${p.color}">
+                    <div class="nm"><span>${exEsc(p.name)}</span><span class="days">${Math.floor(p.days)}일</span></div>
+                    <div class="leg">${leg}</div>
+                    <div class="wind" style="color:${wc}">${wt}</div>
+                    <div class="bar" title="배의 빠르기"><i style="width:${Math.min(100, p.speed / RACE_BASE * 100).toFixed(0)}%"></i></div>
+                </div>`;
+            }).join('');
+        }
+
+        function raceMsg(p, html) {
+            const box = document.getElementById('race-msg');
+            const el = document.createElement('div');
+            el.style.setProperty('--c', p.color);
+            el.innerHTML = html;
+            box.appendChild(el);
+            while (box.children.length > 2) box.firstChild.remove();
+            setTimeout(() => el.remove(), 6000);
+        }
+
+        /* ----- 결과 ----- */
+        function raceFinish() {
+            race.phase = 'done';
+            raceHud();
+            const ranked = race.players.slice().sort((a, b) => (a.dnf - b.dnf) || (a.days - b.days));
+            let best = '';
+            if (race.mode === 1 && !ranked[0].dnf) {
+                const d = Math.round(ranked[0].days);
+                if (!xpStore.raceBest || d < xpStore.raceBest) { best = xpStore.raceBest ? `🎉 최고 기록을 ${xpStore.raceBest - d}일 앞당겼어요!` : '🎉 첫 기록을 세웠어요!'; xpStore.raceBest = d; xpSave(); }
+                else best = `내 최고 기록은 ${xpStore.raceBest}일이에요.`;
+            }
+            const tie = race.mode === 2 && !ranked[0].dnf && !ranked[1].dnf && Math.round(ranked[0].days) === Math.round(ranked[1].days);
+            const head = race.mode === 2 ? (tie ? '무승부!' : ranked[0].dnf ? '두 배 모두 돌아오지 못했어요' : `${exEsc(ranked[0].name)} 승리!`) : (ranked[0].dnf ? '아쉬워요!' : '완주!');
+            const o = document.getElementById('race-overlay');
+            o.className = 'race-overlay side';
+            o.hidden = false;
+            o.innerHTML = `<div class="race-box">
+                <p class="xp-kicker">레이스 결과</p>
+                <h1>${head}</h1>
+                <ol class="race-rank">${ranked.map((p, i) => `<li style="--c:${p.color}">
+                    <span class="pl">${p.dnf ? '-' : i + 1}</span>
+                    <span><b>${exEsc(p.name)}</b><small>${p.dnf ? (p.leg === 0 ? '카리브해에 닿지 못함' : '유럽에 돌아오지 못함') : `가는 길 ${Math.round(p.legDays[0])}일 · 오는 길 ${Math.round(p.legDays[1])}일`}</small></span>
+                    <span class="d">${p.dnf ? '-' : Math.round(p.days) + '일'}</span></li>`).join('')}</ol>
+                ${best ? `<p><b>${best}</b></p>` : ''}
+                <p style="font-size:.9rem">실제 콜럼버스는 카나리아 제도에서 카리브해까지 <b>약 36일</b>, 돌아오는 길은 <b>약 47일</b> 걸렸어요. 지도의 노란 점선과 내 항적을 비교해 보세요.</p>
+                <div class="race-legend"><span><i></i>콜럼버스의 항로</span>${race.players.map(p => `<span><i style="border-top:3px solid ${p.color}"></i>${exEsc(p.name)}</span>`).join('')}</div>
+
+                <div class="race-lesson"><h3>💨 바람이 길을 정했어요</h3>북위 30° 아래에서는 <b>무역풍</b>이 동쪽에서 서쪽으로, 그 위에서는 <b>편서풍</b>이 서쪽에서 동쪽으로 불어요. 그래서 범선은 아메리카로 갈 때 남쪽으로 내려가 무역풍을 타고, 돌아올 때는 북쪽으로 올라가 편서풍을 탔어요. 대서양의 뱃길이 둥근 고리 모양이 된 까닭이에요.</div>
+                <div class="race-lesson"><h3>🌽 바람길은 교류의 고속도로였어요</h3>이 바람길을 따라 말·밀·사탕수수가 아메리카로, 옥수수·감자·카카오·담배가 유럽으로 건너갔어요. 두 세계의 작물과 동물이 오간 이 일을 <b>"콜럼버스 교환"</b>이라고 불러요.</div>
+                <div class="race-lesson dark"><h3>⛓️ 같은 바람, 다른 항해</h3>아프리카 해안을 따라 내려간 배들도 바로 이 무역풍을 타고 대서양을 건넜어요. 이 바람이 노예선을 아메리카로 실어 날랐고, 그 길이 <b>중간 항로</b>였어요. 여러분에게는 1분 남짓한 레이스였지만, 배 밑바닥에 갇힌 사람들에게는 두 달 가까운 고통이었어요.</div>
+
+                <div class="xp-think"><b>생각해 보기</b><br>바람은 누구에게나 똑같이 불었어요. 그런데 왜 어떤 사람에게 이 바람길은 부를 가져다주고, 어떤 사람에게는 고통을 가져다주었을까요?
+                    <textarea class="xp-textarea" data-race="note" placeholder="내 생각을 적어 보세요.">${exEsc(xpStore.notes.race || '')}</textarea>
+                </div>
+                <div class="flex flex-wrap gap-2 mt-5">
+                    <button class="ex-btn primary" data-race="again">⚓ 다시 대결</button>
+                    <button class="ex-btn" data-race="setup">인원·이름 바꾸기</button>
+                    <button class="ex-btn" data-race="hub">체험실로</button>
+                </div>
+            </div>`;
+        }
+
+        function initRace() {
+            const scr = document.getElementById('race-screen');
+            scr.addEventListener('click', e => {
+                const b = e.target.closest('[data-race]');
+                if (!b) return;
+                const a = b.dataset.race;
+                if (a === 'mode') { race.mode = +b.dataset.m; raceSetup(); }
+                else if (a === 'start' || a === 'again') raceStart();
+                else if (a === 'setup') raceSetup();
+                else if (a === 'hub') openExperience();
+            });
+            scr.addEventListener('input', e => {
+                const a = e.target.dataset && e.target.dataset.race;
+                if (a === 'name') race.names[+e.target.dataset.p] = e.target.value;
+                else if (a === 'note') { xpStore.notes.race = e.target.value; xpSave(); }
+            });
+            // 화면 아래 방향 버튼: 누르고 있는 동안 회전
+            const press = (btn, on) => {
+                if (!btn) return;
+                race.held[+btn.dataset.p][btn.dataset.dir === '1' ? 1 : 0] = on;
+                btn.classList.toggle('on', on);
+            };
+            scr.querySelectorAll('.race-pad button').forEach(btn => {
+                btn.addEventListener('pointerdown', e => { e.preventDefault(); btn.setPointerCapture && btn.setPointerCapture(e.pointerId); press(btn, true); });
+                ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(ev => btn.addEventListener(ev, () => press(btn, false)));
+                btn.addEventListener('contextmenu', e => e.preventDefault());
+            });
+            const keyFor = key => {
+                for (let p = 0; p < 2; p++) for (const dir of ['-1', '1']) if (RACE_KEYS[p][dir].includes(key)) return [p, dir === '1' ? 1 : 0];
+                return null;
+            };
+            const onKey = (e, on) => {
+                if (currentScreen !== 'race-screen' || (e.target && e.target.tagName === 'INPUT') || (e.target && e.target.tagName === 'TEXTAREA')) return;
+                const kf = keyFor(e.key);
+                if (!kf) return;
+                e.preventDefault();
+                race.held[kf[0]][kf[1]] = on;
+                const btn = scr.querySelector(`.race-pad button[data-p="${kf[0]}"][data-dir="${kf[1] ? '1' : '-1'}"]`);
+                if (btn) btn.classList.toggle('on', on);
+            };
+            document.addEventListener('keydown', e => onKey(e, true));
+            document.addEventListener('keyup', e => onKey(e, false));
+            window.addEventListener('blur', () => { race.held = [[false, false], [false, false]]; document.querySelectorAll('.race-pad button.on').forEach(b => b.classList.remove('on')); });
+        }
+
         /* ================= 공통 이벤트 ================= */
         document.addEventListener('keydown', e => {
             if (currentScreen === 'experience-screen' && e.key === 'Escape' && !document.getElementById('xp-modal').hidden) {
@@ -2586,11 +3230,13 @@
             if (currentScreen === 'detail-screen') setSliderPct(sliderPct);
             if (mapActive) resizeMap();
             if (currentScreen === 'exchange-screen') renderExchange();
+            if (currentScreen === 'race-screen') raceResize();
         });
 
         initApp();
         initExchange();
         initExperience();
+        initRace();
         if (location.hash) route();
     </script>
 </body>
