@@ -7,15 +7,24 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <!-- 제목: 함렛(Hahmlet) · 본문: 프리텐다드(Pretendard) -->
+    <link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 
     <style>
         *, *::before, *::after { box-sizing: border-box; }
         html, body { height: 100%; }
+        :root {
+            --font-body: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
+            --font-display: 'Hahmlet', 'Nanum Myeongjo', 'Batang', serif;
+        }
         body {
-            font-family: 'Noto Serif KR', 'Nanum Myeongjo', 'Batang', serif;
+            font-family: var(--font-body);
+            letter-spacing: -0.01em;
+            word-break: keep-all;
+            overflow-wrap: break-word;
             margin: 0;
             overflow: hidden;
             background-color: #050505;
@@ -25,6 +34,12 @@
             touch-action: manipulation;
         }
         :focus-visible { outline: 3px solid #facc15; outline-offset: 3px; }
+        /* 제목은 함렛, 나머지는 프리텐다드 */
+        h1, h2, h3, h4, .stat-row strong, .abolition b, .race-count, .race-rank .d, .race-pcard .days { font-family: var(--font-display); letter-spacing: -0.02em; }
+        /* 함렛은 900에서 너무 뭉툭해 보여서 굵기를 낮춤 */
+        h1, .stat-row strong, .race-count { font-weight: 800 !important; }
+        h2, h3, h4, .abolition b, .race-rank .d, .race-pcard .days { font-weight: 700 !important; }
+        .home-kicker { font-family: var(--font-display); }
 
         .screen {
             position: fixed;
@@ -1306,7 +1321,7 @@
             mapBgCtx.stroke();
 
             // 대륙 이름
-            mapBgCtx.font = '600 13px "Noto Serif KR", serif';
+            mapBgCtx.font = '600 13px "Pretendard Variable", Pretendard, sans-serif';
             mapBgCtx.fillStyle = 'rgba(148,163,184,.55)';
             mapBgCtx.textAlign = 'center';
             [['유럽', [10, 50]], ['아프리카', [20, 5]], ['브라질', [-52, -8]], ['카리브해', [-72, 23]], ['북아메리카', [-95, 40]]]
@@ -2975,7 +2990,7 @@
             band(33, 27, 'rgba(148, 163, 184, .05)');
             // 위도선
             ctx.strokeStyle = 'rgba(148, 163, 184, .18)'; ctx.setLineDash([4, 6]); ctx.lineWidth = 1;
-            ctx.font = `600 ${k > 6 ? 12 : 10}px "Noto Serif KR", serif`; ctx.fillStyle = 'rgba(148, 163, 184, .7)'; ctx.textAlign = 'left';
+            ctx.font = `600 ${k > 6 ? 12 : 10}px "Pretendard Variable", Pretendard, sans-serif`; ctx.fillStyle = 'rgba(148, 163, 184, .7)'; ctx.textAlign = 'left';
             [[0, '적도'], [15, '북위 15°'], [30, '북위 30°'], [45, '북위 45°']].forEach(([la, t]) => {
                 const [, y] = raceXY([0, la]);
                 ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y); ctx.stroke();
@@ -2988,7 +3003,7 @@
             ctx.stroke();
             // 해류
             ctx.strokeStyle = 'rgba(103, 232, 249, .55)'; ctx.lineWidth = 1.6;
-            ctx.fillStyle = 'rgba(103, 232, 249, .8)'; ctx.font = `600 ${k > 6 ? 11 : 9}px "Noto Serif KR", serif`; ctx.textAlign = 'center';
+            ctx.fillStyle = 'rgba(103, 232, 249, .8)'; ctx.font = `600 ${k > 6 ? 11 : 9}px "Pretendard Variable", Pretendard, sans-serif`; ctx.textAlign = 'center';
             RACE_CURRENTS.forEach(c => {
                 const [a, b, la, lb] = c.box;
                 for (let lon = a + 3; lon < b; lon += 6) for (let lat = la + 2.5; lat < lb; lat += 5) {
@@ -3000,7 +3015,7 @@
                 ctx.fillText(c.name, cx, cy);
             });
             // 바람 이름
-            ctx.font = `900 ${k > 6 ? 15 : 11}px "Noto Serif KR", serif`;
+            ctx.font = `900 ${k > 6 ? 15 : 11}px "Pretendard Variable", Pretendard, sans-serif`;
             [[[-42, 16.5], '← 북동 무역풍 (동쪽에서 서쪽으로)', 'rgba(125, 211, 252, .9)'],
              [[-42, 30.2], '바람이 거의 없는 곳 (말 위도)', 'rgba(203, 213, 225, .75)'],
              [[-42, 50], '편서풍 (서쪽에서 동쪽으로) →', 'rgba(253, 224, 71, .9)'],
@@ -3009,7 +3024,7 @@
             });
             // 출발점
             const [sx, sy] = raceXY(RACE_START);
-            ctx.fillStyle = '#e2e8f0'; ctx.font = `700 ${k > 6 ? 12 : 10}px "Noto Serif KR", serif`; ctx.textAlign = 'left';
+            ctx.fillStyle = '#e2e8f0'; ctx.font = `700 ${k > 6 ? 12 : 10}px "Pretendard Variable", Pretendard, sans-serif`; ctx.textAlign = 'left';
             ctx.fillText('출발: 리스본·세비야', sx + 8, sy + 14);
         }
 
@@ -3179,7 +3194,7 @@
                 ctx.strokeStyle = active ? 'rgba(250, 204, 21, .85)' : 'rgba(250, 204, 21, .3)'; ctx.lineWidth = 2; ctx.setLineDash([5, 5]);
                 ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
                 if (active) { ctx.strokeStyle = `rgba(250, 204, 21, ${(1 - pulse) * 0.5})`; ctx.beginPath(); ctx.arc(x, y, r * (1 + pulse * 0.35), 0, Math.PI * 2); ctx.stroke(); }
-                ctx.fillStyle = '#fde68a'; ctx.font = `900 ${k > 6 ? 13 : 10}px "Noto Serif KR", serif`; ctx.textAlign = 'center';
+                ctx.fillStyle = '#fde68a'; ctx.font = `900 ${k > 6 ? 13 : 10}px "Pretendard Variable", Pretendard, sans-serif`; ctx.textAlign = 'center';
                 ctx.fillText(g.label, x, y - r - 7);
             });
             // 콜럼버스 항로 (경기가 끝난 뒤)
@@ -3188,7 +3203,7 @@
                 RACE_COLUMBUS.forEach(line => { ctx.beginPath(); line.forEach((ll, i) => { const [x, y] = raceXY(ll); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.stroke(); });
                 ctx.setLineDash([]);
                 const [lx, ly] = raceXY([-40, 25.5]);
-                ctx.fillStyle = '#fde68a'; ctx.font = `700 ${k > 6 ? 12 : 10}px "Noto Serif KR", serif`; ctx.textAlign = 'center';
+                ctx.fillStyle = '#fde68a'; ctx.font = `700 ${k > 6 ? 12 : 10}px "Pretendard Variable", Pretendard, sans-serif`; ctx.textAlign = 'center';
                 ctx.fillText('콜럼버스의 항로 (1492~1493)', lx, ly);
             }
             // 항적과 배
@@ -3217,7 +3232,7 @@
             ctx.fillStyle = '#f8fafc';
             ctx.beginPath(); ctx.moveTo(1, -11); ctx.quadraticCurveTo(1 + bulge * 0.6, 0, 1, 11); ctx.lineTo(-2, 11); ctx.quadraticCurveTo(-2 + bulge * 0.6, 0, -2, -11); ctx.closePath(); ctx.fill();
             ctx.restore();
-            ctx.font = `900 ${race.k > 6 ? 12 : 10}px "Noto Serif KR", serif`; ctx.textAlign = 'center';
+            ctx.font = `900 ${race.k > 6 ? 12 : 10}px "Pretendard Variable", Pretendard, sans-serif`; ctx.textAlign = 'center';
             ctx.lineWidth = 3; ctx.strokeStyle = '#020617'; ctx.strokeText(p.name, x, y - 16 * s);
             ctx.fillStyle = p.color; ctx.fillText(p.name, x, y - 16 * s);
         }
@@ -3364,6 +3379,12 @@
             if (mapActive) resizeMap();
             if (currentScreen === 'exchange-screen') renderExchange();
             if (currentScreen === 'race-screen') raceResize();
+        });
+
+        // 글꼴이 늦게 도착하면 캔버스에 그린 글자를 새 글꼴로 다시 그림
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => {
+            if (currentScreen === 'race-screen') raceDrawBg();
+            if (mapActive && worldGeoData) drawRealWorldMap();
         });
 
         initApp();
