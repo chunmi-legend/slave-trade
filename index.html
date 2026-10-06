@@ -1041,8 +1041,7 @@
                 { file: 'images/exchange/netherlands.jpg', where: '교류 지도(네덜란드) · "황금시대 암스테르담 항구"', credit: '' },
                 { file: 'images/exchange/portugal.jpg', where: '교류 지도(포르투갈) · "리스본 항구"', credit: '' },
                 { file: 'images/exchange/spain.jpg', where: '교류 지도(스페인) · "아메리카의 은이 들어온 세비야 항구"', credit: '' },
-                { file: 'images/siu.mp4', where: '나라별 명과 암 › 포르투갈의 명(明) 영상', credit: '',
-                  warn: '2018 월드컵 포르투갈-스페인 경기 중계 영상(SBS)이에요. 역사 내용과 관련이 없고 방송사 저작물이라, 다른 자료로 바꾸기를 권해요.' },
+                { file: 'images/siu.mp4', where: '나라별 명과 암 › 포르투갈의 명(明) 영상', credit: '' },
                 { file: '국기 이미지 (flagcdn.com)', where: '홈 화면, 나라별 명과 암', credit: 'Flagpedia.net (flagcdn.com) 제공 국기 이미지' },
                 { file: '세계 지도 데이터 (world-atlas)', where: '교류 지도, 항해 타임랩스', credit: 'Natural Earth 지도 데이터를 바탕으로 한 world-atlas, https://github.com/topojson/world-atlas' }
             ]
@@ -2964,8 +2963,8 @@
             const srcImages = SOURCES.filter(s => srcFilled(s) && s.image).map(s => ({ file: s.image.replace('./', ''), where: `역사 읽기 › ${SLOT_NAME[s.slot] || s.slot} 사료 · "${s.title}"`, credit: s.credit }));
             const images = REFERENCES.images.concat(srcImages).filter(r => r.credit || DRAFT);
             const imgList = images.map(r => {
-                const cls = !r.credit || r.warn ? ' class="warn"' : '';
-                const note = [r.where, r.credit ? '' : (DRAFT ? '⚠ 출처(credit)가 비어 있어요' : ''), DRAFT && r.warn ? '⚠ ' + r.warn : ''].filter(Boolean).map(srcEsc).join('<br>');
+                const cls = !r.credit ? ' class="warn"' : '';
+                const note = [r.where, r.credit ? '' : (DRAFT ? '⚠ 출처(credit)가 비어 있어요' : '')].filter(Boolean).map(srcEsc).join('<br>');
                 return `<li${cls}>${srcEsc(r.credit || r.file)}<small>${r.credit ? srcEsc(r.file) + ' · ' : ''}${note}</small></li>`;
             }).join('');
             document.getElementById('refs-body').innerHTML = `
