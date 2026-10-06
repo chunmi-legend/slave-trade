@@ -301,6 +301,47 @@
         .abolition li::before { content: ''; position: absolute; left: -7px; top: .45rem; width: 12px; height: 12px; border-radius: 50%; background: #0f172a; border: 2px solid #eab308; }
         .abolition b { color: #facc15; margin-right: .5rem; }
 
+        /* ---------- 사료 읽기 카드 (옛 종이 느낌) ---------- */
+        .src-slot:empty { display: none; }
+        .src-card { position: relative; margin: 1.8rem 0 2.2rem; padding: 1.5rem 1.6rem 1.4rem; border-radius: 6px 14px 14px 6px;
+                    background: linear-gradient(180deg, #f7efdd 0%, #efe2c3 100%); color: #2b2118; border-left: 6px solid #8b5e34;
+                    box-shadow: 0 16px 36px rgba(0, 0, 0, .5), inset 0 0 40px rgba(139, 94, 52, .12); user-select: text; -webkit-user-select: text; }
+        .src-tag { display: inline-flex; align-items: center; gap: .4rem; font-size: .78rem; font-weight: 800; letter-spacing: .1em; color: #7c4a1e; }
+        .reading .src-card .src-title { font-size: 1.25rem; margin: .35rem 0 .2rem; color: #1f160f; }
+        .reading .src-card p { color: inherit; margin-bottom: 0; }
+        .reading .src-card .src-meta { font-size: .86rem; color: #6b5440; }
+        .src-quote { margin: 1.1rem 0 .4rem; padding: .1rem 0 .1rem 1.1rem; border-left: 3px solid #b08350; font-size: 1.03rem; line-height: 2; color: #2b2118; }
+        .src-card figure { margin: 1rem 0 .3rem; }
+        .src-card figure img { width: 100%; max-height: 360px; object-fit: contain; background: #e6d8b6; border-radius: 6px; border: 1px solid #cdb68b; }
+        .reading .src-card .src-credit { font-size: .78rem; color: #7a6550; margin-top: .45rem; line-height: 1.6; }
+        .src-card details { margin-top: .6rem; font-size: .88rem; color: #6b5440; }
+        .src-card summary { cursor: pointer; font-weight: 700; color: #7c4a1e; }
+        .reading .src-card .src-original { font-style: italic; line-height: 1.8; margin-top: .4rem; color: #5a4632; }
+        .reading .src-card .src-explain { font-size: .95rem; line-height: 1.9; color: #3b2f24; margin-top: .9rem; }
+        .src-q { margin-top: 1.1rem; padding: .9rem 1.1rem; border-radius: 10px; background: rgba(139, 94, 52, .12); }
+        .src-q b { color: #7c4a1e; }
+        .src-q ol { margin: .4rem 0 0 1.25rem; list-style: decimal; }
+        .src-q li { line-height: 1.85; color: #2b2118; }
+        /* 작성 모드에서만 보이는 빈 칸 */
+        .src-card.draft { background: repeating-linear-gradient(45deg, #172033 0 12px, #1b2540 12px 24px); color: #cbd5e1; border: 1px dashed #64748b; border-left: 6px dashed #fbbf24; box-shadow: none; }
+        .src-card.draft .src-tag { color: #fbbf24; }
+        .reading .src-card.draft .src-title { color: #fff; }
+        .src-card.draft code, .refs-draft code { background: rgba(250, 204, 21, .14); color: #fde68a; padding: .05rem .35rem; border-radius: 4px; font-size: .85em; }
+        .src-warn { margin-top: .8rem; padding: .55rem .8rem; border-radius: 8px; background: #7f1d1d; color: #fecaca; font-size: .85rem; font-weight: 700; }
+        .draft-badge { position: fixed; left: 1rem; bottom: 1rem; z-index: 60; padding: .6rem 1rem; border-radius: 12px; background: #a16207; color: #fff; font-size: .85rem; font-weight: 700;
+                       box-shadow: 0 8px 24px rgba(0, 0, 0, .5); max-width: calc(100vw - 2rem); }
+        .draft-badge a { color: #fde68a; text-decoration: underline; margin-left: .4rem; }
+        .refs-link { display: inline-block; margin-top: .5rem; background: none; border: 0; padding: 0; color: #fbbf24; font: inherit; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+        .refs-link:hover { color: #fde68a; }
+        /* 참고문헌 */
+        .refs-list { list-style: none; padding: 0; margin: .4rem 0 0; display: flex; flex-direction: column; gap: .6rem; }
+        .refs-list li { padding: .85rem 1rem .85rem 2.6rem; text-indent: -1.6rem; border-radius: 10px; background: rgba(15, 23, 42, .7); border: 1px solid #1e293b; line-height: 1.75; color: #e2e8f0; word-break: break-word; }
+        .refs-list li small { display: block; text-indent: 0; margin-top: .25rem; color: #94a3b8; font-size: .82rem; }
+        .refs-list li.empty { border-style: dashed; color: #64748b; }
+        .refs-list li.warn { border-color: #b45309; }
+        .refs-list li.warn small { color: #fbbf24; }
+        .refs-draft { margin: .6rem 0 0; padding: .8rem 1rem; border-radius: 10px; border: 1px dashed #a16207; background: rgba(161, 98, 7, .12); font-size: .88rem; line-height: 1.8; color: #fde68a; }
+
         .quiz-opt { display: block; width: 100%; text-align: left; padding: .9rem 1.1rem; margin-bottom: .6rem; border-radius: 10px; border: 1px solid #475569; background: rgba(15,23,42,.8); color: #f1f5f9; font: inherit; transition: background .2s, border-color .2s; }
         .quiz-opt:hover:not(:disabled) { background: #1e293b; border-color: #94a3b8; }
         .quiz-opt.correct { border-color: #22c55e; background: rgba(20,83,45,.6); }
@@ -662,6 +703,7 @@
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 w-full" id="flags-container"></div>
             <p class="text-center text-xs text-slate-500 mt-10 leading-relaxed">
                 인원 수는 SlaveVoyages(대서양 노예무역 데이터베이스)의 선박 국적별 추정치를 반올림한 값이며, 연구에 따라 차이가 있을 수 있습니다.
+                <br><button class="refs-link" onclick="openRefs()">참고문헌과 그림 출처 보기 →</button>
             </p>
         </div>
     </main>
@@ -840,6 +882,7 @@
                 <text x="245" y="70" fill="#cbd5e1" font-size="15" text-anchor="middle">설탕·담배·면화</text>
             </svg>
             <p>유럽 상인들은 총, 직물, 술 같은 공산품을 싣고 아프리카 해안으로 가서 사람과 맞바꿨습니다. 사로잡힌 사람들은 대부분 아프리카 내부의 전쟁이나 납치로 붙잡혀 해안의 요새로 끌려온 이들이었습니다. 배는 이들을 아메리카에 팔고, 그 돈으로 설탕·담배·면화를 사서 유럽으로 돌아갔습니다.</p>
+            <div class="src-slot" data-slot="triangle"></div>
 
             <h2>중간 항로</h2>
             <p>아프리카에서 아메리카로 건너는 구간을 '중간 항로'라고 부릅니다. 보통 한두 달 넘게 걸리는 항해 동안 사람들은 사슬에 묶인 채 몸을 제대로 펼 수도 없는 선창에 갇혔습니다. 더위와 오염된 물, 전염병, 폭력 속에서 많은 이들이 바다 위에서 목숨을 잃었습니다.</p>
@@ -849,13 +892,16 @@
                 <div class="loss"><strong>약 180만 명</strong><span>항해 중 사망</span></div>
             </div>
             <p class="text-sm text-slate-400">해안까지 끌려오는 길과 요새에서 숨진 사람은 이 숫자에 포함되지 않습니다.</p>
+            <div class="src-slot" data-slot="middle-passage"></div>
 
             <h2>끌려간 사람의 목소리</h2>
             <p>올라우다 에퀴아노는 어린 시절 납치되어 노예로 팔렸습니다. 그는 오랜 노력 끝에 스스로 몸값을 치러 자유를 얻었고, 1789년 노예선의 참상과 자신의 삶을 담은 자서전을 영국에서 펴냈습니다. 이 책은 많은 영국인에게 노예무역의 실상을 알리며 폐지 운동의 중요한 근거가 되었습니다.</p>
+            <div class="src-slot" data-slot="voice"></div>
 
             <h2>멈추지 않은 저항</h2>
             <p>끌려간 사람들은 결코 순순히 따르지 않았습니다. 배 위에서 반란을 일으키기도 했고, 아메리카에서는 농장을 탈출해 스스로 공동체를 만들었습니다. 브라질의 팔마리스는 탈출한 노예들이 거의 100년 가까이 지켜 낸 공동체였고, 자메이카의 '마룬'들은 영국군과 싸워 자치를 인정받았습니다.</p>
             <p>가장 큰 저항은 1791년 프랑스 식민지 생도맹그에서 일어났습니다. 투생 루베르튀르 등이 이끈 봉기는 13년 동안 이어졌고, 1804년 노예였던 사람들이 세운 첫 번째 독립국 아이티가 탄생했습니다.</p>
+            <div class="src-slot" data-slot="resistance"></div>
 
             <h2>폐지까지의 긴 길</h2>
             <ol class="abolition">
@@ -869,11 +915,14 @@
                 <li><b>1888</b>브라질이 아메리카 대륙에서 가장 늦게 노예제를 폐지했습니다.</li>
             </ol>
             <p>노예무역을 금지하는 것과 노예제 자체를 없애는 것은 다른 일이었습니다. 무역이 금지된 뒤에도 이미 노예가 된 사람들과 그 자녀들은 수십 년 동안 노예로 살아야 했습니다.</p>
+            <div class="src-slot" data-slot="abolition"></div>
 
             <h2>아프리카에 남은 상처</h2>
             <p>수백 년 동안 가장 일할 나이의 젊은이들이 끌려가면서 서아프리카와 중앙아프리카의 여러 지역은 큰 인구 손실을 겪었습니다. 노예를 얻기 위한 전쟁과 납치가 늘면서 이웃 공동체 사이의 신뢰도 무너졌습니다. 많은 역사학자들은 이 상처가 오늘날까지 아프리카 사회에 영향을 주고 있다고 봅니다.</p>
+            <div class="src-slot" data-slot="africa"></div>
 
-            <p class="text-xs text-slate-500 mt-12">참고: SlaveVoyages(slavevoyages.org) 대서양 노예무역 데이터베이스 추정치. 수치는 반올림했으며 연구에 따라 다를 수 있습니다.</p>
+            <p class="text-xs text-slate-500 mt-12">참고: SlaveVoyages(slavevoyages.org) 대서양 노예무역 데이터베이스 추정치. 수치는 반올림했으며 연구에 따라 다를 수 있습니다.
+                <button class="refs-link" onclick="openRefs()">참고문헌과 그림 출처 전체 보기 →</button></p>
             <div class="mt-8 flex flex-wrap gap-3">
                 <button onclick="openExperience('people')" class="home-btn feature">다음 단계: 네 사람의 이야기 따라가기</button>
                 <button onclick="openQuiz()" class="home-btn">퀴즈로 확인하기</button>
@@ -893,6 +942,17 @@
         <article id="quiz-body"></article>
     </section>
 
+    <!-- 참고문헌과 그림 출처 -->
+    <section id="refs-screen" class="screen scroll-screen reading" aria-label="참고문헌과 그림 출처">
+        <div class="detail-header" style="position:fixed">
+            <button onclick="showScreen('home-screen')" class="px-5 py-2.5 bg-slate-900/90 hover:bg-slate-700 text-white rounded-full flex items-center gap-2 text-sm border border-slate-600 shadow-xl backdrop-blur-md">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                홈으로
+            </button>
+        </div>
+        <article id="refs-body"></article>
+    </section>
+
     <!-- 교류 체험실 -->
     <section id="experience-screen" class="screen scroll-screen" aria-label="교류 체험실">
         <div class="detail-header" style="position:fixed">
@@ -907,6 +967,86 @@
     </section>
 
     <script>
+        /* =====================================================================
+           ✍️ 사료 읽기 · 참고문헌 입력 칸  (직접 채우는 곳은 여기뿐이에요)
+
+           - 빈칸('')으로 둔 사료 카드는 학생 화면에 보이지 않아요.
+             제목(title)과 함께 번역문(text)이나 그림(image) 가운데 하나를 채우면 나타나요.
+           - 주소 끝에 ?draft 를 붙이면 '작성 모드'가 되어 빈 칸 자리와 추천 사료가 보여요.
+               예) https://(사이트 주소)/?draft#history
+           - 따옴표(') 안에 글을 쓰세요. 글 안에 작은따옴표를 써야 하면 \' 로 쓰거나
+             바깥을 큰따옴표(")로 바꾸면 돼요. 줄을 바꾸려면 \n 을 쓰세요.
+           - 그림 파일은 images/sources/ 폴더에 올리고, 경로를 './images/sources/파일이름.jpg' 처럼 적어요.
+           - 같은 자리에 사료를 두 개 넣고 싶으면 { ... } 한 덩어리를 복사해 slot 이름을 같게 두면 돼요.
+           ===================================================================== */
+        const SOURCES = [
+            { slot: 'triangle',        // 역사 읽기 › 삼각무역 (slot 이름은 바꾸지 마세요)
+              hint: '노예선의 화물 목록이나 항해 지시서, 리버풀·낭트 상인의 장부나 편지',
+              title: '',               // 사료 이름. 예) 리버풀 노예선 ○○호의 화물 목록
+              kind: '글',              // '글' 또는 '그림'
+              author: '',              // 쓴 사람·만든 사람
+              year: '',                // 만든 해. 예) 1789
+              from: '',                // 원제·책 이름·소장처
+              text: '',                // 학생이 읽을 번역문 (줄바꿈은 \n)
+              original: '',            // 원문 (선택)
+              translator: '',          // 번역한 사람·참고한 번역본 (선택)
+              image: '',               // 그림 경로 (선택). 예) ./images/sources/brookes.jpg
+              imageAlt: '',            // 그림이 무엇을 보여 주는지 한 줄 설명
+              credit: '',              // 그림 출처 (그림을 넣었다면 꼭)
+              explain: '',             // 짧은 해설 (선택)
+              questions: []            // 탐구 질문. 예) ['이 목록에서 사람은 어떻게 적혀 있나요?']
+            },
+            { slot: 'middle-passage',  // 역사 읽기 › 중간 항로
+              hint: '올라우다 에퀴아노 자서전(1789) 2장의 노예선 장면 / 브룩스호 도면(1788) / 노예선 선의(船醫) 알렉산더 팔콘브리지의 증언(1788)',
+              title: '', kind: '글', author: '', year: '', from: '', text: '', original: '', translator: '',
+              image: '', imageAlt: '', credit: '', explain: '', questions: [] },
+            { slot: 'voice',           // 역사 읽기 › 끌려간 사람의 목소리
+              hint: '에퀴아노 자서전에서 고향 마을과 납치되는 장면 (출생지 논쟁도 함께 소개하면 좋아요)',
+              title: '', kind: '글', author: '', year: '', from: '', text: '', original: '', translator: '',
+              image: '', imageAlt: '', credit: '', explain: '', questions: [] },
+            { slot: 'resistance',      // 역사 읽기 › 멈추지 않은 저항
+              hint: '아이티 독립 선언문(1804) / 투생 루베르튀르의 포고문 / 노예선 반란 기록',
+              title: '', kind: '글', author: '', year: '', from: '', text: '', original: '', translator: '',
+              image: '', imageAlt: '', credit: '', explain: '', questions: [] },
+            { slot: 'abolition',       // 역사 읽기 › 폐지까지의 긴 길
+              hint: '웨지우드 메달 "나는 사람이 아닌가요, 형제가 아닌가요?"(1787) / 윌리엄 폭스의 설탕 불매 소책자(1791) / 의회 청원서',
+              title: '', kind: '그림', author: '', year: '', from: '', text: '', original: '', translator: '',
+              image: '', imageAlt: '', credit: '', explain: '', questions: [] },
+            { slot: 'africa',          // 역사 읽기 › 아프리카에 남은 상처
+              hint: '콩고 왕 아폰수 1세가 포르투갈 왕 주앙 3세에게 보낸 편지(1526)',
+              title: '', kind: '글', author: '', year: '', from: '', text: '', original: '', translator: '',
+              image: '', imageAlt: '', credit: '', explain: '', questions: [] }
+        ];
+
+        // 참고문헌: text 에 한 줄로 적어요. note 는 이 자료를 어디에 썼는지 (선택)
+        //  1차 사료 예) 올라우다 에퀴아노, 『올라우다 에퀴아노의 흥미로운 이야기』(원제: The Interesting Narrative of the Life of Olaudah Equiano, 1789), ○○○ 옮김, ○○출판사, 20○○.
+        //  연구서 예)   저자, 『책 제목』, 옮긴이, 출판사, 출판 연도.
+        //  논문 예)     저자, 「논문 제목」, 『학술지 이름』 권(호), 출판 연도, 쪽.
+        //  웹 예)       운영 기관, "페이지 제목", 주소 (확인한 날짜).
+        const REFERENCES = {
+            primary: [   // 1차 사료 (그 시대 사람이 남긴 기록)
+                // { text: '', note: '' },
+            ],
+            studies: [   // 연구서·논문 (역사학자의 책과 글)
+                // { text: '', note: '' },
+            ],
+            web: [       // 데이터베이스·웹사이트
+                { text: 'SlaveVoyages, "Trans-Atlantic Slave Trade Database", https://www.slavevoyages.org', note: '국가별 운송 인원, 배에 실린·도착한·숨진 사람 수 추정치 (홈 화면, 역사 읽기, 퀴즈)' }
+            ],
+            images: [    // 그림·사진·영상 출처 (credit 을 채우면 학생 화면에 보여요)
+                { file: 'images/exchange/africa.jpg', where: '교류 지도(아프리카), 엘리자의 이야기 · "노예선에 사람을 빽빽하게 실은 모습을 그린 그림 (1788년경)"', credit: '' },
+                { file: 'images/exchange/caribbean.jpg', where: '교류 지도(아메리카) · "사탕수수 농장에서 일하는 사람들을 그린 그림 (1823년)"', credit: '' },
+                { file: 'images/exchange/uk.jpg', where: '교류 지도(유럽·영국) · "18세기 리버풀 항구"', credit: '' },
+                { file: 'images/exchange/france.jpg', where: '교류 지도(프랑스) · "낭트의 부자 상인들이 지은 저택"', credit: '' },
+                { file: 'images/exchange/netherlands.jpg', where: '교류 지도(네덜란드) · "황금시대 암스테르담 항구"', credit: '' },
+                { file: 'images/exchange/portugal.jpg', where: '교류 지도(포르투갈) · "리스본 항구"', credit: '' },
+                { file: 'images/exchange/spain.jpg', where: '교류 지도(스페인) · "아메리카의 은이 들어온 세비야 항구"', credit: '' },
+                { file: 'images/siu.mp4', where: '나라별 명과 암 › 포르투갈의 명(明) 영상', credit: '' },
+                { file: '국기 이미지 (flagcdn.com)', where: '홈 화면, 나라별 명과 암', credit: 'Flagpedia.net (flagcdn.com) 제공 국기 이미지' },
+                { file: '세계 지도 데이터 (world-atlas)', where: '교류 지도, 항해 타임랩스', credit: 'Natural Earth 지도 데이터를 바탕으로 한 world-atlas, https://github.com/topojson/world-atlas' }
+            ]
+        };
+
         /* ================= 국가 데이터 ================= */
         const countryData = {
             pt: { name: '포르투갈', flag: 'https://flagcdn.com/w1280/pt.png',
@@ -938,7 +1078,7 @@
 
         /* ================= 화면 전환 ================= */
         let currentScreen = 'home-screen', currentCountry = null, routing = false;
-        const screenHash = { 'home-screen': '', 'map-screen': '#timelapse', 'voices-screen': '#history', 'quiz-screen': '#quiz', 'exchange-screen': '#exchange', 'experience-screen': '#experience', 'detail-screen': '' };
+        const screenHash = { 'home-screen': '', 'map-screen': '#timelapse', 'voices-screen': '#history', 'quiz-screen': '#quiz', 'exchange-screen': '#exchange', 'experience-screen': '#experience', 'refs-screen': '#references', 'detail-screen': '' };
 
         function showScreen(id, hash) {
             if (currentScreen === 'map-screen' && id !== 'map-screen') stopMap();
@@ -962,6 +1102,7 @@
                 else if (h === 'quiz') openQuiz();
                 else if (h.startsWith('exchange')) openExchange(h.split('-')[1]);
                 else if (h.startsWith('experience')) openExperience(h.split('-')[1]);
+                else if (h === 'references') openRefs();
                 else if (h.startsWith('country-') && countryData[h.slice(8)]) openDetail(h.slice(8));
                 else showScreen('home-screen');
             } finally { routing = false; }
@@ -1001,6 +1142,7 @@
         addDeco('home-screen', '', { ship: true, rose2: true });
         addDeco('voices-screen', 'ember');
         addDeco('quiz-screen', 'quiz');
+        addDeco('refs-screen', 'ember');
         addDeco('experience-screen', 'lab', { ship: true });
 
         /* ================= 홈: 배움의 순서 ================= */
@@ -2760,6 +2902,93 @@
             });
         }
 
+        /* ================= 사료 읽기 · 참고문헌 (그리기) ================= */
+        const DRAFT = /[?&]draft\b/.test(location.search);
+        const SLOT_NAME = { triangle: '삼각무역', 'middle-passage': '중간 항로', voice: '끌려간 사람의 목소리', resistance: '멈추지 않은 저항', abolition: '폐지까지의 긴 길', africa: '아프리카에 남은 상처' };
+        const srcEsc = v => String(v == null ? '' : v).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+        const srcBr = v => srcEsc(v).replace(/\n/g, '<br>');
+        const srcFilled = s => !!(s.title && (s.text || s.image));
+
+        function sourceCardHTML(s) {
+            const meta = [s.author, s.year, s.from].filter(Boolean).map(srcEsc).join(' · ');
+            const warn = DRAFT && s.image && !s.credit ? '<p class="src-warn">⚠ 그림 출처(credit)가 비어 있어요. 학생에게 공개하기 전에 꼭 채워 주세요.</p>' : '';
+            return `<aside class="src-card" aria-label="사료 읽기: ${srcEsc(s.title)}">
+                <span class="src-tag">📜 사료 읽기 · ${s.kind === '그림' ? '그림 사료' : '글 사료'}</span>
+                <h3 class="src-title">${srcEsc(s.title)}</h3>
+                ${meta ? `<p class="src-meta">${meta}</p>` : ''}
+                ${s.image ? `<figure><img src="${srcEsc(s.image)}" alt="${srcEsc(s.imageAlt || s.title)}" loading="lazy">${s.credit ? `<figcaption class="src-credit">그림 출처: ${srcEsc(s.credit)}</figcaption>` : ''}</figure>` : ''}
+                ${s.text ? `<blockquote class="src-quote">${srcBr(s.text)}</blockquote>` : ''}
+                ${s.translator ? `<p class="src-credit">번역: ${srcEsc(s.translator)}</p>` : ''}
+                ${s.original ? `<details><summary>원문 보기</summary><p class="src-original">${srcBr(s.original)}</p></details>` : ''}
+                ${s.explain ? `<p class="src-explain">${srcBr(s.explain)}</p>` : ''}
+                ${s.questions && s.questions.length ? `<div class="src-q"><b>사료를 읽고 생각해 보기</b><ol>${s.questions.map(q => `<li>${srcEsc(q)}</li>`).join('')}</ol></div>` : ''}
+                ${warn}
+            </aside>`;
+        }
+
+        function sourceDraftHTML(s) {
+            return `<aside class="src-card draft">
+                <span class="src-tag">✍️ 작성 모드 · 빈 사료 칸 (학생 화면에는 보이지 않아요)</span>
+                <h3 class="src-title">${srcEsc(SLOT_NAME[s.slot] || s.slot)} 자리의 사료</h3>
+                <p class="src-meta" style="color:#cbd5e1">추천 사료: ${srcEsc(s.hint || '-')}</p>
+                <p class="src-meta" style="color:#94a3b8;margin-top:.5rem"><code>index.html</code> 위쪽의 <code>SOURCES</code>에서 <code>slot: '${srcEsc(s.slot)}'</code> 칸의 <code>title</code>과 <code>text</code>(또는 <code>image</code>)를 채우면 여기에 사료 카드가 나타나요.</p>
+            </aside>`;
+        }
+
+        function renderSources() {
+            document.querySelectorAll('.src-slot').forEach(slot => {
+                const list = SOURCES.filter(s => s.slot === slot.dataset.slot);
+                slot.innerHTML = list.map(s => srcFilled(s) ? sourceCardHTML(s) : (DRAFT ? sourceDraftHTML(s) : '')).join('');
+            });
+            if (DRAFT && !document.querySelector('.draft-badge')) {
+                const filled = SOURCES.filter(srcFilled).length;
+                const b = document.createElement('div');
+                b.className = 'draft-badge';
+                b.innerHTML = `✍️ 작성 모드 · 사료 ${filled}/${SOURCES.length}칸 채움 <a href="${location.pathname}${location.hash}">학생 화면으로 보기</a>`;
+                document.body.appendChild(b);
+            }
+        }
+
+        function refsSection(title, desc, items, example) {
+            const filled = items.filter(r => r && r.text);
+            if (!filled.length && !DRAFT) return '';
+            const list = filled.map(r => `<li>${srcEsc(r.text)}${r.note ? `<small>${srcEsc(r.note)}</small>` : ''}</li>`).join('');
+            return `<h2>${title}</h2>
+                <p class="text-sm" style="color:#94a3b8">${desc}</p>
+                ${list ? `<ol class="refs-list">${list}</ol>` : ''}
+                ${DRAFT ? `<div class="refs-draft">✍️ <code>REFERENCES</code>에 채워 넣으세요. (지금 ${filled.length}개)<br>형식 예) ${srcEsc(example)}</div>` : ''}`;
+        }
+
+        function renderRefs() {
+            const srcImages = SOURCES.filter(s => srcFilled(s) && s.image).map(s => ({ file: s.image.replace('./', ''), where: `역사 읽기 › ${SLOT_NAME[s.slot] || s.slot} 사료 · "${s.title}"`, credit: s.credit }));
+            const images = REFERENCES.images.concat(srcImages).filter(r => r.credit || DRAFT);
+            const imgList = images.map(r => {
+                const cls = !r.credit ? ' class="warn"' : '';
+                const note = [r.where, r.credit ? '' : (DRAFT ? '⚠ 출처(credit)가 비어 있어요' : '')].filter(Boolean).map(srcEsc).join('<br>');
+                return `<li${cls}>${srcEsc(r.credit || r.file)}<small>${r.credit ? srcEsc(r.file) + ' · ' : ''}${note}</small></li>`;
+            }).join('');
+            document.getElementById('refs-body').innerHTML = `
+                <h1 class="text-3xl md:text-5xl font-black leading-tight text-white">참고문헌과 그림 출처</h1>
+                <p class="mt-6">이 사이트를 만들 때 참고한 자료와, 사이트에 쓰인 그림의 출처예요. 역사는 기록을 바탕으로 쓰여요. 궁금한 내용이 있으면 아래 자료를 직접 찾아 읽어 보세요.</p>
+                ${refsSection('1차 사료', '노예무역이 벌어지던 시대의 사람들이 직접 남긴 기록이에요.', REFERENCES.primary,
+                    '올라우다 에퀴아노, 『책 제목』(원제, 1789), 옮긴이, 출판사, 연도.')}
+                ${refsSection('연구서와 논문', '역사학자들이 사료를 연구해 쓴 책과 글이에요.', REFERENCES.studies,
+                    '저자, 『책 제목』, 옮긴이, 출판사, 연도. / 저자, 「논문 제목」, 『학술지』 권(호), 연도, 쪽.')}
+                ${refsSection('데이터베이스와 웹사이트', '숫자와 통계를 확인한 곳이에요.', REFERENCES.web,
+                    '운영 기관, "페이지 제목", 주소 (확인한 날짜).')}
+                ${imgList || DRAFT ? `<h2>그림·사진·영상 출처</h2>
+                    <p class="text-sm" style="color:#94a3b8">사이트에 쓰인 그림과 지도, 영상의 출처예요.</p>
+                    <ol class="refs-list">${imgList}</ol>
+                    ${DRAFT ? '<div class="refs-draft">✍️ <code>REFERENCES.images</code>의 <code>credit</code>을 채우면 학생 화면에도 보여요. 형식 예) 작가, 〈작품 이름〉, 연도, 소장처(또는 사이트), 이용 조건</div>' : ''}` : ''}
+                <p class="text-xs text-slate-500 mt-12">이 사이트의 인물 이야기(체험 1)에 나오는 네 사람은 실제 기록을 바탕으로 만든 가상 인물이에요.</p>
+                <div class="mt-8 flex flex-wrap gap-3">
+                    <button onclick="showScreen('voices-screen')" class="home-btn">중간 항로와 저항의 역사</button>
+                    <button onclick="showScreen('home-screen')" class="home-btn">홈으로</button>
+                </div>`;
+        }
+
+        function openRefs() { renderRefs(); showScreen('refs-screen'); }
+
         /* ================= 공통 이벤트 ================= */
         document.addEventListener('keydown', e => {
             if (currentScreen === 'experience-screen' && e.key === 'Escape' && !document.getElementById('xp-modal').hidden) {
@@ -2791,6 +3020,7 @@
 
         initApp();
         initExchange();
+        renderSources();
         initExperience();
         if (location.hash) route();
     </script>
