@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>노예 무역의 명과 암 - 두 얼굴의 역사</title>
+    <title>대서양 노예무역의 명과 암</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- 제목: 함렛(Hahmlet) · 본문: 프리텐다드(Pretendard) -->
-    <link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@700;800&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css" rel="stylesheet">
+    <!-- 제목: 송명(Song Myung) · 본문: 고운바탕(Gowun Batang) -->
+    <link href="https://fonts.googleapis.com/css2?family=Song+Myung&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 
@@ -17,29 +16,33 @@
         *, *::before, *::after { box-sizing: border-box; }
         html, body { height: 100%; }
         :root {
-            --font-body: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
-            --font-display: 'Hahmlet', 'Nanum Myeongjo', 'Batang', serif;
+            /* 쪽빛 밤바다 · 정제당 · 황동(명) · 꼭두서니(암) */
+            --indigo: #101B3B;
+            --indigo-deep: #0A1230;
+            --rule: #2E3D72;
+            --sugar: #EEF0F4;
+            --brass: #C8A24A;
+            --madder: #B23A48;
+            --muted: #A7B0C8;
+            --font-body: 'Gowun Batang', 'Nanum Myeongjo', 'AppleMyungjo', 'Batang', serif;
+            --font-display: 'Song Myung', 'Gowun Batang', 'Batang', serif;
         }
         body {
             font-family: var(--font-body);
-            letter-spacing: -0.01em;
             word-break: keep-all;
             overflow-wrap: break-word;
             margin: 0;
             overflow: hidden;
-            background-color: #050505;
-            color: #f8fafc;
+            background-color: var(--indigo);
+            color: var(--sugar);
             -webkit-user-select: none;
             user-select: none;
             touch-action: manipulation;
         }
-        :focus-visible { outline: 3px solid #facc15; outline-offset: 3px; }
-        /* 제목은 함렛, 나머지는 프리텐다드 */
-        h1, h2, h3, h4, .stat-row strong, .abolition b { font-family: var(--font-display); letter-spacing: -0.02em; }
-        /* 함렛은 900에서 너무 뭉툭해 보여서 굵기를 낮춤 */
-        h1, .stat-row strong { font-weight: 800 !important; }
-        h2, h3, h4, .abolition b { font-weight: 700 !important; }
-        .home-kicker { font-family: var(--font-display); }
+        :focus-visible { outline: 3px solid var(--brass); outline-offset: 3px; }
+        /* 제목은 송명(옛 인쇄체 느낌). 굵기가 하나뿐이라 가짜 굵게를 막음 */
+        h1, h2, h3, h4, .stat-row strong, .abolition b { font-family: var(--font-display); font-weight: 400 !important; letter-spacing: 0; }
+        button { font-family: inherit; }
 
         .screen {
             position: fixed;
@@ -59,127 +62,89 @@
         }
         .scroll-screen { overflow-y: auto; -webkit-overflow-scrolling: touch; user-select: text; -webkit-user-select: text; }
 
-        /* ---------- 배경 장식 (밤바다 · 옛 해도) ---------- */
-        .deco { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
-                --g1: rgba(202, 138, 4, .22); --g2: rgba(185, 28, 28, .22); --wave: 37, 66, 112; --rose: rgba(250, 204, 21, .06); --grid: rgba(148, 163, 184, .07); }
-        /* 옛 해도의 격자선 */
-        .deco::before { content: ''; position: absolute; inset: 0;
-                        background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-                        background-size: 80px 80px; background-position: center;
-                        -webkit-mask-image: radial-gradient(ellipse at 50% 45%, #000 15%, transparent 72%); mask-image: radial-gradient(ellipse at 50% 45%, #000 15%, transparent 72%); }
-        /* 별빛 */
-        .deco::after { content: ''; position: absolute; inset: 0; opacity: .75;
-                       background-image: radial-gradient(1.3px 1.3px at 22px 34px, rgba(255, 255, 255, .9), transparent),
-                                         radial-gradient(1px 1px at 128px 92px, rgba(255, 255, 255, .7), transparent),
-                                         radial-gradient(1.6px 1.6px at 214px 168px, rgba(254, 240, 138, .8), transparent),
-                                         radial-gradient(1px 1px at 76px 210px, rgba(255, 255, 255, .6), transparent),
-                                         radial-gradient(1.2px 1.2px at 250px 40px, rgba(255, 255, 255, .7), transparent);
-                       background-size: 280px 260px;
-                       -webkit-mask-image: linear-gradient(#000, transparent 62%); mask-image: linear-gradient(#000, transparent 62%);
-                       animation: decoTwinkle 7s ease-in-out infinite alternate; }
-        .deco-glow { position: absolute; width: 60vmax; height: 60vmax; border-radius: 50%; filter: blur(80px); mix-blend-mode: screen; animation: decoBreath 16s ease-in-out infinite alternate; }
-        .deco-glow.a { background: var(--g1); top: -24vmax; left: -20vmax; }
-        .deco-glow.b { background: var(--g2); bottom: -26vmax; right: -20vmax; animation-delay: -8s; }
-        .deco-rose { position: absolute; width: min(60vmin, 560px); aspect-ratio: 1; top: -8vmin; right: -10vmin; color: var(--rose); animation: decoSpin 300s linear infinite; }
-        .deco-rose.left { right: auto; left: -14vmin; top: auto; bottom: 8vh; width: min(44vmin, 380px); animation-direction: reverse; }
-        .deco-sea { position: absolute; left: 0; right: 0; bottom: 0; height: 20vh; min-height: 110px; }
-        .deco-wave { position: absolute; left: 0; bottom: 0; width: 200%; height: 100%; background: rgb(var(--wave));
-                     -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0 60 Q150 30 300 60 T600 60 T900 60 T1200 60 V120 H0Z'/%3E%3C/svg%3E") repeat-x bottom / 50% 100%;
-                             mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0 60 Q150 30 300 60 T600 60 T900 60 T1200 60 V120 H0Z'/%3E%3C/svg%3E") repeat-x bottom / 50% 100%;
-                     animation: decoWave 30s linear infinite; }
-        .deco-wave.w1 { opacity: .22; height: 100%; }
-        .deco-wave.w2 { opacity: .3; height: 72%; animation-duration: 22s; animation-direction: reverse; }
-        .deco-wave.w3 { opacity: .45; height: 46%; animation-duration: 16s; }
-        .deco-ship { position: absolute; bottom: calc(max(20vh, 110px) * .62); left: 0; width: clamp(70px, 9vw, 120px); color: #0b1222; opacity: .9;
-                     filter: drop-shadow(0 0 6px rgba(250, 204, 21, .25)); animation: decoSail 90s linear infinite; }
-        .deco-ship svg { display: block; width: 100%; animation: decoBob 4s ease-in-out infinite; }
-        @keyframes decoTwinkle { from { opacity: .45; } to { opacity: .85; } }
-        @keyframes decoBreath { from { transform: scale(.92); opacity: .75; } to { transform: scale(1.08); opacity: 1; } }
-        @keyframes decoSpin { to { transform: rotate(360deg); } }
-        @keyframes decoWave { to { transform: translateX(-50%); } }
-        @keyframes decoSail { from { transform: translateX(-15vw); } to { transform: translateX(110vw); } }
-        @keyframes decoBob { 0%, 100% { transform: translateY(0) rotate(-1.5deg); } 50% { transform: translateY(5px) rotate(1.5deg); } }
-        /* 탭별 색 */
-        .deco.ember { --g1: rgba(234, 88, 12, .13); --g2: rgba(153, 27, 27, .24); --wave: 92, 28, 28; --rose: rgba(251, 146, 60, .07); --grid: rgba(214, 160, 120, .06); }
-        .deco.quiz  { --g1: rgba(250, 204, 21, .14); --g2: rgba(59, 130, 246, .18); --wave: 30, 64, 120; --rose: rgba(147, 197, 253, .08); }
-        .deco.lab   { --g1: rgba(45, 212, 191, .13); --g2: rgba(250, 204, 21, .12); --wave: 17, 78, 89; --rose: rgba(94, 234, 212, .08); --grid: rgba(94, 234, 212, .06); }
-        /* 장식 위에 내용이 오도록 */
         .home-inner, .reading article, #xp-body { position: relative; z-index: 1; }
 
         /* ---------- 홈 ---------- */
-        #home-screen {
-            background: linear-gradient(180deg, #0b1533 0%, #080d22 50%, #050814 100%);
-            overflow-y: auto;
-            padding: 3rem 1.25rem 2rem;
-        }
-        .home-inner { max-width: 72rem; min-height: 100%; margin: 0 auto; display: flex; flex-direction: column; justify-content: center; }
-        .home-kicker { display: inline-flex; align-items: center; gap: .6rem; font-size: .8rem; letter-spacing: .35em; color: #fbbf24; font-weight: 700; margin-bottom: 1rem; }
-        .home-kicker::before, .home-kicker::after { content: ''; width: 2.4rem; height: 1px; background: linear-gradient(90deg, transparent, #fbbf24); }
-        .home-kicker::after { background: linear-gradient(90deg, #fbbf24, transparent); }
-        .home-title .light { color: #facc15; text-shadow: 0 0 28px rgba(250, 204, 21, .55); }
-        .home-title .dark { color: #ef4444; text-shadow: 0 0 28px rgba(239, 68, 68, .5); }
-        .ornament { display: flex; align-items: center; justify-content: center; gap: .8rem; margin: -.4rem auto 1.4rem; color: #fbbf24; }
-        .ornament span { width: min(18vw, 9rem); height: 1px; background: linear-gradient(90deg, transparent, rgba(250, 204, 21, .7)); }
-        .ornament span:last-child { background: linear-gradient(90deg, rgba(220, 38, 38, .7), transparent); }
-        .ornament svg { width: 22px; height: 22px; }
-        .intro b { font-weight: 700; }
-        /* 배움의 순서 */
-        .path { list-style: none; padding: 0; margin: 0 0 3.5rem; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .9rem; }
-        .path-step { position: relative; display: flex; flex-direction: column; gap: .5rem; padding: 1.15rem 1.05rem 1.05rem; border-radius: 16px;
-                     background: linear-gradient(180deg, rgba(30, 41, 59, .62), rgba(15, 23, 42, .78)); border: 1px solid rgba(255, 255, 255, .12); border-top: 4px solid var(--c);
-                     backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: transform .25s, box-shadow .25s; }
-        .path-step:hover { transform: translateY(-4px); box-shadow: 0 16px 34px rgba(0, 0, 0, .5); }
-        .path-step:not(:last-child)::after { content: '›'; position: absolute; right: -.78rem; top: 1.35rem; font-size: 1.5rem; line-height: 1; color: rgba(148, 163, 184, .7); }
-        .path-step .num, .countries-head .num { width: 2.1rem; height: 2.1rem; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; flex: none;
-                     font-family: var(--font-display); font-weight: 800; background: var(--c, #facc15); color: #0b1222; }
-        .path-step h2 { font-size: 1.12rem; color: #fff; margin-top: .15rem; }
-        .path-step p { font-size: .86rem; line-height: 1.7; color: #cbd5e1; flex: 1; }
-        .path-go { margin-top: .2rem; padding: .6rem .8rem; border-radius: 999px; font-weight: 700; font-size: .9rem; color: #fff;
-                   background: rgba(2, 6, 23, .55); border: 1.5px solid var(--c); transition: background .2s, color .2s; }
-        .path-go:hover { background: var(--c); color: #0b1222; }
-        .path-sub { align-self: center; font-size: .8rem; color: #94a3b8; text-decoration: underline; text-underline-offset: 3px; background: none; border: 0; padding: .15rem; }
-        .path-sub:hover { color: #e2e8f0; }
-        .path-step .seen { position: absolute; top: .85rem; right: .85rem; font-size: .7rem; font-weight: 700; padding: .12rem .5rem; border-radius: 999px;
-                           color: #86efac; background: rgba(34, 197, 94, .14); border: 1px solid rgba(34, 197, 94, .45); }
-        .countries-head { text-align: center; margin-bottom: 1.4rem; scroll-margin-top: 1.5rem; }
-        .countries-head h2 { display: inline-flex; align-items: center; gap: .6rem; font-size: clamp(1.3rem, 3vw, 1.7rem); color: #fff; }
-        .countries-head p { margin-top: .4rem; font-size: .9rem; color: #94a3b8; }
+        #home-screen { background: var(--indigo); overflow-y: auto; }
+        /* 첫 화면: 제목을 가운데 솔기가 가르고, 왼쪽(명)은 밝고 오른쪽(암)은 어둡다 */
+        .hero { position: relative; height: clamp(440px, 74vh, 720px); overflow: hidden; }
+        .hero-layer { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 3rem 1.25rem 6rem; text-align: center; }
+        .hero-dark { background: var(--indigo); color: var(--sugar); }
+        .hero-light { background: var(--sugar); color: var(--indigo); clip-path: inset(0 50% 0 0); animation: heroSeam 2s cubic-bezier(.7, 0, .3, 1) .4s both; }
+        .hero-title { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: clamp(2.7rem, 8.4vw, 7.4rem); line-height: 1.12; }
+        .hero-sub { margin: 1.6rem 0 0; font-size: clamp(1rem, 1.7vw, 1.25rem); line-height: 1.7; text-wrap: balance; }
+        .hero-title, .hero-side { text-wrap: balance; }
+        .hero-side { position: absolute; bottom: 2.2rem; width: min(40%, 22rem); font-size: .95rem; line-height: 1.7; }
+        .hero-side b { display: block; font-family: var(--font-display); font-weight: 400; font-size: 1.5rem; line-height: 1.2; margin-bottom: .2rem; }
+        .hero-light .hero-side { right: calc(50% + 1.6rem); text-align: right; }
+        .hero-light .hero-side b { color: #8C6E22; }
+        .hero-dark .hero-side { left: calc(50% + 1.6rem); text-align: left; }
+        .hero-dark .hero-side b { color: #D7707B; }
+        .hero-seam { position: absolute; top: 0; bottom: 0; left: 50%; width: 3px; margin-left: -1.5px; background: var(--brass); animation: heroSeamLine 2s cubic-bezier(.7, 0, .3, 1) .4s both; }
+        @keyframes heroSeam { from { clip-path: inset(0 0 0 0); } to { clip-path: inset(0 50% 0 0); } }
+        @keyframes heroSeamLine { from { left: 100%; } to { left: 50%; } }
+
+        .home-inner { max-width: 56rem; margin: 0 auto; padding: 3.5rem 1.25rem 3rem; }
+        .intro { max-width: 36em; font-size: 1.08rem; line-height: 2; color: var(--sugar); }
+        /* 배움의 순서: 장부의 줄처럼 */
+        .path { list-style: none; padding: 0; margin: 2.6rem 0 4.5rem; border-top: 1px solid var(--rule); }
+        .path-step { display: grid; grid-template-columns: 4.5rem 1fr auto; column-gap: 1.4rem; row-gap: .35rem; align-items: center; padding: 1.4rem 0; border-bottom: 1px solid var(--rule); }
+        .path-step .num { grid-row: 1 / span 2; align-self: start; font-family: var(--font-display); font-size: 3rem; line-height: 1; color: var(--brass); }
+        .path-step h2 { grid-column: 2; margin: 0; font-size: 1.55rem; line-height: 1.3; color: var(--sugar); }
+        .path-step p { grid-column: 2; margin: 0; font-size: 1rem; line-height: 1.8; color: var(--muted); }
+        .path-actions { grid-column: 3; grid-row: 1 / span 2; display: flex; flex-direction: column; align-items: flex-end; gap: .5rem; }
+        .path-go { padding: .7rem 1.15rem; border-radius: 4px; border: 0; background: var(--brass); color: var(--indigo-deep); font-weight: 700; font-size: .95rem; white-space: nowrap; }
+        .path-go:hover { background: #D9B65A; }
+        .path-sub { background: none; border: 0; padding: .1rem 0; font-size: .88rem; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+        .path-sub:hover { color: var(--sugar); }
+        .path-step .seen { margin-left: .6rem; font-family: var(--font-body); font-size: .82rem; color: var(--brass); vertical-align: middle; }
+        .countries-head { margin-bottom: 1.4rem; scroll-margin-top: 1.5rem; }
+        .countries-head h2 { display: flex; align-items: baseline; gap: .8rem; margin: 0; font-size: clamp(1.5rem, 3.2vw, 2rem); color: var(--sugar); }
+        .countries-head .num { font-size: 1.4em; color: var(--brass); }
+        .countries-head p { margin-top: .5rem; font-size: .98rem; color: var(--muted); }
+        .home-note { margin-top: 2.5rem; font-size: .85rem; line-height: 1.8; color: var(--muted); }
         .flash { animation: flash 1.4s ease-out; }
-        @keyframes flash { 0% { box-shadow: 0 0 0 0 rgba(250, 204, 21, .7); } 100% { box-shadow: 0 0 0 18px rgba(250, 204, 21, 0); } }
-        @media (max-width: 1024px) { .path { grid-template-columns: repeat(2, minmax(0, 1fr)); } .path-step::after { display: none; } }
-        @media (max-width: 560px) { .path { grid-template-columns: 1fr; } }
-        .intro { max-width: 40rem; margin: 0 auto; line-height: 1.9; color: #cbd5e1; }
+        @keyframes flash { 0% { outline: 2px solid rgba(200, 162, 74, .9); outline-offset: 6px; } 100% { outline: 2px solid rgba(200, 162, 74, 0); outline-offset: 14px; } }
+        @media (max-width: 640px) {
+            .hero { height: clamp(460px, 82vh, 640px); }
+            .hero-side { width: calc(50% - 1.6rem); font-size: .82rem; bottom: 1.4rem; }
+            .hero-side b { font-size: 1.2rem; }
+            .path-step { grid-template-columns: 3rem 1fr; }
+            .path-step .num { font-size: 2.2rem; }
+            .path-step h2 { font-size: 1.3rem; }
+            .path-actions { grid-column: 2; grid-row: auto; align-items: flex-start; margin-top: .7rem; }
+        }
         .flag-card {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
-            background: linear-gradient(180deg, rgba(30, 41, 59, .55), rgba(15, 23, 42, .7));
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-            filter: grayscale(100%) opacity(0.8);
+            background: var(--indigo-deep);
+            border: 1px solid var(--rule);
+            border-radius: 4px;
+            filter: grayscale(100%) opacity(0.85);
             color: inherit;
             font: inherit;
+            transition: filter .3s, border-color .3s;
         }
-        .flag-card:hover, .flag-card:focus-visible {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
-            border-color: rgba(250, 204, 21, 0.55);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 24px rgba(250, 204, 21, .18);
-            filter: grayscale(0%) opacity(1);
-        }
+        .flag-card:hover, .flag-card:focus-visible { border-color: var(--brass); filter: grayscale(0%) opacity(1); }
+        .flag-name { font-family: var(--font-display); font-size: 1.45rem; line-height: 1.2; color: var(--sugar); }
+        .flag-num { margin-top: .3rem; font-size: .85rem; color: var(--muted); }
         .home-btn {
-            padding: 0.8rem 1.4rem; border-radius: 999px; font-weight: 700; color: #fff;
-            border: 1px solid rgba(255,255,255,.25); background: rgba(15,23,42,.8);
-            display: inline-flex; align-items: center; gap: .5rem; transition: background .2s;
+            padding: .7rem 1.15rem; border-radius: 4px; font-weight: 700; color: var(--sugar);
+            border: 1px solid var(--rule); background: transparent;
+            display: inline-flex; align-items: center; gap: .5rem; transition: background .2s, border-color .2s;
         }
-        .home-btn:hover { background: #334155; }
-        .home-btn.primary { background: rgba(127,29,29,.85); border-color: rgba(239,68,68,.5); box-shadow: 0 0 20px rgba(220,38,38,.3); }
-        .home-btn.primary:hover { background: #b91c1c; }
+        .home-btn:hover { border-color: var(--muted); background: rgba(46, 61, 114, .45); }
+        .home-btn.primary, .home-btn.feature { background: var(--brass); border-color: var(--brass); color: var(--indigo-deep); box-shadow: none; }
+        .home-btn.primary:hover, .home-btn.feature:hover { background: #D9B65A; }
+        /* 화면 왼쪽 위 돌아가기 버튼 */
+        .back-btn { display: inline-flex; align-items: center; gap: .5rem; padding: .55rem 1rem; border-radius: 4px; font-size: .92rem; font-weight: 700;
+                    background: rgba(10, 18, 48, .88); border: 1px solid var(--rule); color: var(--sugar); transition: border-color .2s; }
+        .back-btn:hover { border-color: var(--brass); }
 
         /* ---------- 상세 ---------- */
         #detail-screen { background-color: #000; }
         .panel { position: absolute; inset: 0; }
-        #panel-dark { background: linear-gradient(135deg, #380404 0%, #000000 100%); z-index: 1; }
-        #panel-light { background: linear-gradient(135deg, #ffffff 0%, #fef08a 100%); z-index: 2; clip-path: inset(0 50% 0 0); }
+        #panel-dark { background: #24101C; z-index: 1; }
+        #panel-light { background: var(--sugar); z-index: 2; clip-path: inset(0 50% 0 0); }
         #flag-overlay {
             position: absolute; inset: 0;
             background-size: cover; background-position: center;
@@ -198,12 +163,12 @@
         .content-right { align-items: flex-end; text-align: right; }
         .info-box {
             max-width: 500px; max-height: calc(100% - 2rem); overflow-y: auto;
-            padding: 2.5rem; border-radius: 16px;
+            padding: 2.5rem; border-radius: 6px;
             backdrop-filter: blur(15px); pointer-events: auto;
             user-select: text; -webkit-user-select: text;
         }
-        .info-box.light { background: rgba(255, 255, 255, 0.92); border: 1px solid #fbbf24; box-shadow: 0 20px 50px rgba(251, 191, 36, 0.3); color: #1e293b; }
-        .info-box.dark { background: rgba(15, 0, 0, 0.88); border: 1px solid #dc2626; box-shadow: 0 20px 50px rgba(220, 38, 38, 0.5); color: #f8fafc; }
+        .info-box.light { background: rgba(255, 255, 255, 0.92); border: 1px solid #D9B65A; box-shadow: 0 20px 50px rgba(251, 191, 36, 0.3); color: #24325F; }
+        .info-box.dark { background: rgba(15, 0, 0, 0.88); border: 1px solid #B23A48; box-shadow: 0 20px 50px rgba(178, 58, 72, 0.5); color: #EEF0F4; }
         .info-box p { line-height: 1.85; }
         .media-element {
             width: 100%; border-radius: 8px; margin-top: 1.5rem;
@@ -211,10 +176,10 @@
             object-fit: cover; max-height: 250px;
         }
         .light .media-element { border: 2px solid rgba(251, 191, 36, 0.5); }
-        .dark .media-element { border: 2px solid rgba(220, 38, 38, 0.5); }
+        .dark .media-element { border: 2px solid rgba(178, 58, 72, 0.5); }
         .whose { margin-top: 1rem; padding-top: .8rem; font-size: .85rem; line-height: 1.7; }
         .light .whose { border-top: 1px dashed #d4a017; color: #78350f; }
-        .dark .whose { border-top: 1px dashed #7f1d1d; color: #fca5a5; }
+        .dark .whose { border-top: 1px dashed #5E1E28; color: #E6A3AA; }
 
         #slider-wrapper {
             position: absolute; top: 0; bottom: 0; left: 50%;
@@ -232,15 +197,18 @@
             position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             width: 64px; height: 64px;
-            background: #0f172a; border: 4px solid #ffffff; border-radius: 50%;
+            background: #16224A; border: 4px solid #ffffff; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             color: white; box-shadow: 0 0 30px rgba(0,0,0,1);
             transition: transform 0.2s, background 0.2s;
         }
         #slider-wrapper:hover .slider-button, #slider-wrapper:active .slider-button, #slider-wrapper:focus-visible .slider-button {
             transform: translate(-50%, -50%) scale(1.1);
-            background: #3b82f6;
+            background: var(--brass);
+            color: var(--indigo-deep);
         }
+        #slider-wrapper:focus-visible { outline: none; }
+        #slider-wrapper:focus-visible .slider-button { box-shadow: 0 0 0 4px var(--brass), 0 0 30px rgba(0,0,0,1); }
         .slider-button.hint::after {
             content: ''; position: absolute; inset: -10px; border-radius: 50%;
             border: 3px solid rgba(255,255,255,.7);
@@ -251,55 +219,54 @@
         .center-card {
             position: absolute; left: 50%; bottom: 1.5rem; transform: translateX(-50%);
             width: min(92vw, 640px); z-index: 11; pointer-events: none;
-            background: rgba(2, 6, 23, 0.9); border: 1px solid rgba(255,255,255,.25);
-            border-radius: 14px; padding: 1.25rem 1.5rem;
+            background: rgba(10, 18, 48, 0.9); border: 1px solid rgba(255,255,255,.25);
+            border-radius: 6px; padding: 1.25rem 1.5rem;
             backdrop-filter: blur(10px);
         }
         .cc-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7rem 1.5rem; margin: .9rem 0; }
-        .cc-grid dt { font-size: .75rem; color: #94a3b8; }
+        .cc-grid dt { font-size: .75rem; color: #A7B0C8; }
         .cc-grid dd { margin: 0; font-weight: 700; font-size: .95rem; }
-        .cc-think { font-size: .9rem; line-height: 1.75; color: #e2e8f0; border-top: 1px solid rgba(255,255,255,.15); padding-top: .8rem; }
-        .cc-hint { font-size: .8rem; color: #94a3b8; margin-top: .6rem; }
+        .cc-think { font-size: .9rem; line-height: 1.75; color: #E3E7F0; border-top: 1px solid rgba(255,255,255,.15); padding-top: .8rem; }
+        .cc-hint { font-size: .8rem; color: #A7B0C8; margin-top: .6rem; }
 
         .detail-header {
             position: absolute; top: 0; left: 0; width: 100%;
             padding: 1.5rem 2rem; z-index: 20; pointer-events: none;
         }
         .detail-header button { pointer-events: auto; }
-        .jump-btn { padding: .45rem .9rem; border-radius: 999px; font-size: .85rem; font-weight: 700; background: rgba(15,23,42,.9); border: 1px solid #475569; color: #fff; }
-        .jump-btn:hover { background: #334155; }
+        .jump-btn { padding: .45rem .9rem; border-radius: 4px; font-size: .85rem; font-weight: 700; background: rgba(22, 34, 74,.9); border: 1px solid #4A5A8F; color: #fff; }
+        .jump-btn:hover { background: #34447A; }
 
         /* ---------- 지도 ---------- */
         .event-toast {
             position: absolute; top: 5.5rem; left: 50%;
             transform: translate(-50%, -12px); opacity: 0;
             width: min(90vw, 460px); z-index: 25; pointer-events: none;
-            background: rgba(15, 23, 42, 0.95); border: 1px solid #f87171; border-left: 6px solid #f87171;
-            border-radius: 12px; padding: 1rem 1.2rem;
+            background: rgba(22, 34, 74, 0.95); border: 1px solid #D7707B; border-left: 6px solid #D7707B;
+            border-radius: 6px; padding: 1rem 1.2rem;
             transition: opacity .35s, transform .35s;
         }
         .event-toast.show { opacity: 1; transform: translate(-50%, 0); }
-        .timeline { position: relative; height: 10px; background: #1e293b; border-radius: 999px; cursor: pointer; width: min(90vw, 720px); margin: 1.2rem auto 0; }
-        .timeline-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: linear-gradient(90deg, #64748b, #e2e8f0); border-radius: 999px; }
-        .tick { position: absolute; top: -5px; width: 3px; height: 20px; background: #f87171; transform: translateX(-1px); border-radius: 2px; }
-        .timeline-labels { display: flex; justify-content: space-between; width: min(90vw, 720px); margin: .35rem auto 0; font-size: .75rem; color: #94a3b8; }
+        .timeline { position: relative; height: 10px; background: #24325F; border-radius: 999px; cursor: pointer; width: min(90vw, 720px); margin: 1.2rem auto 0; }
+        .timeline-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: linear-gradient(90deg, #7380A8, #E3E7F0); border-radius: 999px; }
+        .tick { position: absolute; top: -5px; width: 3px; height: 20px; background: #D7707B; transform: translateX(-1px); border-radius: 2px; }
+        .timeline-labels { display: flex; justify-content: space-between; width: min(90vw, 720px); margin: .35rem auto 0; font-size: .75rem; color: #A7B0C8; }
 
         /* ---------- 읽기 화면 ---------- */
-        .reading { background: linear-gradient(180deg, #1f1210 0%, #120a0a 45%, #070505 100%); }
-        #quiz-screen.reading { background: linear-gradient(180deg, #0d1733 0%, #0a1024 50%, #050814 100%); }
+        .reading { background: var(--indigo); }
         .reading article { max-width: 46rem; margin: 0 auto; padding: 6rem 1.25rem 4rem; }
         .reading h2 { font-size: 1.6rem; font-weight: 900; margin: 3.5rem 0 1rem; color: #fff; }
-        .reading p { line-height: 1.95; color: #cbd5e1; margin-bottom: 1rem; }
+        .reading p { line-height: 1.95; color: #CDD3E2; margin-bottom: 1rem; }
         .stat-row { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1rem; margin: 1.5rem 0; }
-        .stat-row div { border-top: 3px solid #475569; padding-top: .6rem; }
+        .stat-row div { border-top: 3px solid #4A5A8F; padding-top: .6rem; }
         .stat-row strong { display: block; font-size: 1.6rem; font-weight: 900; color: #fff; }
-        .stat-row span { font-size: .85rem; color: #94a3b8; }
-        .stat-row .loss { border-color: #dc2626; }
-        .stat-row .loss strong { color: #f87171; }
-        .abolition { list-style: none; padding: 0; margin: 1rem 0; border-left: 2px solid #475569; }
-        .abolition li { position: relative; padding: 0 0 1.1rem 1.4rem; line-height: 1.7; color: #cbd5e1; }
-        .abolition li::before { content: ''; position: absolute; left: -7px; top: .45rem; width: 12px; height: 12px; border-radius: 50%; background: #0f172a; border: 2px solid #eab308; }
-        .abolition b { color: #facc15; margin-right: .5rem; }
+        .stat-row span { font-size: .85rem; color: #A7B0C8; }
+        .stat-row .loss { border-color: #B23A48; }
+        .stat-row .loss strong { color: #D7707B; }
+        .abolition { list-style: none; padding: 0; margin: 1rem 0; border-left: 2px solid #4A5A8F; }
+        .abolition li { position: relative; padding: 0 0 1.1rem 1.4rem; line-height: 1.7; color: #CDD3E2; }
+        .abolition li::before { content: ''; position: absolute; left: -7px; top: .45rem; width: 12px; height: 12px; border-radius: 50%; background: #16224A; border: 2px solid #C8A24A; }
+        .abolition b { color: #D9B65A; margin-right: .5rem; }
 
         /* ---------- 사료 읽기 카드 (옛 종이 느낌) ---------- */
         .src-slot:empty { display: none; }
@@ -318,145 +285,145 @@
         .src-card summary { cursor: pointer; font-weight: 700; color: #7c4a1e; }
         .reading .src-card .src-original { font-style: italic; line-height: 1.8; margin-top: .4rem; color: #5a4632; }
         .reading .src-card .src-explain { font-size: .95rem; line-height: 1.9; color: #3b2f24; margin-top: .9rem; }
-        .src-q { margin-top: 1.1rem; padding: .9rem 1.1rem; border-radius: 10px; background: rgba(139, 94, 52, .12); }
+        .src-q { margin-top: 1.1rem; padding: .9rem 1.1rem; border-radius: 5px; background: rgba(139, 94, 52, .12); }
         .src-q b { color: #7c4a1e; }
         .src-q ol { margin: .4rem 0 0 1.25rem; list-style: decimal; }
         .src-q li { line-height: 1.85; color: #2b2118; }
         /* 작성 모드에서만 보이는 빈 칸 */
-        .src-card.draft { background: repeating-linear-gradient(45deg, #172033 0 12px, #1b2540 12px 24px); color: #cbd5e1; border: 1px dashed #64748b; border-left: 6px dashed #fbbf24; box-shadow: none; }
-        .src-card.draft .src-tag { color: #fbbf24; }
+        .src-card.draft { background: repeating-linear-gradient(45deg, #172033 0 12px, #1b2540 12px 24px); color: #CDD3E2; border: 1px dashed #7380A8; border-left: 6px dashed #D9B65A; box-shadow: none; }
+        .src-card.draft .src-tag { color: #D9B65A; }
         .reading .src-card.draft .src-title { color: #fff; }
-        .src-card.draft code, .refs-draft code { background: rgba(250, 204, 21, .14); color: #fde68a; padding: .05rem .35rem; border-radius: 4px; font-size: .85em; }
-        .src-warn { margin-top: .8rem; padding: .55rem .8rem; border-radius: 8px; background: #7f1d1d; color: #fecaca; font-size: .85rem; font-weight: 700; }
-        .draft-badge { position: fixed; left: 1rem; bottom: 1rem; z-index: 60; padding: .6rem 1rem; border-radius: 12px; background: #a16207; color: #fff; font-size: .85rem; font-weight: 700;
+        .src-card.draft code, .refs-draft code { background: rgba(200, 162, 74, .14); color: #E8D49A; padding: .05rem .35rem; border-radius: 4px; font-size: .85em; }
+        .src-warn { margin-top: .8rem; padding: .55rem .8rem; border-radius: 8px; background: #5E1E28; color: #F0C9CD; font-size: .85rem; font-weight: 700; }
+        .draft-badge { position: fixed; left: 1rem; bottom: 1rem; z-index: 60; padding: .6rem 1rem; border-radius: 6px; background: #8C6E22; color: #fff; font-size: .85rem; font-weight: 700;
                        box-shadow: 0 8px 24px rgba(0, 0, 0, .5); max-width: calc(100vw - 2rem); }
-        .draft-badge a { color: #fde68a; text-decoration: underline; margin-left: .4rem; }
-        .refs-link { display: inline-block; margin-top: .5rem; background: none; border: 0; padding: 0; color: #fbbf24; font: inherit; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
-        .refs-link:hover { color: #fde68a; }
+        .draft-badge a { color: #E8D49A; text-decoration: underline; margin-left: .4rem; }
+        .refs-link { display: inline-block; margin-top: .5rem; background: none; border: 0; padding: 0; color: #D9B65A; font: inherit; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+        .refs-link:hover { color: #E8D49A; }
         /* 참고문헌 */
         .refs-list { list-style: none; padding: 0; margin: .4rem 0 0; display: flex; flex-direction: column; gap: .6rem; }
-        .refs-list li { padding: .85rem 1rem .85rem 2.6rem; text-indent: -1.6rem; border-radius: 10px; background: rgba(15, 23, 42, .7); border: 1px solid #1e293b; line-height: 1.75; color: #e2e8f0; word-break: break-word; }
-        .refs-list li small { display: block; text-indent: 0; margin-top: .25rem; color: #94a3b8; font-size: .82rem; }
-        .refs-list li.empty { border-style: dashed; color: #64748b; }
+        .refs-list li { padding: .85rem 1rem .85rem 2.6rem; text-indent: -1.6rem; border-radius: 5px; background: rgba(22, 34, 74, .7); border: 1px solid #24325F; line-height: 1.75; color: #E3E7F0; word-break: break-word; }
+        .refs-list li small { display: block; text-indent: 0; margin-top: .25rem; color: #A7B0C8; font-size: .82rem; }
+        .refs-list li.empty { border-style: dashed; color: #7380A8; }
         .refs-list li.warn { border-color: #b45309; }
-        .refs-list li.warn small { color: #fbbf24; }
-        .refs-draft { margin: .6rem 0 0; padding: .8rem 1rem; border-radius: 10px; border: 1px dashed #a16207; background: rgba(161, 98, 7, .12); font-size: .88rem; line-height: 1.8; color: #fde68a; }
+        .refs-list li.warn small { color: #D9B65A; }
+        .refs-draft { margin: .6rem 0 0; padding: .8rem 1rem; border-radius: 5px; border: 1px dashed #8C6E22; background: rgba(161, 98, 7, .12); font-size: .88rem; line-height: 1.8; color: #E8D49A; }
 
-        .quiz-opt { display: block; width: 100%; text-align: left; padding: .9rem 1.1rem; margin-bottom: .6rem; border-radius: 10px; border: 1px solid #475569; background: rgba(15,23,42,.8); color: #f1f5f9; font: inherit; transition: background .2s, border-color .2s; }
-        .quiz-opt:hover:not(:disabled) { background: #1e293b; border-color: #94a3b8; }
+        .quiz-opt { display: block; width: 100%; text-align: left; padding: .9rem 1.1rem; margin-bottom: .6rem; border-radius: 5px; border: 1px solid #4A5A8F; background: rgba(22, 34, 74,.8); color: #EEF0F4; font: inherit; transition: background .2s, border-color .2s; }
+        .quiz-opt:hover:not(:disabled) { background: #24325F; border-color: #A7B0C8; }
         .quiz-opt.correct { border-color: #22c55e; background: rgba(20,83,45,.6); }
-        .quiz-opt.wrong { border-color: #ef4444; background: rgba(127,29,29,.6); }
+        .quiz-opt.wrong { border-color: #C24A57; background: rgba(94, 30, 40,.6); }
 
         /* ---------- 교류 지도 (중학생용) ---------- */
         #exchange-screen { background: linear-gradient(rgba(148, 163, 184, .05) 1px, transparent 1px) center / 80px 80px,
                                        linear-gradient(90deg, rgba(148, 163, 184, .05) 1px, transparent 1px) center / 80px 80px,
-                                       radial-gradient(circle at 35% 45%, #12224a 0%, #071030 45%, #020617 85%); }
+                                       radial-gradient(circle at 35% 45%, #12224a 0%, #071030 45%, #0A1230 85%); }
         #ex-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
         #ex-svg text { font-family: inherit; }
         .ex-land { fill: #121a2b; stroke: #1f2b42; stroke-width: .6; }
         .ex-land.c-europe { fill: #24406e; }
         .ex-land.c-africa { fill: #57401f; }
         .ex-land.c-america { fill: #1f5047; }
-        .ex-land.c-europe, .ex-land.c-africa, .ex-land.c-america { cursor: pointer; stroke: #0b1222; }
+        .ex-land.c-europe, .ex-land.c-africa, .ex-land.c-america { cursor: pointer; stroke: #0D1735; }
         .ex-land.c-europe:hover, .ex-land.c-africa:hover, .ex-land.c-america:hover { filter: brightness(1.25); }
         .ex-land.sel { filter: brightness(1.7) !important; }
         .ex-arrow { fill: none; stroke-linecap: round; transition: opacity .35s; }
         .ex-arrow-g { transition: opacity .35s; }
         .ex-arrow-g.dim { opacity: .15; }
-        .ex-alabel rect { fill: #0b1222; stroke-width: 2; }
+        .ex-alabel rect { fill: #0D1735; stroke-width: 2; }
         .ex-alabel text { fill: #fff; font-weight: 700; font-size: 13px; }
         .ex-pill { cursor: pointer; outline: none; }
-        .ex-pill rect { fill: rgba(2, 6, 23, .82); stroke-width: 2; transition: stroke .2s; }
+        .ex-pill rect { fill: rgba(10, 18, 48, .82); stroke-width: 2; transition: stroke .2s; }
         .ex-pill text { fill: #fff; font-size: 19px; font-weight: 900; }
-        .ex-pill:hover rect, .ex-pill:focus-visible rect { stroke: #facc15 !important; }
-        .ex-pill.sel rect { stroke: #facc15 !important; stroke-width: 3.5; fill: rgba(66, 52, 10, .9); }
+        .ex-pill:hover rect, .ex-pill:focus-visible rect { stroke: #D9B65A !important; }
+        .ex-pill.sel rect { stroke: #D9B65A !important; stroke-width: 3.5; fill: rgba(66, 52, 10, .9); }
         .ex-country { cursor: pointer; outline: none; }
         .ex-country .hit { fill: transparent; stroke: none; }
-        .ex-country .dot { fill: #0f172a; stroke: #e2e8f0; stroke-width: 2; }
-        .ex-country text { fill: #e2e8f0; font-size: 13px; font-weight: 700; paint-order: stroke; stroke: #020617; stroke-width: 3.5px; stroke-linejoin: round; }
-        .ex-country:hover .dot, .ex-country:focus-visible .dot { stroke: #facc15; }
-        .ex-country.sel .dot { fill: #facc15; stroke: #facc15; }
-        .ex-country.sel text { fill: #fde68a; }
-        #ex-cargo rect { fill: #f8fafc; }
-        #ex-cargo text { fill: #0f172a; font-size: 13px; font-weight: 700; }
+        .ex-country .dot { fill: #16224A; stroke: #E3E7F0; stroke-width: 2; }
+        .ex-country text { fill: #E3E7F0; font-size: 13px; font-weight: 700; paint-order: stroke; stroke: #0A1230; stroke-width: 3.5px; stroke-linejoin: round; }
+        .ex-country:hover .dot, .ex-country:focus-visible .dot { stroke: #D9B65A; }
+        .ex-country.sel .dot { fill: #D9B65A; stroke: #D9B65A; }
+        .ex-country.sel text { fill: #E8D49A; }
+        #ex-cargo rect { fill: #EEF0F4; }
+        #ex-cargo text { fill: #16224A; font-size: 13px; font-weight: 700; }
 
         .ex-panel {
             position: absolute; top: 0; right: 0; bottom: 0; width: min(440px, 40vw); z-index: 15;
-            background: rgba(2, 6, 23, .95); border-left: 1px solid #1e293b;
+            background: rgba(10, 18, 48, .95); border-left: 1px solid #24325F;
             overflow-y: auto; padding: 5.5rem 1.7rem 2.5rem; user-select: text; -webkit-user-select: text;
             font-size: 1.02rem;
         }
         .ex-title { font-size: 1.9rem; font-weight: 900; color: #fff; line-height: 1.3; }
-        .ex-tag { font-size: .85rem; color: #94a3b8; margin-bottom: .15rem; }
-        .ex-lead { line-height: 1.9; color: #e2e8f0; margin: .9rem 0 1.2rem; }
-        .ex-lead b, .ex-text b { color: #fde68a; }
-        .ex-summary { display: inline-block; margin: .6rem 0 1rem; padding: .35rem .8rem; border-radius: 8px; background: rgba(250, 204, 21, .12); color: #fde68a; font-weight: 700; line-height: 1.6; }
-        .ex-text { line-height: 1.95; color: #e2e8f0; margin: .8rem 0; }
-        .ex-hint { font-size: .9rem; color: #94a3b8; margin-top: .7rem; }
+        .ex-tag { font-size: .85rem; color: #A7B0C8; margin-bottom: .15rem; }
+        .ex-lead { line-height: 1.9; color: #E3E7F0; margin: .9rem 0 1.2rem; }
+        .ex-lead b, .ex-text b { color: #E8D49A; }
+        .ex-summary { display: inline-block; margin: .6rem 0 1rem; padding: .35rem .8rem; border-radius: 8px; background: rgba(200, 162, 74, .12); color: #E8D49A; font-weight: 700; line-height: 1.6; }
+        .ex-text { line-height: 1.95; color: #E3E7F0; margin: .8rem 0; }
+        .ex-hint { font-size: .9rem; color: #A7B0C8; margin-top: .7rem; }
         .ex-h3 { font-size: 1.05rem; font-weight: 900; color: #fff; margin: 1.5rem 0 .6rem; }
-        .ex-big-btn { width: 100%; padding: 1rem; border-radius: 12px; font-size: 1.1rem; font-weight: 900; color: #fff; background: #b91c1c; border: 0; box-shadow: 0 6px 20px rgba(185, 28, 28, .35); }
-        .ex-big-btn:hover { background: #dc2626; }
-        .ex-btn { padding: .65rem 1.2rem; border-radius: 999px; font-weight: 700; color: #fff; background: #1e293b; border: 1px solid #475569; }
-        .ex-btn:hover { background: #334155; }
-        .ex-btn.primary { background: #b91c1c; border-color: #ef4444; }
-        .ex-btn.primary:hover { background: #dc2626; }
+        .ex-big-btn { width: 100%; padding: 1rem; border-radius: 4px; font-size: 1.1rem; font-weight: 700; color: var(--indigo-deep); background: var(--brass); border: 0; }
+        .ex-big-btn:hover { background: #D9B65A; }
+        .ex-btn { padding: .65rem 1.2rem; border-radius: 4px; font-weight: 700; color: #fff; background: #24325F; border: 1px solid #4A5A8F; }
+        .ex-btn:hover { background: #34447A; }
+        .ex-btn.primary { background: var(--brass); border-color: var(--brass); color: var(--indigo-deep); }
+        .ex-btn.primary:hover { background: #D9B65A; }
         .ex-btn:disabled { opacity: .35; }
-        .ex-link { display: block; font-size: .9rem; color: #94a3b8; text-decoration: underline; text-underline-offset: 3px; margin-top: 1rem; }
+        .ex-link { display: block; font-size: .9rem; color: #A7B0C8; text-decoration: underline; text-underline-offset: 3px; margin-top: 1rem; }
 
         .ex-fig { margin: 0 0 .5rem; }
-        .ex-fig img { width: 100%; max-height: 220px; object-fit: cover; border-radius: 10px; border: 1px solid #334155; background: #0f172a; }
-        .ex-fig figcaption { font-size: .8rem; color: #94a3b8; line-height: 1.6; margin-top: .4rem; }
-        .ex-ph { height: 140px; border: 1px dashed #475569; border-radius: 10px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 1rem; font-size: .8rem; line-height: 1.7; color: #94a3b8; margin-bottom: .5rem;
+        .ex-fig img { width: 100%; max-height: 220px; object-fit: cover; border-radius: 5px; border: 1px solid #34447A; background: #16224A; }
+        .ex-fig figcaption { font-size: .8rem; color: #A7B0C8; line-height: 1.6; margin-top: .4rem; }
+        .ex-ph { height: 140px; border: 1px dashed #4A5A8F; border-radius: 5px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 1rem; font-size: .8rem; line-height: 1.7; color: #A7B0C8; margin-bottom: .5rem;
                  background: repeating-linear-gradient(45deg, #0b1324 0 10px, #0f192e 10px 20px); }
-        .ex-ph b { color: #e2e8f0; }
+        .ex-ph b { color: #E3E7F0; }
 
         .ex-trade { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin: 1.1rem 0 .4rem; }
-        .ex-trade > div { border-radius: 10px; padding: .75rem .85rem; background: #0f172a; border: 1px solid #1e293b; }
-        .ex-trade span { display: block; font-size: .8rem; color: #94a3b8; margin-bottom: .2rem; }
+        .ex-trade > div { border-radius: 5px; padding: .75rem .85rem; background: #16224A; border: 1px solid #24325F; }
+        .ex-trade span { display: block; font-size: .8rem; color: #A7B0C8; margin-bottom: .2rem; }
         .ex-trade b { font-size: 1rem; line-height: 1.6; color: #fff; }
         .ex-send { border-top: 4px solid #60a5fa !important; }
         .ex-recv { border-top: 4px solid #34d399 !important; }
 
         .ex-story { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .55rem; }
-        .ex-story li { position: relative; padding-left: 1.1rem; line-height: 1.85; color: #e2e8f0; }
-        .ex-story li::before { content: ''; position: absolute; left: 0; top: .72rem; width: 6px; height: 6px; border-radius: 50%; background: #94a3b8; }
+        .ex-story li { position: relative; padding-left: 1.1rem; line-height: 1.85; color: #E3E7F0; }
+        .ex-story li::before { content: ''; position: absolute; left: 0; top: .72rem; width: 6px; height: 6px; border-radius: 50%; background: #A7B0C8; }
 
         .ex-feel { display: flex; flex-direction: column; gap: .5rem; margin-top: 1.3rem; }
-        .ex-feel > div { display: flex; gap: .7rem; align-items: flex-start; padding: .75rem .9rem; border-radius: 10px; background: #0f172a; line-height: 1.65; }
+        .ex-feel > div { display: flex; gap: .7rem; align-items: flex-start; padding: .75rem .9rem; border-radius: 5px; background: #16224A; line-height: 1.65; }
         .ex-feel .emo { font-size: 1.5rem; line-height: 1; }
         .ex-feel b { display: block; font-size: .85rem; }
-        .ex-feel .good { border-left: 4px solid #eab308; } .ex-feel .good b { color: #facc15; }
-        .ex-feel .bad { border-left: 4px solid #dc2626; } .ex-feel .bad b { color: #f87171; }
+        .ex-feel .good { border-left: 4px solid #C8A24A; } .ex-feel .good b { color: #D9B65A; }
+        .ex-feel .bad { border-left: 4px solid #B23A48; } .ex-feel .bad b { color: #D7707B; }
 
         .ex-arrow-list { list-style: none; padding: 0; margin: 1.3rem 0 0; display: flex; flex-direction: column; gap: .55rem; }
         .ex-arrow-list li { display: flex; gap: .7rem; align-items: center; line-height: 1.6; }
-        .ex-num { flex: none; width: 1.7rem; height: 1.7rem; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 900; font-size: .9rem; color: #0b1222; }
+        .ex-num { flex: none; width: 1.7rem; height: 1.7rem; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 900; font-size: .9rem; color: #0D1735; }
         .ex-quick { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; margin-top: 1rem; }
-        .ex-quick button { padding: .8rem .4rem; border-radius: 10px; font-weight: 900; color: #fff; border: 2px solid transparent; }
-        .ex-quick button:hover { border-color: #facc15; }
+        .ex-quick button { padding: .8rem .4rem; border-radius: 5px; font-weight: 900; color: #fff; border: 2px solid transparent; }
+        .ex-quick button:hover { border-color: #D9B65A; }
         .ex-flags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .4rem; }
-        .ex-flags button { display: inline-flex; align-items: center; gap: .4rem; padding: .35rem .75rem .35rem .4rem; border-radius: 999px; border: 1px solid #334155; background: #0f172a; color: #e2e8f0; font-size: .9rem; }
-        .ex-flags button.on { border-color: #facc15; color: #fde68a; }
+        .ex-flags button { display: inline-flex; align-items: center; gap: .4rem; padding: .35rem .75rem .35rem .4rem; border-radius: 999px; border: 1px solid #34447A; background: #16224A; color: #E3E7F0; font-size: .9rem; }
+        .ex-flags button.on { border-color: #D9B65A; color: #E8D49A; }
         .ex-flags img { width: 22px; height: 15px; object-fit: cover; border-radius: 2px; }
-        .ex-words { margin-top: 1.4rem; border: 1px solid #1e293b; border-radius: 10px; padding: .8rem 1rem; background: #0b1222; }
-        .ex-words summary { cursor: pointer; font-weight: 700; color: #e2e8f0; }
+        .ex-words { margin-top: 1.4rem; border: 1px solid #24325F; border-radius: 5px; padding: .8rem 1rem; background: #0D1735; }
+        .ex-words summary { cursor: pointer; font-weight: 700; color: #E3E7F0; }
         .ex-words dl { margin: .7rem 0 0; font-size: .92rem; line-height: 1.7; }
-        .ex-words dt { color: #fde68a; font-weight: 700; margin-top: .5rem; }
-        .ex-words dd { margin: 0; color: #cbd5e1; }
+        .ex-words dt { color: #E8D49A; font-weight: 700; margin-top: .5rem; }
+        .ex-words dd { margin: 0; color: #CDD3E2; }
 
         .ex-steps { display: flex; gap: .35rem; margin-bottom: 1rem; }
-        .ex-steps button { flex: 1; height: 2rem; border-radius: 8px; font-weight: 900; font-size: .85rem; color: #94a3b8; background: #0f172a; border: 1px solid #1e293b; }
-        .ex-steps button.done { background: #3f1d1d; color: #fecaca; border-color: #7f1d1d; }
-        .ex-steps button.now { background: #b91c1c; color: #fff; border-color: #ef4444; }
-        .ex-cargo-line { display: flex; gap: .5rem; align-items: center; margin-top: .8rem; padding: .6rem .8rem; border-radius: 10px; background: #0f172a; border: 1px dashed #475569; font-size: .92rem; color: #cbd5e1; }
+        .ex-steps button { flex: 1; height: 2rem; border-radius: 8px; font-weight: 900; font-size: .85rem; color: #A7B0C8; background: #16224A; border: 1px solid #24325F; }
+        .ex-steps button.done { background: #3A1A26; color: #F0C9CD; border-color: #5E1E28; }
+        .ex-steps button.now { background: #9A2E3B; color: #fff; border-color: #C24A57; }
+        .ex-cargo-line { display: flex; gap: .5rem; align-items: center; margin-top: .8rem; padding: .6rem .8rem; border-radius: 5px; background: #16224A; border: 1px dashed #4A5A8F; font-size: .92rem; color: #CDD3E2; }
         .ex-cargo-line b { color: #fff; }
-        .ex-sum-row { display: flex; gap: .7rem; padding: .75rem .9rem; border-radius: 10px; background: #0f172a; margin-top: .5rem; line-height: 1.65; }
+        .ex-sum-row { display: flex; gap: .7rem; padding: .75rem .9rem; border-radius: 5px; background: #16224A; margin-top: .5rem; line-height: 1.65; }
         .ex-sum-row .emo { font-size: 1.5rem; line-height: 1; }
         .ex-sum-row b { display: block; color: #fff; }
-        .ex-think { margin-top: 1.2rem; padding: .9rem 1rem; border-radius: 10px; background: rgba(250, 204, 21, .1); border: 1px solid rgba(250, 204, 21, .35); line-height: 1.8; color: #fef3c7; }
+        .ex-think { margin-top: 1.2rem; padding: .9rem 1rem; border-radius: 5px; background: rgba(200, 162, 74, .1); border: 1px solid rgba(200, 162, 74, .35); line-height: 1.8; color: #F1E7C6; }
 
         @media (max-width: 768px) {
-            .ex-panel { top: auto; left: 0; width: 100%; height: 50%; border-left: 0; border-top: 1px solid #334155; border-radius: 18px 18px 0 0; padding: 1.2rem 1.1rem 2rem; font-size: 1rem; }
+            .ex-panel { top: auto; left: 0; width: 100%; height: 50%; border-left: 0; border-top: 1px solid #34447A; border-radius: 6px 18px 0 0; padding: 1.2rem 1.1rem 2rem; font-size: 1rem; }
             .ex-title { font-size: 1.5rem; }
             .ex-fig img { max-height: 150px; }
             .ex-pill text { font-size: 15px; }
@@ -465,149 +432,150 @@
         }
 
         /* ---------- 교류 체험실 ---------- */
-        #experience-screen { background: linear-gradient(180deg, #0a2230 0%, #081620 50%, #040a10 100%); }
-        .home-btn.feature { background: linear-gradient(135deg, #a16207, #ca8a04); border-color: #facc15; box-shadow: 0 0 22px rgba(250, 204, 21, .35); }
-        .home-btn.feature:hover { background: #ca8a04; }
+        #experience-screen { background: var(--indigo); }
+        .home-btn.feature { background: linear-gradient(135deg, #8C6E22, #A8862F); border-color: #D9B65A; box-shadow: 0 0 22px rgba(200, 162, 74, .35); }
+        .home-btn.feature:hover { background: #A8862F; }
         .xp-wrap { max-width: 60rem; margin: 0 auto; padding: 6rem 1.25rem 5rem; }
-        .xp-kicker { font-size: .85rem; color: #fbbf24; font-weight: 700; letter-spacing: .04em; }
+        .xp-kicker { font-size: .85rem; color: #D9B65A; font-weight: 700; letter-spacing: .04em; }
         .xp-h1 { font-size: clamp(1.8rem, 4.5vw, 2.7rem); font-weight: 900; color: #fff; line-height: 1.3; margin: .3rem 0 1rem; }
         .xp-h2 { font-size: 1.35rem; font-weight: 900; color: #fff; margin: 2.6rem 0 .9rem; }
-        .xp-lead { line-height: 1.9; color: #cbd5e1; max-width: 46rem; }
-        .xp-lead b, .xp-text b, .xp-result b, .xp-box b { color: #fde68a; }
+        .xp-lead { line-height: 1.9; color: #CDD3E2; max-width: 46rem; }
+        .xp-lead b, .xp-text b, .xp-result b, .xp-box b { color: #E8D49A; }
         .xp-top { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.6rem; }
 
         .xp-acts { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 2rem; }
-        .xp-act { position: relative; text-align: left; padding: 1.4rem; border-radius: 16px; background: rgba(15, 23, 42, .88); border: 1px solid #334155; color: inherit; font: inherit;
+        .xp-act { position: relative; text-align: left; padding: 1.4rem; border-radius: 6px; background: rgba(22, 34, 74, .88); border: 1px solid #34447A; color: inherit; font: inherit;
                   display: flex; flex-direction: column; gap: .55rem; transition: transform .2s, border-color .2s; }
-        .xp-act:hover, .xp-act:focus-visible { transform: translateY(-4px); border-color: #facc15; }
+        .xp-act:hover, .xp-act:focus-visible { transform: translateY(-4px); border-color: #D9B65A; }
         .xp-act .emo { font-size: 2.3rem; line-height: 1; }
         .xp-act h2 { font-size: 1.25rem; font-weight: 900; color: #fff; }
-        .xp-act p { font-size: .95rem; line-height: 1.75; color: #cbd5e1; }
-        .xp-act .meta { font-size: .8rem; color: #94a3b8; margin-top: auto; padding-top: .4rem; }
+        .xp-act p { font-size: .95rem; line-height: 1.75; color: #CDD3E2; }
+        .xp-act .meta { font-size: .8rem; color: #A7B0C8; margin-top: auto; padding-top: .4rem; }
         .xp-badge { position: absolute; top: .9rem; right: .9rem; font-size: .75rem; font-weight: 700; padding: .2rem .6rem; border-radius: 999px; background: rgba(34, 197, 94, .18); color: #86efac; border: 1px solid rgba(34, 197, 94, .5); }
 
         /* 화물 분류 */
         .xp-mini { width: 100%; max-width: 420px; height: auto; display: block; margin: 1rem 0 .5rem; }
-        .xp-stat { display: flex; align-items: center; gap: 1rem; margin: 1.2rem 0 .8rem; font-size: .9rem; color: #94a3b8; }
-        .xp-progress { flex: 1; height: 8px; background: #1e293b; border-radius: 999px; overflow: hidden; }
-        .xp-progress div { height: 100%; background: linear-gradient(90deg, #eab308, #f59e0b); transition: width .4s; }
-        .xp-pool { display: flex; flex-wrap: wrap; gap: .55rem; padding: 1rem; border-radius: 14px; background: #0b1222; border: 1px dashed #475569; min-height: 4.5rem; align-items: center; }
-        .xp-card { display: inline-flex; align-items: center; gap: .4rem; padding: .6rem 1rem; border-radius: 999px; background: #f8fafc; color: #0f172a; font: inherit; font-weight: 700;
+        .xp-stat { display: flex; align-items: center; gap: 1rem; margin: 1.2rem 0 .8rem; font-size: .9rem; color: #A7B0C8; }
+        .xp-progress { flex: 1; height: 8px; background: #24325F; border-radius: 999px; overflow: hidden; }
+        .xp-progress div { height: 100%; background: linear-gradient(90deg, #C8A24A, #f59e0b); transition: width .4s; }
+        .xp-pool { display: flex; flex-wrap: wrap; gap: .55rem; padding: 1rem; border-radius: 6px; background: #0D1735; border: 1px dashed #4A5A8F; min-height: 4.5rem; align-items: center; }
+        .xp-card { display: inline-flex; align-items: center; gap: .4rem; padding: .6rem 1rem; border-radius: 999px; background: #EEF0F4; color: #16224A; font: inherit; font-weight: 700;
                    border: 3px solid transparent; cursor: grab; transition: transform .15s, box-shadow .15s; }
         .xp-card:hover { transform: translateY(-2px); }
-        .xp-card.sel { border-color: #facc15; box-shadow: 0 0 0 4px rgba(250, 204, 21, .35); transform: translateY(-3px) scale(1.05); }
-        .xp-card.person { background: #450a0a; color: #fecaca; border-color: #b91c1c; }
-        .xp-card.person.sel { border-color: #facc15; }
+        .xp-card.sel { border-color: #D9B65A; box-shadow: 0 0 0 4px rgba(200, 162, 74, .35); transform: translateY(-3px) scale(1.05); }
+        .xp-card.person { background: #450a0a; color: #F0C9CD; border-color: #9A2E3B; }
+        .xp-card.person.sel { border-color: #D9B65A; }
         .xp-card.shake { animation: xpShake .45s; }
         @keyframes xpShake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-7px); } 40%, 80% { transform: translateX(7px); } }
         .xp-lanes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; margin-top: 1rem; }
-        .xp-lane { text-align: left; border-radius: 14px; background: #0f172a; border: 2px solid #1e293b; border-top: 6px solid var(--c); padding: .9rem 1rem; min-height: 8.5rem;
+        .xp-lane { text-align: left; border-radius: 6px; background: #16224A; border: 2px solid #24325F; border-top: 6px solid var(--c); padding: .9rem 1rem; min-height: 8.5rem;
                    color: inherit; font: inherit; display: flex; flex-direction: column; gap: .6rem; transition: border-color .2s, background .2s; cursor: default; }
-        .xp-lane.ready { border-style: dashed; border-color: #facc15; border-top: 6px solid var(--c); cursor: pointer; }
-        .xp-lane.ready:hover, .xp-lane.over { background: #1e293b; }
+        .xp-lane.ready { border-style: dashed; border-color: #D9B65A; border-top: 6px solid var(--c); cursor: pointer; }
+        .xp-lane.ready:hover, .xp-lane.over { background: #24325F; }
         .xp-lane-h { display: flex; align-items: center; gap: .55rem; font-weight: 900; color: #fff; font-size: 1.05rem; }
-        .xp-lane-h small { font-weight: 400; color: #94a3b8; font-size: .8rem; }
+        .xp-lane-h small { font-weight: 400; color: #A7B0C8; font-size: .8rem; }
         .xp-lane-items { display: flex; flex-wrap: wrap; gap: .35rem; }
-        .xp-placed { font: inherit; font-size: .85rem; padding: .3rem .7rem; border-radius: 999px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; cursor: pointer; }
-        .xp-placed:hover { border-color: #94a3b8; }
-        .xp-placed.person { background: #450a0a; border-color: #ef4444; color: #fecaca; }
-        .xp-empty { font-size: .85rem; color: #64748b; }
+        .xp-placed { font: inherit; font-size: .85rem; padding: .3rem .7rem; border-radius: 999px; background: #24325F; color: #E3E7F0; border: 1px solid #34447A; cursor: pointer; }
+        .xp-placed:hover { border-color: #A7B0C8; }
+        .xp-placed.person { background: #450a0a; border-color: #C24A57; color: #F0C9CD; }
+        .xp-empty { font-size: .85rem; color: #7380A8; }
         .xp-toast { position: fixed; left: 50%; bottom: 1rem; transform: translateX(-50%); width: min(94vw, 40rem); z-index: 40;
-                    background: rgba(2, 6, 23, .97); border: 1px solid #334155; border-left: 6px solid #64748b; border-radius: 14px; padding: 1rem 2.8rem 1rem 1.2rem;
-                    line-height: 1.8; color: #e2e8f0; box-shadow: 0 12px 40px rgba(0, 0, 0, .6); }
+                    background: rgba(10, 18, 48, .97); border: 1px solid #34447A; border-left: 6px solid #7380A8; border-radius: 6px; padding: 1rem 2.8rem 1rem 1.2rem;
+                    line-height: 1.8; color: #E3E7F0; box-shadow: 0 12px 40px rgba(0, 0, 0, .6); }
         .xp-toast[hidden] { display: none; }
         .xp-toast.ok { border-left-color: #22c55e; }
-        .xp-toast.no { border-left-color: #ef4444; }
-        .xp-toast b { color: #fde68a; }
-        .xp-toast-x { position: absolute; top: .5rem; right: .6rem; width: 2rem; height: 2rem; border-radius: 50%; color: #94a3b8; background: transparent; border: 0; font-size: 1.1rem; }
-        .xp-toast-x:hover { color: #fff; background: #1e293b; }
-        .xp-done-box { width: 100%; text-align: center; padding: .4rem; color: #fde68a; font-weight: 700; }
+        .xp-toast.no { border-left-color: #C24A57; }
+        .xp-toast b { color: #E8D49A; }
+        .xp-toast-x { position: absolute; top: .5rem; right: .6rem; width: 2rem; height: 2rem; border-radius: 50%; color: #A7B0C8; background: transparent; border: 0; font-size: 1.1rem; }
+        .xp-toast-x:hover { color: #fff; background: #24325F; }
+        .xp-done-box { width: 100%; text-align: center; padding: .4rem; color: #E8D49A; font-weight: 700; }
 
         .xp-modal { position: fixed; inset: 0; z-index: 50; background: rgba(0, 0, 0, .85); display: flex; align-items: center; justify-content: center; padding: 1rem; }
         .xp-modal[hidden] { display: none; }
-        .xp-modal-box { width: 100%; max-width: 42rem; max-height: 92vh; overflow-y: auto; background: #0c0a09; border: 1px solid #7f1d1d; border-radius: 18px; padding: 1.7rem;
-                        box-shadow: 0 20px 60px rgba(127, 29, 29, .4); user-select: text; -webkit-user-select: text; }
+        .xp-modal-box { width: 100%; max-width: 42rem; max-height: 92vh; overflow-y: auto; background: #0c0a09; border: 1px solid #5E1E28; border-radius: 6px; padding: 1.7rem;
+                        box-shadow: 0 20px 60px rgba(94, 30, 40, .4); user-select: text; -webkit-user-select: text; }
         .xp-people { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; margin: 1.2rem 0; }
-        .xp-who { padding: .9rem .6rem; border-radius: 12px; background: #1c1917; border: 1px solid #44403c; color: #a8a29e; font: inherit; text-align: center; min-height: 8.5rem;
+        .xp-who { padding: .9rem .6rem; border-radius: 6px; background: #1c1917; border: 1px solid #44403c; color: #a8a29e; font: inherit; text-align: center; min-height: 8.5rem;
                   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .45rem; transition: background .2s, border-color .2s; }
         .xp-who svg { width: 38px; height: 38px; }
         .xp-who .q { font-size: .85rem; line-height: 1.6; }
         .xp-who:hover { border-color: #78716c; }
-        .xp-who.on { background: #292524; border-color: #facc15; color: #fde68a; }
+        .xp-who.on { background: #292524; border-color: #D9B65A; color: #E8D49A; }
 
         .xp-summary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; }
-        .xp-box { border-radius: 14px; background: #0f172a; border: 1px solid #1e293b; padding: 1rem 1.1rem; line-height: 1.85; color: #e2e8f0; }
+        .xp-box { border-radius: 6px; background: #16224A; border: 1px solid #24325F; padding: 1rem 1.1rem; line-height: 1.85; color: #E3E7F0; }
         .xp-box h3 { font-weight: 900; color: #fff; margin-bottom: .3rem; }
         .xp-insight { display: flex; gap: .9rem; align-items: flex-start; }
-        .xp-insight .n { flex: none; width: 2rem; height: 2rem; border-radius: 50%; background: #facc15; color: #0b1222; font-weight: 900; display: flex; align-items: center; justify-content: center; }
+        .xp-insight .n { flex: none; width: 2rem; height: 2rem; border-radius: 50%; background: #D9B65A; color: #0D1735; font-weight: 900; display: flex; align-items: center; justify-content: center; }
         .xp-today { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .6rem; align-items: start; }
-        .xp-today button { text-align: left; padding: 1rem; border-radius: 14px; background: #0f172a; border: 1px solid #334155; color: #e2e8f0; font: inherit; line-height: 1.7; }
-        .xp-today button:hover { border-color: #facc15; }
+        .xp-today button { text-align: left; padding: 1rem; border-radius: 6px; background: #16224A; border: 1px solid #34447A; color: #E3E7F0; font: inherit; line-height: 1.7; }
+        .xp-today button:hover { border-color: #D9B65A; }
         .xp-today .emo { font-size: 1.8rem; display: block; }
         .xp-today b { display: block; color: #fff; }
-        .xp-today .more { display: none; font-size: .88rem; color: #cbd5e1; margin-top: .4rem; }
+        .xp-today .more { display: none; font-size: .88rem; color: #CDD3E2; margin-top: .4rem; }
         .xp-today button.on .more { display: block; }
-        .xp-today button.on { border-color: #facc15; }
+        .xp-today button.on { border-color: #D9B65A; }
 
         /* 네 사람 */
         .xp-pick { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; margin-top: 1.8rem; }
-        .xp-person { position: relative; text-align: left; padding: 1.3rem; border-radius: 16px; background: #0f172a; border: 1px solid #334155; border-top: 5px solid var(--c);
+        .xp-person { position: relative; text-align: left; padding: 1.3rem; border-radius: 6px; background: #16224A; border: 1px solid #34447A; border-top: 5px solid var(--c);
                      color: inherit; font: inherit; display: flex; flex-direction: column; gap: .5rem; transition: transform .2s, border-color .2s; }
         .xp-person:hover, .xp-person:focus-visible { transform: translateY(-4px); border-color: var(--c); }
         .xp-person b { font-size: 1.25rem; color: #fff; }
-        .xp-person span { font-size: .9rem; color: #cbd5e1; line-height: 1.6; }
-        .xp-person small { font-size: .8rem; color: #94a3b8; }
+        .xp-person span { font-size: .9rem; color: #CDD3E2; line-height: 1.6; }
+        .xp-person small { font-size: .8rem; color: #A7B0C8; }
         .xp-avatar { width: 3.2rem; height: 3.2rem; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.25rem;
-                     color: #0b1222; background: var(--c); flex: none; }
+                     color: #0D1735; background: var(--c); flex: none; }
         .xp-scene { max-width: 46rem; margin: 0 auto; }
         .xp-who-bar { display: flex; align-items: center; gap: .8rem; }
         .xp-who-bar b { color: #fff; font-size: 1.1rem; display: block; }
-        .xp-who-bar small { color: #94a3b8; font-size: .85rem; }
+        .xp-who-bar small { color: #A7B0C8; font-size: .85rem; }
         .xp-dots { display: flex; gap: .35rem; margin-left: auto; }
-        .xp-dots span { width: .65rem; height: .65rem; border-radius: 50%; background: #334155; }
+        .xp-dots span { width: .65rem; height: .65rem; border-radius: 50%; background: #34447A; }
         .xp-dots span.on { background: var(--c); }
         .xp-place { margin-top: 2rem; font-size: .9rem; color: var(--c); font-weight: 700; }
         .xp-scene-title { font-size: clamp(1.5rem, 3.6vw, 2rem); font-weight: 900; color: #fff; margin: .4rem 0 1rem; line-height: 1.35; }
-        .xp-text { line-height: 2; color: #e2e8f0; font-size: 1.05rem; }
-        .xp-scene img { width: 100%; max-height: 260px; object-fit: cover; border-radius: 12px; border: 1px solid #334155; margin-bottom: 1.2rem; }
+        .xp-text { line-height: 2; color: #E3E7F0; font-size: 1.05rem; }
+        .xp-scene img { width: 100%; max-height: 260px; object-fit: cover; border-radius: 6px; border: 1px solid #34447A; margin-bottom: 1.2rem; }
         .xp-q { margin-top: 1.6rem; font-weight: 700; color: #fff; }
         .xp-choices { display: flex; flex-direction: column; gap: .6rem; margin-top: .7rem; }
-        .xp-choice { text-align: left; padding: 1rem 1.15rem; border-radius: 12px; border: 1px solid #475569; background: rgba(15, 23, 42, .88); color: #f1f5f9; font: inherit; font-size: 1rem;
+        .xp-choice { text-align: left; padding: 1rem 1.15rem; border-radius: 6px; border: 1px solid #4A5A8F; background: rgba(22, 34, 74, .88); color: #EEF0F4; font: inherit; font-size: 1rem;
                      transition: background .2s, border-color .2s; }
-        .xp-choice:hover:not(:disabled) { border-color: var(--c); background: #1e293b; }
-        .xp-choice.picked { border: 2px solid var(--c); background: #1e293b; opacity: 1 !important; }
-        .xp-choice:disabled:not(.picked) { color: #64748b; border-color: #293548; cursor: not-allowed; }
-        .xp-choice .lock { display: block; font-size: .85rem; color: #f87171; margin-top: .25rem; }
-        .xp-result { margin-top: 1.1rem; padding: 1.1rem 1.2rem; border-radius: 12px; background: #0b1222; border-left: 5px solid var(--c); line-height: 1.95; color: #e2e8f0; }
-        .xp-after { margin-top: .8rem; padding-top: .8rem; border-top: 1px dashed #334155; color: #fca5a5; font-weight: 700; }
-        .xp-note { margin-top: .8rem; font-size: .88rem; color: #94a3b8; }
-        .xp-memo::before { content: '역사 메모 · '; color: #fbbf24; font-weight: 700; }
+        .xp-choice:hover:not(:disabled) { border-color: var(--c); background: #24325F; }
+        .xp-choice.picked { border: 2px solid var(--c); background: #24325F; opacity: 1 !important; }
+        .xp-choice:disabled:not(.picked) { color: #7380A8; border-color: #293548; cursor: not-allowed; }
+        .xp-choice .lock { display: block; font-size: .85rem; color: #D7707B; margin-top: .25rem; }
+        #xp-result:focus { outline: none; }
+        .xp-result { margin-top: 1.1rem; padding: 1.1rem 1.2rem; border-radius: 6px; background: #0D1735; border-left: 5px solid var(--c); line-height: 1.95; color: #E3E7F0; }
+        .xp-after { margin-top: .8rem; padding-top: .8rem; border-top: 1px dashed #34447A; color: #E6A3AA; font-weight: 700; }
+        .xp-note { margin-top: .8rem; font-size: .88rem; color: #A7B0C8; }
+        .xp-memo::before { content: '역사 메모 · '; color: #D9B65A; font-weight: 700; }
         .xp-link { margin-top: .6rem; font-size: .88rem; color: #c4b5fd; }
         .xp-two { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; margin-top: 1.4rem; }
-        .xp-two > div { border-radius: 12px; padding: 1rem 1.1rem; background: #0f172a; line-height: 1.8; color: #e2e8f0; }
-        .xp-two .gain { border-top: 4px solid #eab308; } .xp-two .gain b { color: #facc15; }
-        .xp-two .loss { border-top: 4px solid #dc2626; } .xp-two .loss b { color: #f87171; }
+        .xp-two > div { border-radius: 6px; padding: 1rem 1.1rem; background: #16224A; line-height: 1.8; color: #E3E7F0; }
+        .xp-two .gain { border-top: 4px solid #C8A24A; } .xp-two .gain b { color: #D9B65A; }
+        .xp-two .loss { border-top: 4px solid #B23A48; } .xp-two .loss b { color: #D7707B; }
         .xp-two b { display: block; font-size: .9rem; margin-bottom: .2rem; }
         .xp-path { list-style: none; padding: 0; margin: .6rem 0 0; display: flex; flex-direction: column; gap: .4rem; }
-        .xp-path li { padding: .55rem .9rem; border-radius: 10px; background: #0b1222; color: #cbd5e1; line-height: 1.6; font-size: .95rem; }
-        .xp-path li span { color: #94a3b8; font-size: .82rem; display: block; }
-        .xp-think { margin-top: 1.6rem; padding: 1rem 1.1rem; border-radius: 12px; background: rgba(250, 204, 21, .1); border: 1px solid rgba(250, 204, 21, .35); line-height: 1.85; color: #fef3c7; }
-        .xp-think b { color: #facc15; }
-        .xp-textarea { width: 100%; min-height: 7rem; margin-top: .7rem; border-radius: 12px; background: #0b1222; border: 1px solid #475569; color: #f1f5f9; padding: .85rem 1rem;
+        .xp-path li { padding: .55rem .9rem; border-radius: 5px; background: #0D1735; color: #CDD3E2; line-height: 1.6; font-size: .95rem; }
+        .xp-path li span { color: #A7B0C8; font-size: .82rem; display: block; }
+        .xp-think { margin-top: 1.6rem; padding: 1rem 1.1rem; border-radius: 6px; background: rgba(200, 162, 74, .1); border: 1px solid rgba(200, 162, 74, .35); line-height: 1.85; color: #F1E7C6; }
+        .xp-think b { color: #D9B65A; }
+        .xp-textarea { width: 100%; min-height: 7rem; margin-top: .7rem; border-radius: 6px; background: #0D1735; border: 1px solid #4A5A8F; color: #EEF0F4; padding: .85rem 1rem;
                        font: inherit; line-height: 1.75; resize: vertical; user-select: text; -webkit-user-select: text; }
-        .xp-textarea:focus { border-color: #facc15; outline: none; }
-        .xp-saved { font-size: .8rem; color: #64748b; margin-top: .3rem; }
+        .xp-textarea:focus { border-color: #D9B65A; outline: none; }
+        .xp-saved { font-size: .8rem; color: #7380A8; margin-top: .3rem; }
 
         /* 설탕 한 숟가락 */
         .xp-chain { list-style: none; padding: 0; margin: 1.6rem 0 0; display: flex; flex-direction: column; }
-        .xp-chain li { display: flex; gap: 1rem; align-items: flex-start; padding: 1rem 1.1rem; border-radius: 14px; background: #0f172a; border: 1px solid #1e293b; border-left: 5px solid var(--c); line-height: 1.8; color: #e2e8f0; }
+        .xp-chain li { display: flex; gap: 1rem; align-items: flex-start; padding: 1rem 1.1rem; border-radius: 6px; background: #16224A; border: 1px solid #24325F; border-left: 5px solid var(--c); line-height: 1.8; color: #E3E7F0; }
         .xp-chain li b { color: #fff; display: block; }
-        .xp-chain li small { color: #94a3b8; }
-        .xp-chain li.arrow { justify-content: center; color: #64748b; font-size: 1.1rem; padding: .3rem 0; background: none; border: 0; }
+        .xp-chain li small { color: #A7B0C8; }
+        .xp-chain li.arrow { justify-content: center; color: #7380A8; font-size: 1.1rem; padding: .3rem 0; background: none; border: 0; }
         .xp-scale { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .6rem; margin-top: 1rem; }
-        .xp-scale > div { border-radius: 12px; background: #0f172a; padding: .9rem; border-top: 4px solid var(--c); font-size: .9rem; line-height: 1.7; color: #cbd5e1; }
+        .xp-scale > div { border-radius: 6px; background: #16224A; padding: .9rem; border-top: 4px solid var(--c); font-size: .9rem; line-height: 1.7; color: #CDD3E2; }
         .xp-scale b { display: block; color: #fff; font-size: 1rem; }
-        .xp-meter { height: 8px; border-radius: 999px; background: #1e293b; margin: .5rem 0; display: flex; overflow: hidden; }
+        .xp-meter { height: 8px; border-radius: 999px; background: #24325F; margin: .5rem 0; display: flex; overflow: hidden; }
         .xp-meter i { display: block; height: 100%; }
 
         @media (max-width: 768px) {
@@ -633,8 +601,7 @@
             .slider-button.hint::after { animation: none; }
             .xp-card.shake { animation: none; }
             .xp-act, .xp-person, .xp-card { transition: none; }
-            .deco::after, .deco-glow, .deco-rose, .deco-wave, .deco-ship, .deco-ship svg { animation: none !important; }
-            .deco-ship { transform: translateX(70vw); }
+            .hero-light, .hero-seam { animation: none !important; }
         }
     </style>
 </head>
@@ -642,68 +609,77 @@
 
     <!-- 메인 홈 화면 -->
     <main id="home-screen" class="screen active">
-        <div class="home-inner">
-            <div class="text-center mb-10">
-                <p class="home-kicker">1500 – 1870 · 대서양</p>
-                <h1 class="home-title text-4xl md:text-6xl font-black mb-6 tracking-tight drop-shadow-lg">
-                    <span class="text-slate-200">대서양 노예 무역의</span><br class="md:hidden">
-                    <span class="light">명</span>과
-                    <span class="dark">암</span>
-                </h1>
-                <div class="ornament" aria-hidden="true">
-                    <span></span>
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1l2.2 8.8L23 12l-8.8 2.2L12 23l-2.2-8.8L1 12l8.8-2.2z"/></svg>
-                    <span></span>
-                </div>
-                <p class="intro text-sm md:text-base">
-                    16세기부터 19세기까지 약 1,250만 명의 아프리카인이 강제로 배에 실려 대서양을 건넜습니다.
-                    유럽의 항구 도시가 누린 번영은 이들의 고통 위에 세워졌습니다.
-                    아래 다섯 단계를 차례대로 따라가며, 이 교류로 <b class="text-yellow-400">누가 번영을 누렸고</b> <b class="text-red-400">누가 그 대가를 치렀는지</b> 살펴보세요.
-                </p>
+        <header class="hero">
+            <div class="hero-layer hero-dark">
+                <h1 class="hero-title">대서양 노예무역의<br>명과 암</h1>
+                <p class="hero-sub">1500년부터 1870년까지, 대서양을 오간 교류의 두 얼굴</p>
+                <p class="hero-side"><b>암(暗)</b>배에 실려 끌려간 약 1,250만 명이 치른 대가</p>
             </div>
+            <div class="hero-layer hero-light" aria-hidden="true">
+                <p class="hero-title">대서양 노예무역의<br>명과 암</p>
+                <p class="hero-sub">1500년부터 1870년까지, 대서양을 오간 교류의 두 얼굴</p>
+                <p class="hero-side"><b>명(明)</b>설탕과 은으로 번영한 유럽의 항구 도시</p>
+            </div>
+            <div class="hero-seam" aria-hidden="true"></div>
+        </header>
+        <div class="home-inner">
+            <p class="intro">
+                유럽의 항구 도시가 누린 번영은 끌려간 사람들의 고통 위에 세워졌습니다.
+                아래 다섯 단계를 차례대로 따라가며, 이 교류로 누가 번영을 누렸고 누가 그 대가를 치렀는지 살펴보세요.
+            </p>
 
             <ol class="path" aria-label="배움의 순서">
-                <li class="path-step" data-step="1" style="--c:#60a5fa">
+                <li class="path-step" data-step="1">
                     <span class="num">1</span>
                     <h2>큰 그림 보기</h2>
                     <p>세 대륙 사이에 무엇이, 누가 오갔을까요? 지도에서 배를 따라가 보세요.</p>
-                    <button class="path-go" onclick="openExchange()">대서양 교류 지도</button>
-                    <button class="path-sub" onclick="openMap()">370년의 항해를 타임랩스로 보기</button>
+                    <div class="path-actions">
+                        <button class="path-go" onclick="openExchange()">대서양 교류 지도</button>
+                        <button class="path-sub" onclick="openMap()">370년의 항해를 타임랩스로 보기</button>
+                    </div>
                 </li>
-                <li class="path-step" data-step="2" style="--c:#facc15">
+                <li class="path-step" data-step="2">
                     <span class="num">2</span>
                     <h2>나라별 명과 암</h2>
                     <p>다섯 나라가 얻은 번영과, 그 대가를 치른 사람들을 나란히 비교해요.</p>
-                    <button class="path-go" onclick="homeToCountries()">나라 고르기 ↓</button>
+                    <div class="path-actions">
+                        <button class="path-go" onclick="homeToCountries()">나라 고르기</button>
+                    </div>
                 </li>
-                <li class="path-step" data-step="3" style="--c:#ef4444">
+                <li class="path-step" data-step="3">
                     <span class="num">3</span>
                     <h2>끌려간 사람들의 시선</h2>
                     <p>중간 항로의 실상과, 끝까지 멈추지 않은 저항의 역사를 읽어요.</p>
-                    <button class="path-go" onclick="showScreen('voices-screen')">중간 항로와 저항의 역사</button>
+                    <div class="path-actions">
+                        <button class="path-go" onclick="showScreen('voices-screen')">역사 읽기</button>
+                    </div>
                 </li>
-                <li class="path-step" data-step="4" style="--c:#2dd4bf">
+                <li class="path-step" data-step="4">
                     <span class="num">4</span>
                     <h2>이야기 따라가기</h2>
                     <p>배운 내용을 바탕으로, 같은 배로 이어진 네 사람의 이야기를 따라가요.</p>
-                    <button class="path-go" onclick="openExperience()">교류 체험실</button>
+                    <div class="path-actions">
+                        <button class="path-go" onclick="openExperience()">교류 체험실</button>
+                    </div>
                 </li>
-                <li class="path-step" data-step="5" style="--c:#c084fc">
+                <li class="path-step" data-step="5">
                     <span class="num">5</span>
                     <h2>정리하기</h2>
                     <p>배운 내용을 퀴즈로 확인하고, 내 생각을 정리해요.</p>
-                    <button class="path-go" onclick="openQuiz()">확인 퀴즈</button>
+                    <div class="path-actions">
+                        <button class="path-go" onclick="openQuiz()">확인 퀴즈</button>
+                    </div>
                 </li>
             </ol>
 
             <div class="countries-head" id="countries">
-                <h2><span class="num">2</span> 나라를 골라 명과 암 비교하기</h2>
+                <h2><span class="num">2</span>나라를 골라 명과 암 비교하기</h2>
                 <p>국기를 누른 뒤 가운데 막대를 좌우로 움직이면, 한 나라의 두 얼굴을 비교할 수 있어요.</p>
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 w-full" id="flags-container"></div>
-            <p class="text-center text-xs text-slate-500 mt-10 leading-relaxed">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 w-full" id="flags-container"></div>
+            <p class="home-note">
                 인원 수는 SlaveVoyages(대서양 노예무역 데이터베이스)의 선박 국적별 추정치를 반올림한 값이며, 연구에 따라 차이가 있을 수 있습니다.
-                <br><button class="refs-link" onclick="openRefs()">참고문헌과 그림 출처 보기 →</button>
+                <br><button class="refs-link" onclick="openRefs()">참고문헌과 그림 출처 보기</button>
             </p>
         </div>
     </main>
@@ -711,11 +687,11 @@
     <!-- 국가별 명과 암 상세 화면 -->
     <section id="detail-screen" class="screen" aria-label="국가별 명과 암">
         <div class="detail-header flex flex-wrap items-center justify-between gap-2">
-            <button onclick="goBack()" class="px-4 py-2.5 bg-slate-900/90 hover:bg-slate-700 text-white rounded-full transition-all flex items-center gap-2 text-sm border border-slate-600 shadow-xl backdrop-blur-md">
+            <button onclick="goBack()" class="back-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
                 다른 국가
             </button>
-            <button onclick="openExchange(currentCountry)" class="px-4 py-2.5 bg-slate-900/90 hover:bg-slate-700 text-white rounded-full text-sm border border-slate-600 shadow-xl backdrop-blur-md mr-auto">교류 지도에서 보기</button>
+            <button onclick="openExchange(currentCountry)" class="back-btn mr-auto">교류 지도에서 보기</button>
             <div class="flex gap-1.5">
                 <button class="jump-btn" onclick="animateSliderTo(10)">◀ 암</button>
                 <button class="jump-btn" onclick="animateSliderTo(50)">가운데</button>
@@ -729,10 +705,10 @@
             <div class="content-wrapper content-left" id="content-light">
                 <div class="info-box light">
                     <div class="flex items-center gap-3 mb-2">
-                        <h3 class="text-4xl font-black text-yellow-600">명(明)</h3>
-                        <span class="text-yellow-700/70 font-bold">유럽이 얻은 번영</span>
+                        <h3 class="text-4xl font-black text-[#8C6E22]">명(明)</h3>
+                        <span class="text-[#8C6E22]/70 font-bold">유럽이 얻은 번영</span>
                     </div>
-                    <div class="h-1 w-20 bg-yellow-400 mb-4"></div>
+                    <div class="h-1 w-20 bg-[#C8A24A] mb-4"></div>
                     <h4 id="light-title" class="text-2xl font-bold mb-3 text-slate-800"></h4>
                     <p id="light-desc" class="text-slate-700 text-sm md:text-base font-medium"></p>
                     <div id="light-media-container"></div>
@@ -742,10 +718,10 @@
             <div class="content-wrapper content-right" id="content-dark">
                 <div class="info-box dark">
                     <div class="flex items-center justify-end gap-3 mb-2">
-                        <span class="text-red-400/70 font-bold">아프리카인이 치른 대가</span>
-                        <h3 class="text-4xl font-black text-red-600">암(暗)</h3>
+                        <span class="text-[#D7707B]/70 font-bold">아프리카인이 치른 대가</span>
+                        <h3 class="text-4xl font-black text-[#B23A48]">암(暗)</h3>
                     </div>
-                    <div class="h-1 w-20 bg-red-700 ml-auto mb-4"></div>
+                    <div class="h-1 w-20 bg-[#B23A48] ml-auto mb-4"></div>
                     <h4 id="dark-title" class="text-2xl font-bold mb-3 text-white"></h4>
                     <p id="dark-desc" class="text-slate-300 text-sm md:text-base font-light"></p>
                     <div id="dark-media-container"></div>
@@ -762,7 +738,7 @@
                 <div><dt>주요 출발 항구</dt><dd id="cc-ports"></dd></div>
                 <div><dt>주요 도착지</dt><dd id="cc-dest"></dd></div>
             </dl>
-            <p class="cc-think"><strong class="text-yellow-400">생각해 보기</strong> <span id="cc-think"></span></p>
+            <p class="cc-think"><strong class="text-[#D9B65A]">생각해 보기</strong> <span id="cc-think"></span></p>
             <p class="cc-hint">막대를 오른쪽으로 끌면 명(明), 왼쪽으로 끌면 암(暗)이 보입니다. 키보드 ← → 키도 쓸 수 있어요.</p>
         </div>
 
@@ -784,7 +760,7 @@
         <p id="map-error" class="hidden absolute inset-x-0 top-1/3 text-center text-slate-400 z-10 px-6">세계 지도를 불러오지 못했습니다. 인터넷 연결을 확인하고 새로고침해 주세요. 항해 애니메이션은 계속 볼 수 있습니다.</p>
 
         <div class="detail-header flex items-center justify-between z-20">
-            <button onclick="closeMap()" class="px-5 py-2.5 bg-slate-900/90 hover:bg-slate-700 text-white rounded-full transition-all flex items-center gap-2 text-sm border border-slate-600 shadow-xl backdrop-blur-md">
+            <button onclick="closeMap()" class="back-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
                 홈으로
             </button>
@@ -795,7 +771,7 @@
         </div>
 
         <div id="event-toast" class="event-toast" role="status" aria-live="polite">
-            <div class="text-red-300 text-sm font-bold" id="toast-year"></div>
+            <div class="text-[#E6A3AA] text-sm font-bold" id="toast-year"></div>
             <div class="text-white text-lg font-bold mt-0.5" id="toast-title"></div>
             <p class="text-slate-300 text-sm leading-relaxed mt-1" id="toast-text"></p>
         </div>
@@ -806,7 +782,7 @@
                 <div class="flex items-center gap-3"><div class="w-4 h-4 rounded-full shadow-[0_0_8px_#10b981] bg-[#10b981]"></div><span class="text-slate-200 text-sm font-medium">포르투갈 / 브라질</span></div>
                 <div class="flex items-center gap-3"><div class="w-4 h-4 rounded-full shadow-[0_0_8px_#3b82f6] bg-[#3b82f6]"></div><span class="text-slate-200 text-sm font-medium">영국</span></div>
                 <div class="flex items-center gap-3"><div class="w-4 h-4 rounded-full shadow-[0_0_8px_#06b6d4] bg-[#06b6d4]"></div><span class="text-slate-200 text-sm font-medium">프랑스</span></div>
-                <div class="flex items-center gap-3"><div class="w-4 h-4 rounded-full shadow-[0_0_8px_#eab308] bg-[#eab308]"></div><span class="text-slate-200 text-sm font-medium">스페인 / 우루과이</span></div>
+                <div class="flex items-center gap-3"><div class="w-4 h-4 rounded-full shadow-[0_0_8px_#C8A24A] bg-[#C8A24A]"></div><span class="text-slate-200 text-sm font-medium">스페인 / 우루과이</span></div>
                 <div class="flex items-center gap-3"><div class="w-4 h-4 rounded-full shadow-[0_0_8px_#f97316] bg-[#f97316]"></div><span class="text-slate-200 text-sm font-medium">네덜란드</span></div>
             </div>
         </div>
@@ -845,7 +821,7 @@
     <section id="exchange-screen" class="screen" aria-label="대서양 교류 지도">
         <svg id="ex-svg" role="group" aria-label="대서양 교류 지도. 대륙이나 나라를 누르면 설명이 나옵니다."></svg>
         <div class="detail-header flex items-center gap-4 z-20">
-            <button onclick="showScreen('home-screen')" class="px-5 py-2.5 bg-slate-900/90 hover:bg-slate-700 text-white rounded-full transition-all flex items-center gap-2 text-sm border border-slate-600 shadow-xl backdrop-blur-md">
+            <button onclick="showScreen('home-screen')" class="back-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
                 홈으로
             </button>
@@ -856,7 +832,7 @@
     <!-- 중간 항로와 저항 -->
     <section id="voices-screen" class="screen scroll-screen reading" aria-label="중간 항로와 저항의 역사">
         <div class="detail-header" style="position:fixed">
-            <button onclick="showScreen('home-screen')" class="px-5 py-2.5 bg-slate-900/90 hover:bg-slate-700 text-white rounded-full flex items-center gap-2 text-sm border border-slate-600 shadow-xl backdrop-blur-md">
+            <button onclick="showScreen('home-screen')" class="back-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
                 홈으로
             </button>
@@ -868,18 +844,18 @@
             <h2>삼각무역: 배가 한 바퀴 돌 때마다 이익이 남는 구조</h2>
             <svg viewBox="0 0 600 360" class="w-full h-auto my-4" role="img" aria-label="유럽에서 아프리카로 공산품, 아프리카에서 아메리카로 노예가 된 사람들, 아메리카에서 유럽으로 설탕·담배·면화가 이동한 삼각무역 지도">
                 <defs>
-                    <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#cbd5e1"/></marker>
-                    <marker id="ahr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#ef4444"/></marker>
+                    <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#CDD3E2"/></marker>
+                    <marker id="ahr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#C24A57"/></marker>
                 </defs>
-                <path d="M440,85 C500,140 500,200 470,245" fill="none" stroke="#cbd5e1" stroke-width="3" marker-end="url(#ah)"/>
-                <path d="M440,275 C340,320 200,290 135,215" fill="none" stroke="#ef4444" stroke-width="5" marker-end="url(#ahr)"/>
-                <path d="M130,160 C200,70 320,50 400,65" fill="none" stroke="#cbd5e1" stroke-width="3" marker-end="url(#ah)"/>
+                <path d="M440,85 C500,140 500,200 470,245" fill="none" stroke="#CDD3E2" stroke-width="3" marker-end="url(#ah)"/>
+                <path d="M440,275 C340,320 200,290 135,215" fill="none" stroke="#C24A57" stroke-width="5" marker-end="url(#ahr)"/>
+                <path d="M130,160 C200,70 320,50 400,65" fill="none" stroke="#CDD3E2" stroke-width="3" marker-end="url(#ah)"/>
                 <circle cx="425" cy="70" r="10" fill="#3b82f6"/><text x="425" y="42" fill="#fff" font-size="20" font-weight="700" text-anchor="middle">유럽</text>
-                <circle cx="455" cy="265" r="10" fill="#eab308"/><text x="505" y="300" fill="#fff" font-size="20" font-weight="700" text-anchor="middle">서아프리카</text>
+                <circle cx="455" cy="265" r="10" fill="#C8A24A"/><text x="505" y="300" fill="#fff" font-size="20" font-weight="700" text-anchor="middle">서아프리카</text>
                 <circle cx="120" cy="190" r="10" fill="#10b981"/><text x="85" y="240" fill="#fff" font-size="20" font-weight="700" text-anchor="middle">아메리카</text>
-                <text x="520" y="170" fill="#cbd5e1" font-size="15" text-anchor="middle">총·직물·술</text>
-                <text x="290" y="330" fill="#fca5a5" font-size="16" font-weight="700" text-anchor="middle">중간 항로: 사로잡힌 아프리카인</text>
-                <text x="245" y="70" fill="#cbd5e1" font-size="15" text-anchor="middle">설탕·담배·면화</text>
+                <text x="520" y="170" fill="#CDD3E2" font-size="15" text-anchor="middle">총·직물·술</text>
+                <text x="290" y="330" fill="#E6A3AA" font-size="16" font-weight="700" text-anchor="middle">중간 항로: 사로잡힌 아프리카인</text>
+                <text x="245" y="70" fill="#CDD3E2" font-size="15" text-anchor="middle">설탕·담배·면화</text>
             </svg>
             <p>유럽 상인들은 총, 직물, 술 같은 공산품을 싣고 아프리카 해안으로 가서 사람과 맞바꿨습니다. 사로잡힌 사람들은 대부분 아프리카 내부의 전쟁이나 납치로 붙잡혀 해안의 요새로 끌려온 이들이었습니다. 배는 이들을 아메리카에 팔고, 그 돈으로 설탕·담배·면화를 사서 유럽으로 돌아갔습니다.</p>
             <div class="src-slot" data-slot="triangle"></div>
@@ -922,7 +898,7 @@
             <div class="src-slot" data-slot="africa"></div>
 
             <p class="text-xs text-slate-500 mt-12">참고: SlaveVoyages(slavevoyages.org) 대서양 노예무역 데이터베이스 추정치. 수치는 반올림했으며 연구에 따라 다를 수 있습니다.
-                <button class="refs-link" onclick="openRefs()">참고문헌과 그림 출처 전체 보기 →</button></p>
+                <button class="refs-link" onclick="openRefs()">참고문헌과 그림 출처 전체 보기</button></p>
             <div class="mt-8 flex flex-wrap gap-3">
                 <button onclick="openExperience('people')" class="home-btn feature">다음 단계: 네 사람의 이야기 따라가기</button>
                 <button onclick="openQuiz()" class="home-btn">퀴즈로 확인하기</button>
@@ -934,7 +910,7 @@
     <!-- 퀴즈 -->
     <section id="quiz-screen" class="screen scroll-screen reading" aria-label="확인 퀴즈">
         <div class="detail-header" style="position:fixed">
-            <button onclick="showScreen('home-screen')" class="px-5 py-2.5 bg-slate-900/90 hover:bg-slate-700 text-white rounded-full flex items-center gap-2 text-sm border border-slate-600 shadow-xl backdrop-blur-md">
+            <button onclick="showScreen('home-screen')" class="back-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
                 홈으로
             </button>
@@ -945,7 +921,7 @@
     <!-- 참고문헌과 그림 출처 -->
     <section id="refs-screen" class="screen scroll-screen reading" aria-label="참고문헌과 그림 출처">
         <div class="detail-header" style="position:fixed">
-            <button onclick="showScreen('home-screen')" class="px-5 py-2.5 bg-slate-900/90 hover:bg-slate-700 text-white rounded-full flex items-center gap-2 text-sm border border-slate-600 shadow-xl backdrop-blur-md">
+            <button onclick="showScreen('home-screen')" class="back-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
                 홈으로
             </button>
@@ -956,7 +932,7 @@
     <!-- 교류 체험실 -->
     <section id="experience-screen" class="screen scroll-screen" aria-label="교류 체험실">
         <div class="detail-header" style="position:fixed">
-            <button onclick="showScreen('home-screen')" class="px-5 py-2.5 bg-slate-900/90 hover:bg-slate-700 text-white rounded-full flex items-center gap-2 text-sm border border-slate-600 shadow-xl backdrop-blur-md">
+            <button onclick="showScreen('home-screen')" class="back-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
                 홈으로
             </button>
@@ -1109,42 +1085,6 @@
         }
         window.addEventListener('popstate', route);
 
-        /* ================= 배경 장식 ================= */
-        const DECO_ROSE = (() => {
-            let ticks = '';
-            for (let i = 0; i < 64; i++) ticks += `<line x1="100" y1="${i % 8 ? 7 : 4}" x2="100" y2="${i % 8 ? 11 : 15}" transform="rotate(${i * 5.625} 100 100)"/>`;
-            const pt = (len, w, rot) => `<path d="M100 ${100 - len} L${100 + w} ${100 - w} L100 100 L${100 - w} ${100 - w}Z" transform="rotate(${rot} 100 100)"/>`;
-            return `<svg viewBox="0 0 200 200" fill="none" stroke="currentColor" aria-hidden="true">
-                <circle cx="100" cy="100" r="97" stroke-width="1.2"/><circle cx="100" cy="100" r="88" stroke-width=".6"/>
-                <circle cx="100" cy="100" r="62" stroke-width=".6" stroke-dasharray="2 4"/><circle cx="100" cy="100" r="22" stroke-width=".8"/>
-                <g stroke-width=".8">${ticks}</g>
-                <g fill="currentColor" stroke="none">${[0, 90, 180, 270].map(r => pt(84, 11, r)).join('')}${[45, 135, 225, 315].map(r => pt(58, 7, r)).join('')}</g>
-                <g fill="currentColor" stroke="none" font-size="13" font-weight="700" text-anchor="middle" font-family="serif"><text x="100" y="30">N</text></g>
-            </svg>`;
-        })();
-        const DECO_SHIP = `<svg viewBox="0 0 120 80" fill="currentColor" aria-hidden="true">
-            <path d="M6 56 L114 56 L101 71 L19 71Z"/>
-            <path d="M40 8 V56 M62 2 V56 M84 12 V56" stroke="currentColor" stroke-width="2.2"/>
-            <path d="M42 12 Q57 21 42 32Z M42 34 Q60 44 42 54Z M64 6 Q81 17 64 29Z M64 31 Q84 42 64 54Z M86 16 Q99 25 86 35Z M86 37 Q101 46 86 54Z"/>
-            <path d="M62 2 L74 5 L62 8Z"/>
-        </svg>`;
-        function addDeco(screenId, variant, opts = {}) {
-            const scr = document.getElementById(screenId);
-            if (!scr) return;
-            const d = document.createElement('div');
-            d.className = 'deco' + (variant ? ' ' + variant : '');
-            d.setAttribute('aria-hidden', 'true');
-            d.innerHTML = `<div class="deco-glow a"></div><div class="deco-glow b"></div>
-                <div class="deco-rose">${DECO_ROSE}</div>${opts.rose2 ? `<div class="deco-rose left">${DECO_ROSE}</div>` : ''}
-                <div class="deco-sea">${opts.ship ? `<div class="deco-ship">${DECO_SHIP}</div>` : ''}<div class="deco-wave w1"></div><div class="deco-wave w2"></div><div class="deco-wave w3"></div></div>`;
-            scr.prepend(d);
-        }
-        addDeco('home-screen', '', { ship: true, rose2: true });
-        addDeco('voices-screen', 'ember');
-        addDeco('quiz-screen', 'quiz');
-        addDeco('refs-screen', 'ember');
-        addDeco('experience-screen', 'lab', { ship: true });
-
         /* ================= 홈: 배움의 순서 ================= */
         const PATH_OF = { 'exchange-screen': 1, 'map-screen': 1, 'detail-screen': 2, 'voices-screen': 3, 'experience-screen': 4, 'quiz-screen': 5 };
         // '봤어요' 표시는 페이지를 연 동안만 기억함 (새로고침하면 처음부터)
@@ -1159,7 +1099,7 @@
         function pathRender() {
             document.querySelectorAll('.path-step').forEach(el => {
                 const has = el.querySelector('.seen');
-                if (pathSeen[el.dataset.step] && !has) el.insertAdjacentHTML('beforeend', '<span class="seen">✓ 봤어요</span>');
+                if (pathSeen[el.dataset.step] && !has) el.querySelector('h2').insertAdjacentHTML('beforeend', '<span class="seen">✓ 봤어요</span>');
             });
         }
         function homeToCountries() {
@@ -1177,11 +1117,11 @@
                 const c = countryData[key];
                 const card = document.createElement('button');
                 card.type = 'button';
-                card.className = 'flag-card rounded-xl overflow-hidden flex flex-col items-center pb-5';
+                card.className = 'flag-card overflow-hidden flex flex-col items-center pb-5';
                 card.onclick = () => openDetail(key);
-                card.innerHTML = `<div class="w-full h-28 md:h-36 bg-slate-900 flex items-center justify-center overflow-hidden mb-4 border-b border-white/10"><img src="${c.flag}" alt="" class="w-full h-full object-cover"></div>
-                    <span class="text-xl font-bold text-white tracking-widest">${c.name}</span>
-                    <span class="text-xs text-slate-400 mt-1.5">${c.stats.people} 강제 수송</span>`;
+                card.innerHTML = `<div class="w-full h-28 md:h-36 bg-[#0A1230] flex items-center justify-center overflow-hidden mb-4 border-b border-white/10"><img src="${c.flag}" alt="" class="w-full h-full object-cover"></div>
+                    <span class="flag-name">${c.name}</span>
+                    <span class="flag-num">${c.stats.people} 강제 수송</span>`;
                 container.appendChild(card);
             });
         }
@@ -1334,7 +1274,7 @@
         let shownEvents = new Set();
         let toastTimer = null;
 
-        const colors = { pt: '#10b981', uk: '#3b82f6', fr: '#06b6d4', es: '#eab308', nl: '#f97316' };
+        const colors = { pt: '#10b981', uk: '#3b82f6', fr: '#06b6d4', es: '#C8A24A', nl: '#f97316' };
         const countryNames = { pt: '포르투갈', uk: '영국', fr: '프랑스', es: '스페인', nl: '네덜란드' };
 
         const routeWeights = { pt:{am:[],eu:[]}, uk:{am:[],eu:[]}, fr:{am:[],eu:[]}, es:{am:[],eu:[]}, nl:{am:[],eu:[]} };
@@ -1408,8 +1348,8 @@
         function drawRealWorldMap() {
             mapBgCtx.clearRect(0, 0, mapBgCanvas.width, mapBgCanvas.height);
             const g = mapBgCtx.createRadialGradient(mapBgCanvas.width/2, mapBgCanvas.height/2, mapBgCanvas.height*0.2, mapBgCanvas.width/2, mapBgCanvas.height/2, mapBgCanvas.height);
-            g.addColorStop(0, '#0f172a');
-            g.addColorStop(1, '#020617');
+            g.addColorStop(0, '#16224A');
+            g.addColorStop(1, '#0A1230');
             mapBgCtx.fillStyle = g;
             mapBgCtx.fillRect(0, 0, mapBgCanvas.width, mapBgCanvas.height);
             if (!worldGeoData) return;
@@ -1418,13 +1358,13 @@
             const countries = topojson.feature(worldGeoData, worldGeoData.objects.countries);
             mapBgCtx.beginPath();
             path(countries);
-            mapBgCtx.fillStyle = '#1e293b';
+            mapBgCtx.fillStyle = '#24325F';
             mapBgCtx.fill();
-            mapBgCtx.strokeStyle = '#334155';
+            mapBgCtx.strokeStyle = '#34447A';
             mapBgCtx.stroke();
 
             // 대륙 이름
-            mapBgCtx.font = '600 13px "Pretendard Variable", Pretendard, sans-serif';
+            mapBgCtx.font = '600 13px "Gowun Batang", serif';
             mapBgCtx.fillStyle = 'rgba(148,163,184,.55)';
             mapBgCtx.textAlign = 'center';
             [['유럽', [10, 50]], ['아프리카', [20, 5]], ['브라질', [-52, -8]], ['카리브해', [-72, 23]], ['북아메리카', [-95, 40]]]
@@ -1687,7 +1627,7 @@
             const item = quizData[quizIdx];
             body.innerHTML = `
                 <p class="text-sm text-slate-400">${quizIdx + 1} / ${quizData.length}</p>
-                <div class="h-1 bg-slate-800 rounded-full mt-2 mb-8"><div class="h-1 bg-yellow-500 rounded-full" style="width:${quizIdx / quizData.length * 100}%"></div></div>
+                <div class="h-1 bg-[#24325F] rounded-full mt-2 mb-8"><div class="h-1 bg-[#C8A24A] rounded-full" style="width:${quizIdx / quizData.length * 100}%"></div></div>
                 <h1 class="text-2xl md:text-3xl font-black text-white leading-snug mb-8">${item.q}</h1>
                 <div id="quiz-opts">${item.opts.map((o, i) => `<button class="quiz-opt" data-i="${i}">${o}</button>`).join('')}</div>
                 <div id="quiz-feedback" class="mt-4"></div>`;
@@ -1705,7 +1645,7 @@
             const ok = i === item.a;
             if (ok) quizScore++;
             document.getElementById('quiz-feedback').innerHTML = `
-                <p class="font-bold ${ok ? 'text-green-400' : 'text-red-400'}">${ok ? '정답입니다.' : '아쉬워요, 정답은 ' + item.opts[item.a] + '입니다.'}</p>
+                <p class="font-bold ${ok ? 'text-green-400' : 'text-[#D7707B]'}">${ok ? '정답입니다.' : '아쉬워요, 정답은 ' + item.opts[item.a] + '입니다.'}</p>
                 <p class="mt-1">${item.ex}</p>
                 <button class="home-btn primary mt-4" id="quiz-next">${quizIdx + 1 < quizData.length ? '다음 문제' : '결과 보기'}</button>`;
             const next = document.getElementById('quiz-next');
@@ -1717,8 +1657,8 @@
         // 삼각무역의 세 뱃길
         const EX_ARROWS = [
             { id: 'a1', from: 'europe', to: 'africa', color: '#60a5fa', num: 1, label: '옷감·총·술', cargo: '📦 옷감·총·술', bend: 1 },
-            { id: 'a2', from: 'africa', to: 'america', color: '#ef4444', num: 2, label: '끌려간 사람들', cargo: '⛓️ 끌려가는 사람들', bend: -1 },
-            { id: 'a3', from: 'america', to: 'europe', color: '#eab308', num: 3, label: '설탕·담배·면화', cargo: '🌿 설탕·담배·면화', bend: -1 }
+            { id: 'a2', from: 'africa', to: 'america', color: '#C24A57', num: 2, label: '끌려간 사람들', cargo: '⛓️ 끌려가는 사람들', bend: -1 },
+            { id: 'a3', from: 'america', to: 'europe', color: '#C8A24A', num: 3, label: '설탕·담배·면화', cargo: '🌿 설탕·담배·면화', bend: -1 }
         ];
         const EX_HUB = { europe: [-12, 47], africa: [1, 3], america: [-63, 15] };
         const EX_PILL = { europe: [28, 55], africa: [21, 6], america: [-60, -9] };
@@ -1858,7 +1798,7 @@
                     <g class="ex-alabel" transform="translate(${p.m[0].toFixed(1)},${p.m[1].toFixed(1)})">
                         <rect x="${-lw / 2}" y="-13" width="${lw}" height="26" rx="13" stroke="${a.color}"/>
                         <circle cx="${-lw / 2 + 13}" cy="0" r="9" fill="${a.color}"/>
-                        <text x="${-lw / 2 + 13}" y="4.5" text-anchor="middle" style="fill:#0b1222;font-weight:900">${a.num}</text>
+                        <text x="${-lw / 2 + 13}" y="4.5" text-anchor="middle" style="fill:#0D1735;font-weight:900">${a.num}</text>
                         <text x="${-lw / 2 + 28}" y="4.5">${a.label}</text>
                     </g></g>`;
             }).join('') + '</g>';
@@ -1884,10 +1824,10 @@
             // 5) 배
             out += `<g id="ex-ship" style="pointer-events:none">
                 <g id="ex-ship-body">
-                    <path d="M-16,2 L16,2 L10,11 L-11,11 Z" fill="#e2e8f0" stroke="#0f172a" stroke-width="1.5"/>
-                    <path d="M0,2 L0,-18" stroke="#e2e8f0" stroke-width="2"/>
-                    <path d="M1.5,-17 L13,0 L1.5,0 Z" fill="#f8fafc" stroke="#0f172a" stroke-width="1"/>
-                    <path d="M-1.5,-15 L-11,0 L-1.5,0 Z" fill="#cbd5e1" stroke="#0f172a" stroke-width="1"/>
+                    <path d="M-16,2 L16,2 L10,11 L-11,11 Z" fill="#E3E7F0" stroke="#16224A" stroke-width="1.5"/>
+                    <path d="M0,2 L0,-18" stroke="#E3E7F0" stroke-width="2"/>
+                    <path d="M1.5,-17 L13,0 L1.5,0 Z" fill="#EEF0F4" stroke="#16224A" stroke-width="1"/>
+                    <path d="M-1.5,-15 L-11,0 L-1.5,0 Z" fill="#CDD3E2" stroke="#16224A" stroke-width="1"/>
                 </g>
                 <g id="ex-cargo" transform="translate(0,-34)"><rect rx="10" height="22" y="-15"/><text y="0" text-anchor="middle"></text></g>
             </g>`;
@@ -2083,8 +2023,8 @@
                     <h3 class="ex-h3">화살표 읽는 법</h3>
                     <ul class="ex-arrow-list">
                         <li><span class="ex-num" style="background:#60a5fa">1</span><span>유럽에서 아프리카로 간 <b>물건</b> (옷감·총·술)</span></li>
-                        <li><span class="ex-num" style="background:#ef4444">2</span><span>아프리카에서 아메리카로 <b>끌려간 사람들</b></span></li>
-                        <li><span class="ex-num" style="background:#eab308">3</span><span>아메리카에서 유럽으로 간 <b>설탕·담배·면화</b></span></li>
+                        <li><span class="ex-num" style="background:#C24A57">2</span><span>아프리카에서 아메리카로 <b>끌려간 사람들</b></span></li>
+                        <li><span class="ex-num" style="background:#C8A24A">3</span><span>아메리카에서 유럽으로 간 <b>설탕·담배·면화</b></span></li>
                     </ul>
                     <details class="ex-words"><summary>어려운 낱말 풀이</summary><dl>
                         <dt>삼각무역</dt><dd>유럽·아프리카·아메리카 세 대륙을 세모 모양으로 오가며 한 무역</dd>
@@ -2158,8 +2098,8 @@
         // 더 해 보기: 어느 뱃길에 실렸을까? (화물 분류)
         const XP_LANES = [
             { id: 'l1', num: 1, from: '유럽', to: '아프리카', color: '#60a5fa' },
-            { id: 'l2', num: 2, from: '아프리카', to: '아메리카', color: '#ef4444', sub: '중간 항로' },
-            { id: 'l3', num: 3, from: '아메리카', to: '유럽', color: '#eab308' },
+            { id: 'l2', num: 2, from: '아프리카', to: '아메리카', color: '#C24A57', sub: '중간 항로' },
+            { id: 'l3', num: 3, from: '아메리카', to: '유럽', color: '#C8A24A' },
             { id: 'l4', num: 4, from: '아메리카', to: '아프리카', color: '#34d399', sub: '세모 밖의 뱃길' }
         ];
         const XP_CARGO = [
@@ -2457,23 +2397,21 @@
                 <div class="xp-acts">
                     <button class="xp-act" data-act="go-people">
                         ${n ? `<span class="xp-badge">${n} / 4명</span>` : ''}
-                        <span class="emo">🧭</span>
                         <h2>체험 1. 같은 배, 네 사람</h2>
                         <p>선원, 끌려간 소녀, 농장의 소년, 런던의 소녀. 같은 배로 이어진 네 사람의 이야기를 따라가며 1788년의 대서양을 들여다봐요. 사람마다 고를 수 있었던 것이 달랐어요.</p>
                         <span class="meta">선택형 이야기 · 한 사람당 약 5분</span>
                     </button>
                     <button class="xp-act" data-act="go-chain">
-                        <span class="emo">🍵</span>
                         <h2>체험 2. 설탕 한 숟가락의 여행</h2>
                         <p>네 사람의 이야기는 사실 하나로 이어져 있어요. 홍차 속 설탕 한 숟가락을 거꾸로 따라가며 교류의 명과 암을 정리해요.</p>
                         <span class="meta">마무리 활동 · ${n === 4 ? '준비 완료' : '네 사람 이야기를 먼저 들으면 좋아요'}</span>
                     </button>
                 </div>
-                <h2 class="xp-h2" style="font-size:1.05rem;color:#94a3b8;margin-top:2.2rem">시간이 남는다면</h2>
+                <h2 class="xp-h2" style="font-size:1.05rem;color:#A7B0C8;margin-top:2.2rem">시간이 남는다면</h2>
                 <div class="xp-acts" style="margin-top:.6rem">
                     <button class="xp-act" data-act="go-sort" style="padding:1.1rem">
                         ${xpStore.sort ? '<span class="xp-badge">완료</span>' : ''}
-                        <h2 style="font-size:1.05rem">📦 더 해 보기. 어느 뱃길에 실렸을까?</h2>
+                        <h2 style="font-size:1.25rem">더 해 보기. 어느 뱃길에 실렸을까?</h2>
                         <p>화물 카드를 알맞은 뱃길에 실으며 상품, 사람, 문화, 작물이 어떻게 오갔는지 복습해요.</p>
                         <span class="meta">분류 활동 · 약 10분</span>
                     </button>
@@ -2492,17 +2430,17 @@
             return `<svg class="xp-mini" viewBox="0 0 420 210" role="img" aria-label="뱃길 지도: 1번 유럽에서 아프리카, 2번 아프리카에서 아메리카, 3번 아메리카에서 유럽, 4번 아메리카에서 아프리카로 곧장">
                 <defs>${XP_LANES.map(l => `<marker id="xpm-${l.id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="${l.color}"/></marker>`).join('')}</defs>
                 <path d="M330,48 C380,80 380,130 345,160" fill="none" stroke="#60a5fa" stroke-width="4" marker-end="url(#xpm-l1)"/>
-                <path d="M310,185 C230,215 140,200 82,140" fill="none" stroke="#ef4444" stroke-width="5" marker-end="url(#xpm-l2)"/>
-                <path d="M75,105 C120,40 220,25 300,35" fill="none" stroke="#eab308" stroke-width="4" marker-end="url(#xpm-l3)"/>
+                <path d="M310,185 C230,215 140,200 82,140" fill="none" stroke="#C24A57" stroke-width="5" marker-end="url(#xpm-l2)"/>
+                <path d="M75,105 C120,40 220,25 300,35" fill="none" stroke="#C8A24A" stroke-width="4" marker-end="url(#xpm-l3)"/>
                 <path d="M95,128 C170,150 240,160 305,168" fill="none" stroke="#34d399" stroke-width="3" stroke-dasharray="7 5" marker-end="url(#xpm-l4)"/>
                 <circle cx="318" cy="38" r="9" fill="#3b82f6"/><text x="318" y="18" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">유럽</text>
                 <circle cx="325" cy="175" r="9" fill="#f59e0b"/><text x="372" y="200" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">아프리카</text>
                 <circle cx="72" cy="120" r="9" fill="#10b981"/><text x="40" y="95" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">아메리카</text>
                 <g font-size="13" font-weight="900" text-anchor="middle">
-                    <circle cx="378" cy="100" r="11" fill="#60a5fa"/><text x="378" y="105" fill="#0b1222">1</text>
-                    <circle cx="175" cy="196" r="11" fill="#ef4444"/><text x="175" y="201" fill="#0b1222">2</text>
-                    <circle cx="170" cy="40" r="11" fill="#eab308"/><text x="170" y="45" fill="#0b1222">3</text>
-                    <circle cx="205" cy="152" r="11" fill="#34d399"/><text x="205" y="157" fill="#0b1222">4</text>
+                    <circle cx="378" cy="100" r="11" fill="#60a5fa"/><text x="378" y="105" fill="#0D1735">1</text>
+                    <circle cx="175" cy="196" r="11" fill="#C24A57"/><text x="175" y="201" fill="#0D1735">2</text>
+                    <circle cx="170" cy="40" r="11" fill="#C8A24A"/><text x="170" y="45" fill="#0D1735">3</text>
+                    <circle cx="205" cy="152" r="11" fill="#34d399"/><text x="205" y="157" fill="#0D1735">4</text>
                 </g>
             </svg>`;
         }
@@ -2531,7 +2469,7 @@
                 ${xpMiniMap()}
                 <div class="xp-stat"><span>${placedN} / ${total}</span><div class="xp-progress"><div style="width:${placedN / total * 100}%"></div></div><span>다시 생각한 횟수 ${s.wrong}</span></div>
                 <div class="xp-pool" id="xp-pool" aria-label="실을 화물 카드">${pool || `<div class="xp-done-box">모든 화물을 실었어요! <button class="ex-btn primary ml-2" data-act="sort-done">교류 결산표 보기</button></div>`}</div>
-                <p class="xp-note" style="margin-top:.8rem" aria-live="polite">${xp.sel ? `지금 고른 화물: <b style="color:#fde68a">${xpCard(xp.sel).emo} ${xpCard(xp.sel).name}</b> · 이제 아래에서 뱃길을 눌러 보세요.` : '카드를 먼저 고르세요. 이미 실린 카드를 누르면 설명을 다시 볼 수 있어요.'}</p>
+                <p class="xp-note" style="margin-top:.8rem" aria-live="polite">${xp.sel ? `지금 고른 화물: <b style="color:#E8D49A">${xpCard(xp.sel).emo} ${xpCard(xp.sel).name}</b> · 이제 아래에서 뱃길을 눌러 보세요.` : '카드를 먼저 고르세요. 이미 실린 카드를 누르면 설명을 다시 볼 수 있어요.'}</p>
                 <div class="xp-lanes">${lanes}</div>
             </div>`;
         }
@@ -2569,11 +2507,11 @@
         function xpPersonModal() {
             const m = document.getElementById('xp-modal');
             m.innerHTML = `<div class="xp-modal-box">
-                <p class="xp-kicker" style="color:#f87171">잠깐, 이 카드는 다른 카드와 달라요</p>
+                <p class="xp-kicker" style="color:#D7707B">잠깐, 이 카드는 다른 카드와 달라요</p>
                 <h2 id="xp-modal-title" class="text-2xl font-black text-white mt-1 mb-3">장부에는 "화물"로 적혔지만</h2>
                 <p class="xp-text" style="font-size:1rem">노예선의 장부에는 사람이 옷감·총과 같은 줄에 적혔어요. 이름 대신 <b>"남자 ○명, 여자 ○명, 아이 ○명"</b>이라는 숫자만 남았지요. 하지만 한 사람 한 사람에게는 이름과 가족, 할 줄 아는 일이 있었어요. <b>아래 사람들을 눌러 보세요.</b></p>
                 <div class="xp-people">${XP_WHO.map((w, i) => `<button class="xp-who" data-act="who" data-i="${i}" aria-label="이 사람은 누구였을까요?">${XP_PERSON_SVG}<span class="q">이 사람은 누구였을까요?</span></button>`).join('')}</div>
-                <p class="xp-text" style="font-size:.95rem;color:#cbd5e1">이들이 지닌 <b>기술과 문화</b>도 함께 바다를 건넜어요. 그래서 2번 뱃길에는 벼농사 기술, 북 장단, 아난시 이야기도 실려 있어요. 이것들은 빼앗긴 사람들이 <b>몸과 기억 속에 지켜 낸</b> 것들이에요.</p>
+                <p class="xp-text" style="font-size:.95rem;color:#CDD3E2">이들이 지닌 <b>기술과 문화</b>도 함께 바다를 건넜어요. 그래서 2번 뱃길에는 벼농사 기술, 북 장단, 아난시 이야기도 실려 있어요. 이것들은 빼앗긴 사람들이 <b>몸과 기억 속에 지켜 낸</b> 것들이에요.</p>
                 <div class="flex flex-wrap gap-2 mt-5">
                     <button class="ex-btn primary" data-act="modal-close">기억할게요, 계속하기</button>
                     <button class="ex-btn" data-act="modal-ada">끌려간 소녀 "아다"의 이야기 듣기</button>
@@ -2755,15 +2693,15 @@
             const scale = XP_ORDER.map(k => {
                 const p = XP_PEOPLE[k], [g, l] = XP_SCALE[k];
                 return `<div style="--c:${p.color}"><b>${p.name}</b>
-                    <div class="xp-meter" aria-hidden="true"><i style="width:${g}%;background:#eab308"></i><i style="width:${l}%;background:#dc2626"></i></div>
-                    <span style="color:#facc15">얻음</span> ${p.ending.gain}<br><span style="color:#f87171">잃음</span> ${p.ending.loss}</div>`;
+                    <div class="xp-meter" aria-hidden="true"><i style="width:${g}%;background:#C8A24A"></i><i style="width:${l}%;background:#B23A48"></i></div>
+                    <span style="color:#D9B65A">얻음</span> ${p.ending.gain}<br><span style="color:#D7707B">잃음</span> ${p.ending.loss}</div>`;
             }).join('');
             const notes = XP_ORDER.map(k => [k, XP_PEOPLE[k].name + '의 이야기']).concat([['chain', '체험 2 마무리'], ['sort', '더 해 보기 결산표']]);
             return `<div class="xp-wrap">
                 <div class="xp-top"><button class="ex-btn" data-act="hub">${XP_BACK} 체험실</button></div>
                 <p class="xp-kicker">체험 2 · 마무리</p>
                 <h1 class="xp-h1">설탕 한 숟가락의 여행</h1>
-                ${n < 4 ? `<p class="xp-lead" style="color:#fca5a5">아직 ${4 - n}명의 이야기를 듣지 않았어요. 먼저 들으면 더 잘 이해할 수 있어요. <button class="ex-btn ml-1" data-act="go-people">이야기 들으러 가기</button></p>` : ''}
+                ${n < 4 ? `<p class="xp-lead" style="color:#E6A3AA">아직 ${4 - n}명의 이야기를 듣지 않았어요. 먼저 들으면 더 잘 이해할 수 있어요. <button class="ex-btn ml-1" data-act="go-people">이야기 들으러 가기</button></p>` : ''}
                 <p class="xp-lead">1791년 런던, 엘리자의 홍차 속 설탕 한 숟가락을 거꾸로 따라가 볼까요?</p>
                 <ol class="xp-chain">${items}</ol>
                 <p class="xp-lead" style="margin-top:1.5rem">네 사람은 한 번도 한자리에 모인 적이 없어요. 하지만 <b>대서양을 오간 배 한 척</b>으로 모두 이어져 있었어요. 교류는 세계를 하나로 이었지만, 그 연결은 평등하지 않았어요.</p>
@@ -2930,8 +2868,8 @@
             return `<aside class="src-card draft">
                 <span class="src-tag">✍️ 작성 모드 · 빈 사료 칸 (학생 화면에는 보이지 않아요)</span>
                 <h3 class="src-title">${srcEsc(SLOT_NAME[s.slot] || s.slot)} 자리의 사료</h3>
-                <p class="src-meta" style="color:#cbd5e1">추천 사료: ${srcEsc(s.hint || '-')}</p>
-                <p class="src-meta" style="color:#94a3b8;margin-top:.5rem"><code>index.html</code> 위쪽의 <code>SOURCES</code>에서 <code>slot: '${srcEsc(s.slot)}'</code> 칸의 <code>title</code>과 <code>text</code>(또는 <code>image</code>)를 채우면 여기에 사료 카드가 나타나요.</p>
+                <p class="src-meta" style="color:#CDD3E2">추천 사료: ${srcEsc(s.hint || '-')}</p>
+                <p class="src-meta" style="color:#A7B0C8;margin-top:.5rem"><code>index.html</code> 위쪽의 <code>SOURCES</code>에서 <code>slot: '${srcEsc(s.slot)}'</code> 칸의 <code>title</code>과 <code>text</code>(또는 <code>image</code>)를 채우면 여기에 사료 카드가 나타나요.</p>
             </aside>`;
         }
 
@@ -2954,7 +2892,7 @@
             if (!filled.length && !DRAFT) return '';
             const list = filled.map(r => `<li>${srcEsc(r.text)}${r.note ? `<small>${srcEsc(r.note)}</small>` : ''}</li>`).join('');
             return `<h2>${title}</h2>
-                <p class="text-sm" style="color:#94a3b8">${desc}</p>
+                <p class="text-sm" style="color:#A7B0C8">${desc}</p>
                 ${list ? `<ol class="refs-list">${list}</ol>` : ''}
                 ${DRAFT ? `<div class="refs-draft">✍️ <code>REFERENCES</code>에 채워 넣으세요. (지금 ${filled.length}개)<br>형식 예) ${srcEsc(example)}</div>` : ''}`;
         }
@@ -2977,7 +2915,7 @@
                 ${refsSection('데이터베이스와 웹사이트', '숫자와 통계를 확인한 곳이에요.', REFERENCES.web,
                     '운영 기관, "페이지 제목", 주소 (확인한 날짜).')}
                 ${imgList || DRAFT ? `<h2>그림·사진·영상 출처</h2>
-                    <p class="text-sm" style="color:#94a3b8">사이트에 쓰인 그림과 지도, 영상의 출처예요.</p>
+                    <p class="text-sm" style="color:#A7B0C8">사이트에 쓰인 그림과 지도, 영상의 출처예요.</p>
                     <ol class="refs-list">${imgList}</ol>
                     ${DRAFT ? '<div class="refs-draft">✍️ <code>REFERENCES.images</code>의 <code>credit</code>을 채우면 학생 화면에도 보여요. 형식 예) 작가, 〈작품 이름〉, 연도, 소장처(또는 사이트), 이용 조건</div>' : ''}` : ''}
                 <p class="text-xs text-slate-500 mt-12">이 사이트의 인물 이야기(체험 1)에 나오는 네 사람은 실제 기록을 바탕으로 만든 가상 인물이에요.</p>
