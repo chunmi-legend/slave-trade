@@ -150,7 +150,13 @@
         .fb-light b { color: #8C6E22; }
         .fb-dark b { color: #FF7C8E; }
         .fb-half span { font-family: var(--font-display); font-size: 1.22rem; line-height: 1.35; }
-        .fb-go { position: absolute; right: .9rem; bottom: .7rem; font-size: .78rem; color: #F6DCE1; opacity: .8; }
+        .fb-go { position: absolute; right: .8rem; bottom: .7rem; padding: .35rem .75rem; border-radius: 999px; border: 1px solid rgba(246, 220, 225, .5); background: rgba(20, 8, 22, .6); font-size: .8rem; color: #F6DCE1; }
+        .flip.flipped { transform: rotateY(180deg); }
+        .touch-only { display: none; }
+        @media (hover: none) { .touch-only { display: inline; } }
+        .motion-on-cta { color: #F3D77A !important; }
+        #globe-canvas { touch-action: pan-y; cursor: grab; }
+        #globe-canvas:active { cursor: grabbing; }
 
         /* 페이지마다 다른 빛 (배경은 고정, 내용만 스크롤) */
         #voices-screen { background: radial-gradient(ellipse 70% 55% at 12% -8%, rgba(178, 58, 72, .55), transparent 70%),
@@ -659,16 +665,15 @@
             .cc-grid { gap: .5rem 1rem; }
             .stat-row strong { font-size: 1.25rem; }
         }
-        @media (prefers-reduced-motion: reduce) {
-            .screen, .flag-card, .event-toast { transition: none !important; }
-            .slider-button.hint::after { animation: none; }
-            .xp-card.shake { animation: none; }
-            .xp-act, .xp-person, .xp-card { transition: none; }
-            .screen, .screen.active { transform: none !important; transition: opacity .3s, visibility 0s !important; }
-            .lt-line, .landing-sub, .landing-legend, .chapter, #countries-screen.active .flip-wrap { animation: none !important; }
-            .flip { transition: none; }
-            .rv { opacity: 1; transform: none; transition: none; }
-        }
+        /* 움직임 효과 끄기 (운영체제 설정을 따르되, 화면 아래 버튼으로 바꿀 수 있음) */
+        html.motion-off .screen, html.motion-off .flag-card, html.motion-off .event-toast { transition: none !important; }
+        html.motion-off .slider-button.hint::after { animation: none; }
+        html.motion-off .xp-card.shake { animation: none; }
+        html.motion-off .xp-act, html.motion-off .xp-person, html.motion-off .xp-card { transition: none; }
+        html.motion-off .screen, html.motion-off .screen.active { transform: none !important; transition: opacity .3s, visibility 0s !important; }
+        html.motion-off .lt-line, html.motion-off .landing-sub, html.motion-off .landing-legend, html.motion-off .chapter, html.motion-off #countries-screen.active .flip-wrap { animation: none !important; }
+        html.motion-off .flip { transition: none; }
+        html.motion-off .rv { opacity: 1; transform: none; transition: none; }
     </style>
 </head>
 <body>
@@ -710,6 +715,7 @@
             <p class="landing-foot">
                 <button class="refs-link" onclick="openMap()">370년의 항해를 타임랩스로 보기</button>
                 <button class="refs-link" onclick="openRefs()">참고문헌과 그림 출처</button>
+                <button class="refs-link motion-btn" id="motion-btn" onclick="toggleMotion()">움직임 효과 끄기</button>
             </p>
         </div>
     </main>
@@ -724,7 +730,7 @@
         </div>
         <div class="countries-wrap">
             <h1 class="countries-title">나라별 <span class="lt-light">명</span>과 <span class="lt-dark">암</span></h1>
-            <p class="countries-lead">카드에 마우스를 올리면 그 나라가 누린 번영과 그 대가가 뒤집혀 보여요. 카드를 누르면 가운데 막대를 움직이며 두 얼굴을 자세히 비교할 수 있어요.</p>
+            <p class="countries-lead">카드에 마우스를 올리면(태블릿에서는 카드를 누르면) 그 나라가 누린 번영과 그 대가가 뒤집혀 보여요. 자세히 보기를 누르면 가운데 막대를 움직이며 두 얼굴을 비교할 수 있어요.</p>
             <div class="flip-grid" id="flags-container"></div>
             <p class="home-note">인원 수는 SlaveVoyages(대서양 노예무역 데이터베이스)의 선박 국적별 추정치를 반올림한 값이며, 연구에 따라 차이가 있을 수 있습니다.</p>
         </div>
@@ -989,6 +995,21 @@
     </section>
 
     <script>
+        /* 움직임 효과: 컴퓨터의 '애니메이션 끄기' 설정을 따르되, 사이트에서 직접 켜고 끌 수 있음 */
+        const MOTION_KEY = 'slave-trade-motion';
+        function motionChoice() { try { return localStorage.getItem(MOTION_KEY); } catch (e) { return null; } }
+        function motionOff() {
+            const c = motionChoice();
+            if (c === 'on') return false;
+            if (c === 'off') return true;
+            return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        }
+        document.documentElement.classList.toggle('motion-off', motionOff());
+        function toggleMotion() {
+            try { localStorage.setItem(MOTION_KEY, motionOff() ? 'on' : 'off'); } catch (e) {}
+            location.reload();
+        }
+
         /* =====================================================================
            ✍️ 사료 읽기, 참고문헌 입력 칸  (직접 채우는 곳은 여기뿐이에요)
 
@@ -1161,20 +1182,26 @@
                 const wrap = document.createElement('div');
                 wrap.className = 'flip-wrap';
                 wrap.style.setProperty('--i', i);
-                wrap.innerHTML = `<button type="button" class="flip" aria-label="${c.name}의 명과 암 자세히 보기">
+                wrap.innerHTML = `<div class="flip" role="button" tabindex="0" aria-label="${c.name}의 명과 암 자세히 보기">
                     <span class="flip-face flip-front">
                         <span class="fimg"><img src="${c.flag}" alt="" onerror="this.remove()"></span>
                         <span class="fname">${c.name}</span>
                         <span class="fnum">${c.stats.people} 강제 수송</span>
-                        <span class="fhint">${c.stats.period}</span>
+                        <span class="fhint">${c.stats.period}<span class="touch-only">, 눌러서 뒤집어 보세요</span></span>
                     </span>
                     <span class="flip-face flip-back" aria-hidden="true">
                         <span class="fb-half fb-light"><b>명(明)</b><span>${c.light.title}</span></span>
                         <span class="fb-half fb-dark"><b>암(暗)</b><span>${c.dark.title}</span></span>
-                        <span class="fb-go">눌러서 자세히 보기</span>
+                        <button type="button" class="fb-go" tabindex="-1">자세히 보기</button>
                     </span>
-                </button>`;
-                wrap.querySelector('.flip').onclick = () => openDetail(key);
+                </div>`;
+                const flip = wrap.querySelector('.flip');
+                // 마우스: 올리면 뒤집히고 누르면 상세 화면 / 터치: 누르면 뒤집히고 '자세히 보기'로 상세 화면
+                flip.addEventListener('click', e => {
+                    if (e.target.closest('.fb-go') || window.matchMedia('(hover: hover)').matches) { openDetail(key); return; }
+                    flip.classList.toggle('flipped');
+                });
+                flip.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openDetail(key); } });
                 container.appendChild(wrap);
             });
         }
@@ -1265,7 +1292,7 @@
         function animateSliderTo(target) {
             sliderButton.classList.remove('hint');
             cancelAnimationFrame(sliderAnim);
-            const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const reduce = motionOff();
             if (reduce) { setSliderPct(target); return; }
             const start = sliderPct, t0 = performance.now(), dur = 600;
             const step = now => {
@@ -1783,7 +1810,7 @@
         let exSelected = null, exStory = -1, exAnim = null, exLast = null, exProjCur = null;
         const exShip = { leg: 0, t: 0, cargo: null };
         const exEsc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-        const exReduce = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const exReduce = () => motionOff();
         const exGroupOf = k => (EX[k] && EX[k].parent) || k;
 
         function openExchange(r) {
@@ -2969,7 +2996,7 @@
 
         /* ================= 첫 화면 3D 지구 (Three.js) ================= */
         // 빛이 위에서 비춰 유럽 쪽은 낮(명), 아프리카와 중간 항로 쪽은 밤(암)이 된다. 세 뱃길이 빛나는 호로 떠오른다.
-        const globe = { ready: false, running: false, raf: null };
+        const globe = { ready: false, running: false, raf: null, drag: 0 };
         const GLOBE_ROUTES = [
             { from: [48, -3], to: [6, 1], color: 0xE3C46A, width: 0.012, label: '유럽 → 아프리카' },
             { from: [6, 1], to: [18, -70], color: 0xE0566A, width: 0.022, label: '중간 항로' },
@@ -3021,11 +3048,11 @@
 
         function initGlobe() {
             const canvas = document.getElementById('globe-canvas');
-            if (!window.THREE || !canvas) { document.getElementById('home-screen').classList.add('no-globe'); return; }
-            let renderer;
-            try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true }); }
-            catch (e) { document.getElementById('home-screen').classList.add('no-globe'); return; }
-            const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (!canvas) return;
+            let renderer = null;
+            if (window.THREE) { try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true }); } catch (e) { renderer = null; } }
+            if (!renderer) { if (!initGlobe2D()) document.getElementById('home-screen').classList.add('no-globe'); return; }
+            const reduce = motionOff();
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 200);
             camera.position.set(0, 0, 9.5);
@@ -3146,8 +3173,9 @@
                 root.rotation.y = -0.6 * (1 - e);
                 const sc = (window.innerWidth < 720 ? 0.78 : 0.86) * (0.72 + 0.28 * e);
                 root.scale.setScalar(sc);
+                if (reduce) earth.rotation.y = baseY + globe.drag;
                 if (!reduce) {
-                    earth.rotation.y = baseY + Math.sin(t * 0.13) * 0.32;
+                    earth.rotation.y = baseY + Math.sin(t * 0.13) * 0.32 + globe.drag;
                     root.rotation.x += (pointer.y * 0.25 - root.rotation.x) * 0.04;
                     root.rotation.z += (-pointer.x * 0.08 - root.rotation.z) * 0.04;
                     stars.rotation.y = t * 0.006;
@@ -3164,14 +3192,109 @@
             globe.redraw = () => { drawGlobeTexture(texCanvas); texture.needsUpdate = true; if (!globe.running || reduce) renderer.render(scene, camera); };
             globe.start = () => { if (globe.running) return; globe.running = true; globe.raf = requestAnimationFrame(frame); };
             globe.stop = () => { globe.running = false; if (globe.raf) cancelAnimationFrame(globe.raf); globe.raf = null; };
+            globe.render = () => requestAnimationFrame(frame);
             document.addEventListener('visibilitychange', () => { if (document.hidden) globe.stop(); else if (currentScreen === 'home-screen') globe.start(); });
             globe.ready = true;
             if (currentScreen === 'home-screen') globe.start();
         }
 
+        /* ----- WebGL을 쓸 수 없을 때: d3로 그리는 2D 지구본 (돌아가고, 낮과 밤, 뱃길도 그림) ----- */
+        function initGlobe2D() {
+            const canvas = document.getElementById('globe-canvas');
+            if (!canvas || !window.d3) return false;
+            const ctx = canvas.getContext('2d');
+            const reduce = motionOff();
+            const proj = d3.geoOrthographic().clipAngle(90).precision(0.4);
+            const path = d3.geoPath(proj, ctx);
+            const grat = d3.geoGraticule10();
+            const night = d3.geoCircle().center([-20, -86]).radius(106)(); // 3D와 같이: 북위 20° 아래(서아프리카·카리브해·중간 항로)가 밤
+            const routes = GLOBE_ROUTES.map(r => ({ type: 'LineString', coordinates: d3.range(0, 1.0001, 0.02).map(d3.geoInterpolate([r.from[1], r.from[0]], [r.to[1], r.to[0]])), color: '#' + r.color.toString(16).padStart(6, '0'), w: r.width > 0.015 ? 3.4 : 2.2 }));
+            let W = 0, H = 0, cx = 0, cy = 0, R = 0, dpr = 1;
+            function layout() {
+                dpr = Math.min(window.devicePixelRatio || 1, 2);
+                W = window.innerWidth; H = window.innerHeight;
+                canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+                const mobile = W < 720;
+                if (mobile) { cx = W / 2; cy = H * 0.24; R = Math.min(W * 0.62, H * 0.3); }
+                else { cx = W * 0.71; cy = H * 0.37; R = Math.min(H * 0.33, W * 0.22); }
+                proj.translate([cx, cy]).scale(R);
+            }
+            const t0 = performance.now();
+            function frame(now) {
+                const t = (now - t0) / 1000;
+                const spin = reduce ? 0 : Math.sin(t * 0.13) * 18;
+                proj.rotate([34 - spin - globe.drag * 57.3, -16]);
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                ctx.clearRect(0, 0, W, H);
+                // 대기 빛
+                const halo = ctx.createRadialGradient(cx, cy, R * 0.95, cx, cy, R * 1.18);
+                halo.addColorStop(0, 'rgba(243,215,122,.45)'); halo.addColorStop(.5, 'rgba(224,86,106,.18)'); halo.addColorStop(1, 'rgba(224,86,106,0)');
+                ctx.fillStyle = halo; ctx.beginPath(); ctx.arc(cx, cy, R * 1.18, 0, Math.PI * 2); ctx.fill();
+                // 바다
+                const sea = ctx.createRadialGradient(cx - R * 0.3, cy - R * 0.4, R * 0.1, cx, cy, R);
+                sea.addColorStop(0, '#2a4aa8'); sea.addColorStop(1, '#0c1846');
+                ctx.fillStyle = sea; ctx.beginPath(); path({ type: 'Sphere' }); ctx.fill();
+                ctx.strokeStyle = 'rgba(227,196,106,.14)'; ctx.lineWidth = 0.7; ctx.beginPath(); path(grat); ctx.stroke();
+                // 육지
+                if (worldGeoData && window.topojson) {
+                    if (!globe.land2d) globe.land2d = topojson.feature(worldGeoData, worldGeoData.objects.countries);
+                    ctx.fillStyle = '#E8D089'; ctx.beginPath(); path(globe.land2d); ctx.fill();
+                    ctx.strokeStyle = 'rgba(12,24,70,.35)'; ctx.lineWidth = 0.6; ctx.stroke();
+                }
+                // 밤(암): 남쪽 반구를 어둡게, 그 위 육지는 붉게
+                ctx.save(); ctx.beginPath(); path(night); ctx.clip();
+                ctx.fillStyle = 'rgba(6,8,30,.72)'; ctx.fillRect(0, 0, W, H);
+                if (globe.land2d) { ctx.fillStyle = 'rgba(120,28,52,.75)'; ctx.beginPath(); path(globe.land2d); ctx.fill(); }
+                ctx.restore();
+                ctx.strokeStyle = 'rgba(255,170,110,.55)'; ctx.lineWidth = 2; ctx.beginPath(); path(night); ctx.stroke();
+                // 뱃길 (빛이 흐르는 점선)
+                routes.forEach((r, i) => {
+                    ctx.save();
+                    ctx.shadowColor = r.color; ctx.shadowBlur = 14;
+                    ctx.strokeStyle = r.color; ctx.globalAlpha = 0.35; ctx.lineWidth = r.w; ctx.beginPath(); path(r); ctx.stroke();
+                    ctx.globalAlpha = 1; ctx.setLineDash([R * 0.05, R * 0.16]); ctx.lineDashOffset = -(reduce ? 0 : t * R * 0.12) - i * 20;
+                    ctx.lineWidth = r.w + 0.8; ctx.beginPath(); path(r); ctx.stroke();
+                    ctx.restore();
+                });
+                // 테두리 빛
+                ctx.strokeStyle = 'rgba(243,215,122,.35)'; ctx.lineWidth = 1.5; ctx.beginPath(); path({ type: 'Sphere' }); ctx.stroke();
+                if (globe.running && !reduce) globe.raf = requestAnimationFrame(frame);
+            }
+            layout();
+            window.addEventListener('resize', () => { layout(); if (!globe.running || reduce) requestAnimationFrame(frame); });
+            globe.redraw = () => { globe.land2d = null; requestAnimationFrame(frame); };
+            globe.start = () => { if (globe.running) return; globe.running = true; globe.raf = requestAnimationFrame(frame); };
+            globe.stop = () => { globe.running = false; if (globe.raf) cancelAnimationFrame(globe.raf); globe.raf = null; };
+            globe.render = () => requestAnimationFrame(frame);
+            document.addEventListener('visibilitychange', () => { if (document.hidden) globe.stop(); else if (currentScreen === 'home-screen') globe.start(); });
+            globe.ready = true;
+            document.getElementById('home-screen').classList.add('globe-2d');
+            if (currentScreen === 'home-screen') globe.start();
+            return true;
+        }
+
+        // 지구본을 손가락이나 마우스로 끌어 돌리기
+        function initGlobeDrag() {
+            const canvas = document.getElementById('globe-canvas');
+            let sx = null, base = 0;
+            canvas.addEventListener('pointerdown', e => { sx = e.clientX; base = globe.drag; });
+            window.addEventListener('pointermove', e => { if (sx == null) return; globe.drag = base + (e.clientX - sx) / 180; if (motionOff() && globe.render) globe.render(); });
+            ['pointerup', 'pointercancel'].forEach(ev => window.addEventListener(ev, () => { sx = null; }));
+        }
+
+        // 움직임 효과 버튼 문구
+        function initMotionButton() {
+            const b = document.getElementById('motion-btn');
+            if (!b) return;
+            if (motionOff()) {
+                b.textContent = motionChoice() === 'off' ? '움직임 효과 켜기' : '이 컴퓨터는 애니메이션이 꺼져 있어요. 움직임 효과 켜기';
+                b.classList.add('motion-on-cta');
+            } else b.textContent = '움직임 효과 끄기';
+        }
+
         // 장(章) 카드가 마우스 쪽으로 기울어짐
         function initTilt() {
-            if (!window.matchMedia('(hover: hover)').matches || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            if (!window.matchMedia('(hover: hover)').matches || motionOff()) return;
             document.querySelectorAll('.chapter').forEach((el, i) => {
                 el.addEventListener('pointermove', e => {
                     const r = el.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
@@ -3186,7 +3309,7 @@
         // 역사 읽기: 스크롤하면 문단이 3D로 떠오름
         const revealState = { io: null, items: [] };
         function initReveal() {
-            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+            if (motionOff() || !('IntersectionObserver' in window)) return;
             const root = document.getElementById('voices-screen');
             revealState.items = [...root.querySelectorAll('article > *')];
             revealState.items.forEach(el => el.classList.add('rv'));
@@ -3230,6 +3353,8 @@
 
         initApp();
         initGlobe();
+        initGlobeDrag();
+        initMotionButton();
         initTilt();
         initReveal();
         initExchange();
